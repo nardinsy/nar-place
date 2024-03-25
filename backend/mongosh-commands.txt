@@ -1,0 +1,5 @@
+use mern
+
+List all collections in the MongoDB shell => show collections
+
+Delete all records of a collection MongoDB shell => db.users.deleteMany({})

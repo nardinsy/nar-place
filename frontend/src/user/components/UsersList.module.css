@@ -1,0 +1,27 @@
+/* .users-list {
+  max-width: 30rem;
+  margin: 4rem auto;
+} */
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.center-message {
+  width: 40%;
+  text-align: center;
+}
+
+.users-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 4rem auto;
+  padding: 0;
+  width: 90%;
+  max-width: 80rem;
+}
