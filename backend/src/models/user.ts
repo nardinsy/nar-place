@@ -8,7 +8,7 @@ export interface IUser extends mongoose.Document {
   email: string;
   password: string;
   places: Types.ObjectId[];
-  picture: Types.ObjectId;
+  picture: Types.ObjectId | null;
   _id: Types.ObjectId;
 }
 

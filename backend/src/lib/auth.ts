@@ -7,7 +7,7 @@ const runCallbakIfAuthenticated = async (
   req: Request,
   res: Response,
   next: NextFunction,
-  callback: AuthEndpointHandler
+  callback: AuthRequestHandler
 ) => {
   const token = req.headers.token;
   const user = await getUserIfAuthenticated(token, res);
@@ -21,8 +21,8 @@ const delegateMethodToRouter = async (
   entry: EndpointMethods,
   method: ENDPOINTSMETHODSName,
   path: string,
-  validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-  callbackOrUndefined?: AuthEndpointHandler
+  validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+  callbackOrUndefined?: AuthRequestHandler
 ) => {
   if (
     typeof validationsOrCallback === "object" &&
@@ -50,7 +50,7 @@ const delegateMethodToRouter = async (
 
 type ENDPOINTSMETHODSName = "get" | "post" | "patch" | "delete";
 
-export type AuthEndpointHandler = (
+export type AuthRequestHandler = (
   user: IUser,
   req: Request,
   res: Response,
@@ -60,23 +60,23 @@ export type AuthEndpointHandler = (
 export interface AuthEndpoints {
   getAuth(
     path: string,
-    validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-    callbackOrUndefined?: AuthEndpointHandler
+    validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+    callbackOrUndefined?: AuthRequestHandler
   ): any;
   postAuth(
     path: string,
-    validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-    callbackOrUndefined?: AuthEndpointHandler
+    validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+    callbackOrUndefined?: AuthRequestHandler
   ): any;
   patchAuth(
     path: string,
-    validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-    callbackOrUndefined?: AuthEndpointHandler
+    validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+    callbackOrUndefined?: AuthRequestHandler
   ): any;
   deleteAuth(
     path: string,
-    validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-    callbackOrUndefined?: AuthEndpointHandler
+    validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+    callbackOrUndefined?: AuthRequestHandler
   ): any;
 }
 
@@ -103,8 +103,8 @@ export function createAuthEndpoints(entry: EndpointMethods): AuthEndpoints {
   return {
     getAuth: async function (
       path: string,
-      validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-      callbackOrUndefined?: AuthEndpointHandler
+      validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+      callbackOrUndefined?: AuthRequestHandler
     ) {
       await delegateMethodToRouter(
         entry,
@@ -117,8 +117,8 @@ export function createAuthEndpoints(entry: EndpointMethods): AuthEndpoints {
 
     postAuth: async function (
       path: string,
-      validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-      callbackOrUndefined?: AuthEndpointHandler
+      validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+      callbackOrUndefined?: AuthRequestHandler
     ) {
       await delegateMethodToRouter(
         entry,
@@ -131,8 +131,8 @@ export function createAuthEndpoints(entry: EndpointMethods): AuthEndpoints {
 
     patchAuth: async function (
       path: string,
-      validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-      callbackOrUndefined?: AuthEndpointHandler
+      validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+      callbackOrUndefined?: AuthRequestHandler
     ) {
       await delegateMethodToRouter(
         entry,
@@ -145,8 +145,8 @@ export function createAuthEndpoints(entry: EndpointMethods): AuthEndpoints {
 
     deleteAuth: async function (
       path: string,
-      validationsOrCallback: ValidationChain[] | AuthEndpointHandler,
-      callbackOrUndefined?: AuthEndpointHandler
+      validationsOrCallback: ValidationChain[] | AuthRequestHandler,
+      callbackOrUndefined?: AuthRequestHandler
     ) {
       await delegateMethodToRouter(
         entry,

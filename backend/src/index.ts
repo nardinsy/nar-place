@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import expressAuth from "./lib/express-auth";
 import { json } from "body-parser";
 import placeRouter from "./routes/place-route";
+import usersRouter from "./routes/users-authed-route";
 import type { ErrorRequestHandler } from "express";
 import { IUser } from "./models/user";
 import { check } from "express-validator";
@@ -31,14 +32,15 @@ app.use(json());
 // });
 
 app.use("/api/places", placeRouter);
+app.use("/api/users", usersRouter);
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.log("Last errorHandler midelware", err);
-  res.status(err.code || 500);
-  res.json({ message: err.message || "An unknow error" });
-};
+// const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+//   console.log("Last errorHandler midelware", err);
+//   res.status(err.code || 500);
+//   res.json({ message: err.message || "An unknow error" });
+// };
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 mongoose
   .connect(mongoDB)

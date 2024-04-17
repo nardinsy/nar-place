@@ -1,4 +1,4 @@
-class StatusError extends Error {
+class HttpError extends Error {
   code: number;
   constructor(code: number) {
     super();
@@ -8,8 +8,9 @@ class StatusError extends Error {
 
 const createHttpError = (message: any, code: any) => {
   // const error = new Error(message);
-  const error = new StatusError(message);
-  error.code = code;
+  const error = new HttpError(code);
+  error.message = message;
+  // error.code = code;
   return error;
 };
 

@@ -13,3 +13,10 @@ export interface ResponsePlace {
   location: { lat: number; lng: number };
   pictureUrl: string;
 }
+
+export type UserInfoType = {
+  userId: string;
+  username: string;
+  placeCount: number;
+  pictureUrl: string | undefined;
+};

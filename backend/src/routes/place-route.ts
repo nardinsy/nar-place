@@ -1,6 +1,14 @@
 import { check } from "express-validator";
 import routerAuth from "../lib/router-auth";
-import { getPlaces } from "../controllers/places-controller";
+import {
+  getPlaces,
+  getUserPlaces,
+  addPlace,
+  // editPlaceById,
+  // deletePlaceById,
+  // getOtherUserPlacesByUserId,
+  // getPlacePictureByUrl,
+} from "../controllers/places-controller";
 import { Request, Response, NextFunction } from "express";
 import { IUser } from "../models/user";
 
@@ -28,5 +36,13 @@ const placeRouter = routerAuth();
 // });
 
 placeRouter.get("/", getPlaces);
+
+// placeRouter.getAuth("/userPlaces", getUserPlaces);
+
+// placeRouter.deleteAuth("/:pid", deletePlaceById);
+
+// placeRouter.get("/placesByUserId/:uid", getOtherUserPlacesByUserId);
+
+// placeRouter.get("/place-picture/:id", getPlacePictureByUrl);
 
 export default placeRouter;

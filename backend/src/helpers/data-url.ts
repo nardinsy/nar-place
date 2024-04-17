@@ -1,5 +1,8 @@
-const contentTypeBufferSplit = (data: any) => {
-  const contentType = data.substring(data.indexOf(":") + 1, data.indexOf(";"));
+const contentTypeBufferSplit = (data: string) => {
+  const contentType: string = data.substring(
+    data.indexOf(":") + 1,
+    data.indexOf(";")
+  );
 
   const split = data.split(",");
   const base64string = split[1];
