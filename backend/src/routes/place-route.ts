@@ -4,13 +4,11 @@ import {
   getPlaces,
   getUserPlaces,
   addPlace,
-  // editPlaceById,
-  // deletePlaceById,
-  // getOtherUserPlacesByUserId,
-  // getPlacePictureByUrl,
+  editPlaceById,
+  deletePlaceById,
+  getOtherUserPlacesByUserId,
+  getPlacePictureByUrl,
 } from "../controllers/places-controller";
-import { Request, Response, NextFunction } from "express";
-import { IUser } from "../models/user";
 
 const placeRouter = routerAuth();
 //test
@@ -37,12 +35,28 @@ const placeRouter = routerAuth();
 
 placeRouter.get("/", getPlaces);
 
-// placeRouter.getAuth("/userPlaces", getUserPlaces);
+placeRouter.getAuth("/userPlaces", getUserPlaces);
 
-// placeRouter.deleteAuth("/:pid", deletePlaceById);
+placeRouter.postAuth(
+  "/addPlace",
+  [
+    check("title").not().isEmpty(),
+    check("description").isLength({ min: 5 }),
+    check("address").not().isEmpty(),
+  ],
+  addPlace
+);
 
-// placeRouter.get("/placesByUserId/:uid", getOtherUserPlacesByUserId);
+placeRouter.patchAuth(
+  "/edit",
+  [check("title").not().isEmpty(), check("description").isLength({ min: 5 })],
+  editPlaceById
+);
 
-// placeRouter.get("/place-picture/:id", getPlacePictureByUrl);
+placeRouter.deleteAuth("/:pid", deletePlaceById);
+
+placeRouter.get("/placesByUserId/:uid", getOtherUserPlacesByUserId);
+
+placeRouter.get("/place-picture/:id", getPlacePictureByUrl);
 
 export default placeRouter;

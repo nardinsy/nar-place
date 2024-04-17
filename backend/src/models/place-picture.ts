@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 import { Model, Schema } from "mongoose";
 
+export interface IPlacePicture {
+  image: {
+    data: Buffer;
+    contentType: string;
+  };
+  placeId: { type: string };
+}
+
 const placePictureSchema = new Schema({
   image: {
     data: Buffer,

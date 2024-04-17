@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export class UserDto {
   userId: string;
   username: string;
@@ -25,4 +27,16 @@ export class UserWithPlacesDto extends UserDto {
     super(userId, username, pictureUrl);
     this.places = places;
   }
+}
+
+export class PlaceDto {
+  constructor(
+    public readonly title: string,
+    public readonly description: string,
+    public readonly address: string,
+    public readonly picture: Types.ObjectId,
+    public readonly id: Types.ObjectId,
+    public readonly creator: Types.ObjectId,
+    public readonly pictureUrl: string
+  ) {}
 }

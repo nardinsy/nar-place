@@ -1,79 +1,82 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
-import { ObjectId } from "mongoose";
-
+import { ObjectId, Types } from "mongoose";
 import createHttpError from "../models/createHttpError";
 import getCoordsForAddress from "../util/location";
-
 import User, { IUser } from "../models/user";
 import Place, { IPlace } from "../models/place";
-
 import contentTypeBufferSplit from "../helpers/data-url";
-import PlacePicture from "../models/place-picture";
+import PlacePicture, { IPlacePicture } from "../models/place-picture";
 import getUserIfAuthenticated from "../authentication/getUserIfAuthenticated";
 import { ResponsePlace } from "../types/types";
+import { PlaceDto } from "../shared/dtos";
+import { AuthRequestHandler } from "../lib/auth";
 
 class MyPlaceClass extends Place {}
 
-export const getPlacePictureUrl = (id: any) => {
+export const getPlacePictureUrl = (id: string) => {
   return `places/place-picture/${id}`;
 };
 
 export const getPlaces: RequestHandler = async (req, res, next) => {
   const places = await Place.find().exec();
-  res.json({ places });
+  const placesDto = places.map((place) => {
+    return new PlaceDto(
+      place.title,
+      place.description,
+      place.address,
+      place.picture,
+      place._id,
+      place.creator,
+      getPlacePictureUrl(place.picture.toHexString())
+    );
+  });
+  res.json({ places: placesDto });
 };
 
-export const getUserPlaces = async (
-  user: IUser,
-  req: Request,
-  res: Response,
-  next: NextFunction
+export const getUserPlaces: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
 ) => {
   //authed user places
   const placesId = user.places.map((place) => {
-    const placeId = place._id.toHexString();
     // const userPlace = await Place.findById(placeId);
-    return placeId;
+    return place._id.toHexString();
   });
 
-  let places = [];
+  const places: IPlace[] = [];
 
   for (let i = 0; i < user.places.length; i++) {
     const id = placesId[i];
     const u = await Place.findById(id);
-    places.push(u);
-  }
-
-  places = places.filter((place) => place !== null);
-
-  const placesWithImageUrl = places.map((place) => {
-    if (place) {
-      const placepictureId = place.image.toHexString();
-      const editedPlace = {
-        id: place.id,
-        title: place.title,
-        description: place.description,
-        address: place.address,
-        location: place.location,
-        pictureUrl: getPlacePictureUrl(placepictureId),
-      };
-      return editedPlace;
+    if (u !== null) {
+      places.push(u);
     }
+  }
+  // places = places.filter((place) => place !== null);
+
+  const placesWithPictureUrl = places.map((place) => {
+    // const placepictureId = place.picture.toHexString();
+    return new PlaceDto(
+      place.title,
+      place.description,
+      place.address,
+      place.picture,
+      place._id,
+      place.creator,
+      getPlacePictureUrl(place.picture.toHexString())
+    );
   });
 
   res.json({
     mesaage: "Get user's places successfully",
-    places: placesWithImageUrl,
+    places: placesWithPictureUrl,
   });
 };
 
-export const addPlace = async (
-  user: IUser,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const addPlace: AuthRequestHandler = async (user, req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = createHttpError(
@@ -83,12 +86,22 @@ export const addPlace = async (
     return next(error);
   }
 
-  const { title, description, address, image } = req.body;
+  const {
+    title,
+    description,
+    address,
+    picture,
+  }: {
+    title: string;
+    description: string;
+    address: string;
+    picture: string;
+  } = req.body;
 
   const coordinates: { lat: number; lng: number } =
     getCoordsForAddress(address);
 
-  const { contentType, buffer } = contentTypeBufferSplit(image);
+  const { contentType, buffer } = contentTypeBufferSplit(picture);
 
   const newPlace = new MyPlaceClass({
     title,
@@ -106,11 +119,11 @@ export const addPlace = async (
     placeId: newPlace.id,
   });
 
-  newPlace.image = placePicture._id;
+  newPlace.picture = placePicture._id;
 
   try {
     await newPlace.save();
-    await user.places.push(newPlace._id);
+    user.places.push(newPlace._id);
     await user.save();
   } catch (error) {
     return next(
@@ -124,178 +137,257 @@ export const addPlace = async (
     console.log(error);
   }
 
-  const placepictureId = placePicture._id.toHexString();
+  // const placepictureId = placePicture._id.toHexString();
+  // pictureUrl: getPlacePictureUrl(placePicture._id.toHexString()),
+  const placeDto = new PlaceDto(
+    newPlace.title,
+    newPlace.description,
+    newPlace.address,
+    placePicture._id,
+    newPlace.id,
+    user.id,
+    getPlacePictureUrl(placePicture._id.toHexString())
+  );
 
+  console.log(placeDto);
   res.status(201).json({
     message: "Created new place.",
-    place: {
-      id: newPlace.id,
-      title: newPlace.title,
-      description: newPlace.description,
-      address: newPlace.address,
-      location: newPlace.location,
-      pictureUrl: getPlacePictureUrl(placepictureId),
-    } as ResponsePlace,
+    place: placeDto,
+    // place: {
+    //   id: newPlace.id,
+    //   title: newPlace.title,
+    //   description: newPlace.description,
+    //   address: newPlace.address,
+    //   location: newPlace.location,
+    //   pictureUrl: getPlacePictureUrl(placePicture._id.toHexString()),
+    // },
   });
 };
 
-// export const editPlaceById = async (user, req, res, next) => {
-//   const errors = validationResult(req);
-//   if (!errors.isEmpty()) {
-//     const error = createHttpError(
-//       "Invalid input passed, please check your data.",
-//       422
-//     );
-//     return next(error);
-//   }
+export const editPlaceById: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = createHttpError(
+      "Invalid input passed, please check your data.",
+      422
+    );
+    return next(error);
+  }
 
-//   const { title, description, address, id } = req.body;
+  const {
+    title,
+    description,
+    address,
+    id,
+  }: {
+    title: string;
+    description: string;
+    address: string;
+    id: string;
+  } = req.body;
 
-//   // db.places.find({ _id: new ObjectId("65d5ef04ff5588f10abe77cb") });
+  // db.places.find({ _id: new ObjectId("65d5ef04ff5588f10abe77cb") });
 
-//   let place;
+  let place: IPlace | null;
 
-//   try {
-//     place = await Place.findOne({
-//       _id: new ObjectId(id),
-//     });
+  try {
+    place = await Place.findOne({
+      _id: new Types.ObjectId(id),
+    });
 
-//     if (checkPlaceBelongsToUser(place, user)) {
-//       place.title = title;
-//       place.description = description;
-//       place.address = address;
-//     } else {
-//       return res.status(401).json({
-//         message: "unauthorize",
-//       });
-//     }
-//   } catch (err) {
-//     return next(
-//       createHttpError("Something went wrong, could not update place 1.", 500)
-//     );
-//   }
+    if (!place) {
+      return next(
+        createHttpError("Something went wrong, could not find place.", 500)
+      );
+    }
 
-//   try {
-//     await place.save();
-//   } catch (err) {
-//     // return next(
-//     //   createHttpError("Something went wrong, could not update place 2.", 500)
-//     // );
-//     console.log(err);
-//   }
+    if (checkPlaceBelongsToUser(place, user)) {
+      place.title = title;
+      place.description = description;
+      place.address = address;
+    } else {
+      return res.status(401).json({
+        message: "unauthorize",
+      });
+    }
+  } catch (err) {
+    return next(
+      createHttpError("Something went wrong, could not update place 1.", 500)
+    );
+  }
 
-//   res.status(200).json({ message: "Plcas update successfully", place });
-// };
+  try {
+    await place.save();
+  } catch (err) {
+    // return next(
+    //   createHttpError("Something went wrong, could not update place 2.", 500)
+    // );
+    console.log(err);
+  }
 
-// export const deletePlaceById = async (user, req, res, next) => {
-//   const id = req.params.pid;
+  const placeDto = new PlaceDto(
+    place.title,
+    place.description,
+    place.address,
+    place.picture,
+    place.id,
+    user.id,
+    getPlacePictureUrl(place.picture._id.toHexString())
+  );
 
-//   let place;
-//   try {
-//     place = await Place.findOne({
-//       _id: new ObjectId(id),
-//     });
+  res
+    .status(200)
+    .json({ message: "Plcas update successfully", place: placeDto });
+};
 
-//     if (checkPlaceBelongsToUser(place, user)) {
-//       let filteredPlace;
-//       filteredPlace = await user.places.filter(
-//         (place) => place._id.toHexString() !== id
-//       );
+export const deletePlaceById: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const id: string = req.params.pid;
 
-//       user.places = filteredPlace;
-//       await user.save();
+  let place: IPlace | null;
+  try {
+    place = await Place.findOne({
+      _id: new Types.ObjectId(id),
+    });
 
-//       //-- delete image from place pictures
-//       const imageId = place.image.toHexString();
-//       await PlacePicture.findByIdAndDelete(imageId);
-//       //--
+    if (!place) {
+      return next(
+        createHttpError("Something went wrong, could not find place.", 500)
+      );
+    }
 
-//       await Place.findByIdAndDelete(id);
-//     } else {
-//       return res.status(401).json({
-//         message: "unauthorize",
-//       });
-//     }
-//   } catch (error) {
-//     return next(createHttpError(error, 500));
-//   }
+    if (checkPlaceBelongsToUser(place, user)) {
+      let filteredPlace = user.places.filter(
+        (place) => place._id.toHexString() !== id
+      );
 
-//   res.status(200).json({ message: "Place removed successfully." });
-// };
+      user.places = filteredPlace;
+      await user.save();
 
-// export const checkPlaceBelongsToUser = (place, user) => {
-//   const userId = user.id;
-//   const placeCreatorId = place.creator.toHexString();
+      //-- delete image from place pictures
+      const pictureId = place.picture.toHexString();
+      await PlacePicture.findByIdAndDelete(pictureId);
+      //--
 
-//   if (placeCreatorId === userId) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
+      await Place.findByIdAndDelete(id);
+    } else {
+      return res.status(401).json({
+        message: "unauthorize",
+      });
+    }
+  } catch (error) {
+    return next(createHttpError(error, 500));
+  }
 
-// export const getOtherUserPlacesByUserId = async (req, res, next) => {
-//   const acountId = req.params.uid;
-//   const result = await User.findById(acountId);
+  res.status(200).json({ message: "Place removed successfully." });
+};
 
-//   const userPlacesID = result.places;
+export const getOtherUserPlacesByUserId: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  const acountId: string = req.params.uid;
+  const user: IUser | null = await User.findById(acountId);
 
-//   const placesId = userPlacesID.map((place) => {
-//     const placeId = place._id.toHexString();
-//     return placeId;
-//   });
+  if (!user) {
+    return next(
+      createHttpError(
+        "Something went wrong, could not find user with given id.",
+        500
+      )
+    );
+  }
+  const userPlacesID = user.places;
 
-//   let places = [];
+  const placesId = userPlacesID.map((place) => {
+    return place._id.toHexString();
+  });
 
-//   for (let i = 0; i < userPlacesID.length; i++) {
-//     const id = placesId[i];
-//     const u = await Place.findById(id);
-//     places.push(u);
-//   }
+  const places: IPlace[] = [];
 
-//   places = places.filter((place) => place !== null);
+  for (let i = 0; i < userPlacesID.length; i++) {
+    const id = placesId[i];
+    const place = await Place.findById(id);
+    if (place !== null) {
+      places.push(place);
+    }
+  }
 
-//   places = places.filter((place) => place !== null);
+  // places = places.filter((place) => place !== null);
+  const placesDto = places.map((place) => {
+    return new PlaceDto(
+      place.title,
+      place.description,
+      place.address,
+      place.picture,
+      place._id,
+      place.creator,
+      getPlacePictureUrl(place.picture.toHexString())
+    );
+  });
 
-//   const placesWithImageUrl = places.map((place) => {
-//     const placepictureId = place.image.toHexString();
-//     const editedPlace = {
-//       id: place.id,
-//       title: place.title,
-//       description: place.description,
-//       address: place.address,
-//       location: place.location,
-//       pictureUrl: getPlacePictureUrl(placepictureId),
-//     };
+  // const placesWithImageUrl = places.map((place) => {
+  //   const placepictureId = place.picture.toHexString();
+  //   const editedPlace = {
+  //     id: place.id,
+  //     title: place.title,
+  //     description: place.description,
+  //     address: place.address,
+  //     location: place.location,
+  //     pictureUrl: getPlacePictureUrl(placepictureId),
+  //   };
 
-//     return editedPlace;
-//   });
+  //   return editedPlace;
+  // });
 
-//   // console.log(result);
-//   res.json({
-//     mesaage: "Get some users place successfully",
-//     places: placesWithImageUrl,
-//   });
-// };
+  // console.log(result);
+  res.json({
+    mesaage: "Get some users place successfully",
+    places: placesDto,
+  });
+};
 
-// export const getPlacePictureByUrl = async (req, res, next) => {
-//   // id -> place picture id
-//   const placePictureId = req.params.id;
+export const getPlacePictureByUrl: RequestHandler = async (req, res, next) => {
+  // id -> place picture id
+  const placePictureId: string = req.params.id;
 
-//   let placePicture;
-//   try {
-//     placePicture = await PlacePicture.findOne({
-//       _id: placePictureId,
-//     });
-//     // console.log(placePicture._id);
-//   } catch (error) {
-//     console.log(error);
-//   }
+  let placePicture: IPlacePicture | null;
+  try {
+    placePicture = await PlacePicture.findOne({
+      _id: placePictureId,
+    });
+    // console.log(placePicture._id);
+  } catch (error) {
+    console.log(error);
+    return next(
+      createHttpError(
+        "Something went wrong, could not find place's picture.",
+        500
+      )
+    );
+  }
 
-//   if (!placePicture) {
-//     res.status(404).end();
-//   } else {
-//     res.set("Content-Type", placePicture.image.contentType);
-//     res.send(placePicture.image.data);
-//   }
-// };
+  if (!placePicture) {
+    res.status(404).end();
+  } else {
+    res.set("Content-Type", placePicture.image.contentType);
+    res.send(placePicture.image.data);
+  }
+};
+
+const checkPlaceBelongsToUser = (place: IPlace, user: IUser) => {
+  const userId = user.id;
+  const placeCreatorId = place.creator.toHexString();
+
+  return placeCreatorId === userId ? true : false;
+};
