@@ -1,15 +1,17 @@
 const mongoDB = "mongodb://127.0.0.1:27017/mern";
 import mongoose from "mongoose";
 import expressAuth from "./lib/express-auth";
-import { json } from "body-parser";
+import { json, urlencoded } from "body-parser";
 import placeRouter from "./routes/place-route";
 import usersRouter from "./routes/users-authed-route";
-import type { ErrorRequestHandler } from "express";
-import { IUser } from "./models/user";
-import { check } from "express-validator";
-import { validationResult } from "express-validator";
+import { configureCORS } from "./cors";
 
 const app = expressAuth();
+app.use(configureCORS);
+
+app.use(json({ limit: "50mb" }));
+app.use(urlencoded({ limit: "50mb", extended: true }));
+
 app.use(json());
 
 //test

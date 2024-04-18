@@ -1,18 +1,14 @@
-import { RequestHandler, Request, Response, NextFunction } from "express";
+import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
-import { ObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
+import { AuthRequestHandler } from "../lib/auth";
 import createHttpError from "../models/createHttpError";
-import getCoordsForAddress from "../util/location";
 import User, { IUser } from "../models/user";
 import Place, { IPlace } from "../models/place";
-import contentTypeBufferSplit from "../helpers/data-url";
 import PlacePicture, { IPlacePicture } from "../models/place-picture";
-import getUserIfAuthenticated from "../authentication/getUserIfAuthenticated";
-import { ResponsePlace } from "../types/types";
+import getCoordsForAddress from "../util/location";
+import contentTypeBufferSplit from "../helpers/data-url";
 import { PlaceDto } from "../shared/dtos";
-import { AuthRequestHandler } from "../lib/auth";
-
-class MyPlaceClass extends Place {}
 
 export const getPlacePictureUrl = (id: string) => {
   return `places/place-picture/${id}`;
@@ -103,7 +99,7 @@ export const addPlace: AuthRequestHandler = async (user, req, res, next) => {
 
   const { contentType, buffer } = contentTypeBufferSplit(picture);
 
-  const newPlace = new MyPlaceClass({
+  const newPlace = new Place({
     title,
     description,
     address,
@@ -307,23 +303,20 @@ export const getOtherUserPlacesByUserId: RequestHandler = async (
       )
     );
   }
-  const userPlacesID = user.places;
 
-  const placesId = userPlacesID.map((place) => {
+  const placesId = user.places.map((place) => {
     return place._id.toHexString();
   });
 
   const places: IPlace[] = [];
 
-  for (let i = 0; i < userPlacesID.length; i++) {
-    const id = placesId[i];
+  for (const id of placesId) {
     const place = await Place.findById(id);
-    if (place !== null) {
+    if (place) {
       places.push(place);
     }
   }
 
-  // places = places.filter((place) => place !== null);
   const placesDto = places.map((place) => {
     return new PlaceDto(
       place.title,
@@ -336,21 +329,6 @@ export const getOtherUserPlacesByUserId: RequestHandler = async (
     );
   });
 
-  // const placesWithImageUrl = places.map((place) => {
-  //   const placepictureId = place.picture.toHexString();
-  //   const editedPlace = {
-  //     id: place.id,
-  //     title: place.title,
-  //     description: place.description,
-  //     address: place.address,
-  //     location: place.location,
-  //     pictureUrl: getPlacePictureUrl(placepictureId),
-  //   };
-
-  //   return editedPlace;
-  // });
-
-  // console.log(result);
   res.json({
     mesaage: "Get some users place successfully",
     places: placesDto,
