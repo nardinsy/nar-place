@@ -1,0 +1,9 @@
+.logo-name {
+  color: #5f9ea0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.logo-name:hover {
+  color: #7a9697;
+}

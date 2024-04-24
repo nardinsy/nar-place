@@ -40,3 +40,14 @@ export class PlaceDto {
     public readonly pictureUrl: string
   ) {}
 }
+
+export interface UserLoginInformation {
+  email: string;
+  password: string;
+}
+
+export interface UserSignupInformation {
+  username: string;
+  email: string;
+  password: string;
+}
