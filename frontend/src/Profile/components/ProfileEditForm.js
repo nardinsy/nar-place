@@ -183,11 +183,3 @@ const ProfileEditForm = ({
 };
 
 export default ProfileEditForm;
-
-{
-  /* <Mis
-id={authContext.username}
-channheFileWithPickedFile={setPickedFile}
-className={classes["edit-btn"]}
-/> */
-}

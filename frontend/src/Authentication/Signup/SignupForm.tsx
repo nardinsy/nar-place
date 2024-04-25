@@ -1,18 +1,19 @@
 import { useContext, useRef, MouseEvent } from "react";
+import Button from "../../Shared-UI/Button";
+import AuthContext from "../../store/auth-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import AuthContext from "../../store/auth-context";
-import Button from "../../Shared-UI/Button";
-import classes from "./LoginForm.module.css";
-import { UserLoginInformation } from "../../../../backend/src/shared/dtos";
+import classes from "./SignupForm.module.css";
+import { UserSignupInformation } from "../../../../backend/src/shared/dtos";
 
-const LoginForm: React.FC = () => {
-  const authContext = useContext(AuthContext);
+const SignupForm = (props) => {
+  const userContext = useContext(AuthContext);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
 
-  const togglePasswordVisibilityHandler = () => {
+  const togglePasswordVisibilityHandler = (event) => {
     if (!passwordRef.current) return;
     if (passwordRef.current.type === "text") {
       passwordRef.current.type = "password";
@@ -21,26 +22,35 @@ const LoginForm: React.FC = () => {
     passwordRef.current.type = "text";
   };
 
-  const submitHandler = (event: MouseEvent<HTMLElement>) => {
+  const submitHandler = async (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
-    if (!emailRef.current || !passwordRef.current) {
+    if (!emailRef.current || !passwordRef.current || !usernameRef.current) {
       console.log("Enter valid input");
       return;
     }
 
-    const userInfo: UserLoginInformation = {
+    const userInfo: UserSignupInformation = {
+      username: usernameRef.current.value,
       email: emailRef.current.value,
       password: passwordRef.current.value,
     };
-    authContext.login(userInfo);
+
+    await userContext.signup(userInfo);
   };
 
   return (
     <form>
+      {/* <form onSubmit={submitHandler}> */}
+
       <div className={classes.control}>
         <label htmlFor="email">E-Mail</label>
         <input type="email" ref={emailRef} autoFocus />
+      </div>
+
+      <div className={classes.control}>
+        <label htmlFor="username">Username</label>
+        <input type="text" ref={usernameRef} />
       </div>
 
       <div className={classes.control}>
@@ -54,17 +64,12 @@ const LoginForm: React.FC = () => {
       </div>
 
       <div className={classes.actions}>
-        <Button
-          type="submit"
-          onClick={submitHandler}
-          // onKeyPress={submitByEnterHandler}
-          action={"submit"}
-        >
-          Login
+        <Button onClick={submitHandler} action={"submit"} type="submit">
+          Sign up
         </Button>
       </div>
     </form>
   );
 };
 
-export default LoginForm;
+export default SignupForm;

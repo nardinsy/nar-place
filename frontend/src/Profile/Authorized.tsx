@@ -1,40 +1,51 @@
 import { useContext, useState } from "react";
 import { Route } from "react-router-dom";
-
+import { useHistory } from "react-router-dom";
 import MyPlacePage from "../places/pages/MyPlacesPage";
-// import AddPlacePageOLD from "../places/pages/AddPlacePageOld";
 import LogoutModal from "../Authentication/Logout/LogoutModal";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import NewPlacePage from "../places/pages/NewPlacePage";
-
 import sendHttpRequest from "../helpers/http-request";
-import { getApiAddress, createAbsoluteApiAddress } from "../helpers/api-url";
+import {
+  getApiAddress,
+  createAbsoluteApiAddress,
+  ENDPOINTS,
+} from "../helpers/api-url";
 import AuthContext from "../store/auth-context";
 import PictureModal from "../shared/PictureModal";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { Base64, NewPlace, PlaceDto } from "../sharedTypes/dtos";
 
-const Authorized = ({ token }) => {
+// import { PlaceDto } from "../../../backend/src/shared/dtos";
+
+const Authorized = ({ token }: { token: string }) => {
   const authContext = useContext(AuthContext);
   console.log("User Component Render");
-  const [places, setPlaces] = useState([]);
+  const [places, setPlaces] = useState<PlaceDto[]>([]);
 
   const history = useHistory();
 
-  const addPlace = async (place) => {
+  const addPlace: (place: {
+    title: string;
+    description: string;
+    address: string;
+    image: File;
+  }) => Promise<void> = async (place) => {
     const newPLaceBlob = place.image;
 
     const reader = new FileReader();
 
     reader.onloadend = async () => {
-      const newImageDataURLFormat = reader.result; //reader.result: data:image/jpeg;base64
+      const newImageDataURLFormat = reader.result as Base64<"jpeg">;
+      //reader.result: data:image/jpeg;base64
 
-      const newplace = {
+      const newplace: NewPlace = {
         title: place.title,
         description: place.description,
         address: place.address,
         picture: newImageDataURLFormat,
       };
-      const address = getApiAddress("addPlace");
+
+      const address = getApiAddress(ENDPOINTS.addPlace);
 
       const requestOptions = {
         method: "POST",
@@ -43,8 +54,18 @@ const Authorized = ({ token }) => {
       };
 
       const data = await sendHttpRequest(address, requestOptions);
+      console.log(data.place);
+      const placeData = new PlaceDto(
+        data.place.title,
+        data.place.description,
+        data.place.address,
+        data.picture,
+        data.place.id,
+        data.place.creator,
+        data.place.pictureUrl
+      );
 
-      setPlaces((pre) => [...pre, data.place]);
+      setPlaces((pre) => (pre ? [...pre, placeData] : [placeData]));
       console.log(data.message);
 
       history.push("/myplace");
@@ -59,7 +80,7 @@ const Authorized = ({ token }) => {
       headers: { "Content-Type": "application/json", token },
     };
 
-    const address = getApiAddress("getPlaces");
+    const address = getApiAddress(ENDPOINTS.getPlaces);
 
     const data = await sendHttpRequest(address, requestOptions);
 
@@ -79,15 +100,17 @@ const Authorized = ({ token }) => {
         address: placeInfo.address,
       }),
     };
-    const address = getApiAddress("editPlace");
+    const address = getApiAddress(ENDPOINTS.editPlace);
 
     const data = await sendHttpRequest(address, requestOptions);
 
     const editedPlace = places.find((place) => place.id === placeInfo.id);
 
-    editedPlace.title = placeInfo.title;
-    editedPlace.description = placeInfo.description;
-    editedPlace.address = placeInfo.address;
+    if (editedPlace) {
+      editedPlace.title = placeInfo.title;
+      editedPlace.description = placeInfo.description;
+      editedPlace.address = placeInfo.address;
+    }
 
     setPlaces((pre) => [...pre]);
 
@@ -99,7 +122,7 @@ const Authorized = ({ token }) => {
       method: "DELETE",
       headers: { "Content-Type": "application/json", token },
     };
-    const address = getApiAddress("deletePlace", placeId);
+    const address = getApiAddress(ENDPOINTS.deletePlace, placeId);
 
     const data = await sendHttpRequest(address, requestOptions);
 
@@ -165,7 +188,7 @@ const Authorized = ({ token }) => {
       headers: { "Content-Type": "application/json", token },
       body: JSON.stringify(userNewImage),
     };
-    const address = getApiAddress("changeProfilePicture");
+    const address = getApiAddress(ENDPOINTS.changeProfilePicture);
 
     const data = await sendHttpRequest(address, requestOptions);
     return data;
@@ -177,7 +200,7 @@ const Authorized = ({ token }) => {
       headers: { "Content-Type": "application/json", token },
       body: JSON.stringify({ password: newPassword }),
     };
-    const address = getApiAddress("changePassword");
+    const address = getApiAddress(ENDPOINTS.changePassword);
 
     const data = await sendHttpRequest(address, requestOptions);
     console.log(data.message);
@@ -189,7 +212,7 @@ const Authorized = ({ token }) => {
       headers: { "Content-Type": "application/json", token },
       body: JSON.stringify({ username: newUsername }),
     };
-    const address = getApiAddress("changeUsername");
+    const address = getApiAddress(ENDPOINTS.changeUsername);
 
     const data = await sendHttpRequest(address, requestOptions);
     authContext.setUsername(newUsername);

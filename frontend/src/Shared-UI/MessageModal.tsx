@@ -4,7 +4,7 @@ import Modal from "./Modal";
 import React, { FC } from "react";
 
 type MessageProps = HasChildren & {
-  className: string;
+  className?: string;
   message: string;
   //   children?: React.ReactNode | JSX.Element;
 };

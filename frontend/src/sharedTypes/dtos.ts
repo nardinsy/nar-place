@@ -27,9 +27,9 @@ export class PlaceDto {
     public title: string,
     public description: string,
     public address: string,
-    public picture: Types.ObjectId,
-    public readonly id: Types.ObjectId,
-    public readonly creator: Types.ObjectId,
+    public picture: string,
+    public readonly id: string,
+    public readonly creator: string,
     public pictureUrl: string
   ) {}
 }
@@ -64,3 +64,10 @@ export interface NewPlace {
 
 export type Base64<imageType extends string> =
   `data:image/${imageType};base64${string}`;
+
+export type UserInfoType = {
+  userId: string;
+  username: string;
+  placeCount: number;
+  pictureUrl: string | undefined;
+};

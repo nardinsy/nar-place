@@ -1,7 +1,7 @@
 export interface MyRequestOptions {
   // method: "GET" | "POST" | "PATCH" | "DELETE";
   method: string;
-  headers: any;
+  headers?: any;
   body?: string;
 }
 

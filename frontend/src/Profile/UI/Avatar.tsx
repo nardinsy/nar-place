@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import classes from "./Avatar.module.css";
-import { useState } from "react";
 
 const Avatar = ({
   cssClassName,

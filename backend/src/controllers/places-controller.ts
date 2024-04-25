@@ -8,7 +8,7 @@ import Place, { IPlace } from "../models/place";
 import PlacePicture, { IPlacePicture } from "../models/place-picture";
 import getCoordsForAddress from "../util/location";
 import contentTypeBufferSplit from "../helpers/data-url";
-import { PlaceDto } from "../shared/dtos";
+import { NewPlace, PlaceDto } from "../shared/dtos";
 
 export const getPlacePictureUrl = (id: string) => {
   return `places/place-picture/${id}`;
@@ -82,17 +82,7 @@ export const addPlace: AuthRequestHandler = async (user, req, res, next) => {
     return next(error);
   }
 
-  const {
-    title,
-    description,
-    address,
-    picture,
-  }: {
-    title: string;
-    description: string;
-    address: string;
-    picture: string;
-  } = req.body;
+  const { title, description, address, picture }: NewPlace = req.body;
 
   const coordinates: { lat: number; lng: number } =
     getCoordsForAddress(address);

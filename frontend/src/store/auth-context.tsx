@@ -9,31 +9,33 @@ import {
 } from "../../../backend/src/shared/dtos";
 import { HasChildren } from "../helpers/props";
 
-type ValueContex = {
+interface AuthContextT {
   isLoggedin: boolean;
   token: string | undefined;
   username: string | undefined;
   userPictureUrl: string | undefined;
   userId: string | undefined;
-  signup: (userinfo: UserSignupInformation) => void;
-  login: (userinfo: UserLoginInformation) => void;
-  logout: () => void;
-  setPictureUrl: (picrute: string) => void;
+  signup: (userinfo: UserSignupInformation) => Promise<void>;
+  login: (userinfo: UserLoginInformation) => Promise<void>;
+  logout: () => Promise<void>;
+  setPictureUrl: (picrute: string | undefined) => void;
   setUsername: (username: string) => void;
+}
+
+const defaultState = {
+  isLoggedin: false,
+  token: undefined,
+  username: undefined,
+  userPictureUrl: undefined,
+  userId: undefined,
+  signup: async (userInfo: UserSignupInformation) => {},
+  login: async (userInfo: UserLoginInformation) => {},
+  logout: async () => {},
+  setPictureUrl: (picture: string | undefined) => {},
+  setUsername: (username: string) => {},
 };
 
-const AuthContext = createContext<ValueContex>({
-  isLoggedin: false,
-  token: "",
-  username: "",
-  userPictureUrl: "",
-  userId: "",
-  signup: (userInfo: UserSignupInformation) => {},
-  login: (userInfo: UserLoginInformation) => {},
-  logout: () => {},
-  setPictureUrl: (picture: string) => {},
-  setUsername: (username: string) => {},
-});
+const AuthContext = createContext<AuthContextT>(defaultState);
 
 const saveUserInfoToLocalStorage = (
   token: string,
@@ -49,7 +51,7 @@ const saveUserInfoToLocalStorage = (
   }
 };
 
-export const AuthContextProvider: FC<HasChildren> = (props) => {
+export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [isLoggedin, setIsloggedin] = useState(false);
   const [token, setToken] = useState<string | undefined>(undefined);
   const [userId, setUserId] = useState<string | undefined>(undefined);
@@ -77,21 +79,24 @@ export const AuthContextProvider: FC<HasChildren> = (props) => {
   }, []);
 
   const signup = async (userInfo: UserSignupInformation) => {
+    console.log("here");
     const requestOptions: MyRequestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userInfo),
     };
     const address = getApiAddress(ENDPOINTS.signup);
-
-    const data = await sendHttpRequest(address, requestOptions);
-
-    localLogin(data.token, data.userId, data.username, undefined);
-
-    history.replace("/");
+    try {
+      const data = await sendHttpRequest(address, requestOptions);
+      localLogin(data.token, data.userId, data.username, undefined);
+      history.replace("/");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const login = async (userInfo: UserLoginInformation) => {
+    console.log("login");
     if (userInfo.email.length === 0 || userInfo.password.length === 0) {
       console.log("Please enter email or password");
       return;
@@ -121,9 +126,12 @@ export const AuthContextProvider: FC<HasChildren> = (props) => {
       headers: { "Content-Type": "application/json", token },
     };
     const address = getApiAddress(ENDPOINTS.logout);
-
+    console.log(address);
     const data = await sendHttpRequest(address, requestOptions);
-    console.log(data.message);
+    if (data.ok) {
+      console.log(data);
+      console.log(data.message);
+    }
 
     localLogout();
   };
@@ -157,7 +165,7 @@ export const AuthContextProvider: FC<HasChildren> = (props) => {
     saveUserInfoToLocalStorage(token, userId, username, pictureUrl);
   };
 
-  const setPictureUrlMethod = (picture: string) => {
+  const setPictureUrlMethod = (picture: string | undefined) => {
     setUserPictureUrl(picture);
   };
 
@@ -180,7 +188,7 @@ export const AuthContextProvider: FC<HasChildren> = (props) => {
         setUsername: changeUsernameMethod,
       }}
     >
-      {props.children}
+      {children}
     </AuthContext.Provider>
   );
 };

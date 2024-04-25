@@ -3,7 +3,11 @@ import classes from "./Modal.module.css";
 import { FC } from "react";
 import { HasChildren } from "../helpers/props";
 
-const Backdrop = ({ onBackdropClick }: { onBackdropClick?: () => {} }) => {
+const Backdrop = ({
+  onBackdropClick,
+}: {
+  onBackdropClick?: (event: any) => void;
+}) => {
   return <div className={classes.backdrop} onClick={onBackdropClick}></div>;
 };
 
@@ -24,7 +28,7 @@ const ModalOverlay: FC<ModalOverlayProps> = ({
 const portalElement = document.getElementById("overlays") as HTMLElement;
 
 type ModalProps = HasChildren & {
-  onBackdropClick?: () => {};
+  onBackdropClick?: (event: any) => void;
   cssClassName?: string;
 };
 

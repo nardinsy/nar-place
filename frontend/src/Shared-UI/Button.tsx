@@ -6,7 +6,7 @@ type ButtonProps = HasChildren & {
   className?: string;
   action: "submit" | "cancel" | "delete" | "edit";
   onClick: Function;
-  type: "button" | "submit" | "reset" | undefined;
+  type?: "button" | "submit" | "reset" | undefined;
 };
 
 const Button: FC<ButtonProps> = ({

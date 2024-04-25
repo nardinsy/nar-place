@@ -6,7 +6,7 @@ import createHttpError from "../models/createHttpError";
 import User, { IUser } from "../models/user";
 import { UserInfoType } from "../types/types";
 import privateKey from "../privateKey";
-import { UserDto } from "../shared/dtos";
+import { PlaceDto, UserDto } from "../shared/dtos";
 import { AuthRequestHandler } from "../lib/auth";
 import contentTypeBufferSplit from "../helpers/data-url";
 import ProfilePicture, { IProfilePicture } from "../models/profile-picture";
@@ -19,16 +19,16 @@ const getProfilePictureUrl = (id: string): string => {
 export const getUsers: RequestHandler = async (req, res, next) => {
   const result = await User.find().exec();
 
-  const usersInfo = result.map((user): UserInfoType => {
-    return {
-      userId: user.id,
-      username: user.username,
-      placeCount: user.places.length,
-      pictureUrl: user.picture
+  const usersInfo = result.map((user) => {
+    return new UserDto(
+      user.id,
+      user.username,
+      user.picture
         ? getProfilePictureUrl(user.picture.toHexString())
         : undefined,
+      user.places.length
       // pictureUrl: (if has picture) ? url to the picture : undefined
-    };
+    );
   });
 
   res.json({ message: "Get users successfully", usersInfo });

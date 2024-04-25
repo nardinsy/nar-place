@@ -1,8 +1,8 @@
 import classes from "./Card.module.css";
 
 type CardProps = {
-  className: string | undefined;
-  style: React.CSSProperties | undefined;
+  className?: string | undefined;
+  style?: React.CSSProperties | undefined;
   children?: React.ReactNode;
 };
 
