@@ -1,10 +1,8 @@
 import { useState } from "react";
-
 import PlaceCard from "../UI/PlaceCard";
 import MessageModal from "../../Shared-UI/MessageModal";
 import EditPlaceModal from "./EditPlaceModal";
 import Button from "../../Shared-UI/Button";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import classes from "./EditablePlaceItem.module.css";

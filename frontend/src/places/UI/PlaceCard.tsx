@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useState, FC, PropsWithChildren } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import classes from "./PlaceCard.module.css";
-import { HasChildren } from "../../helpers/props";
+import { UserDto } from "../../sharedTypes/dtos";
 
-type PlaceCardProps = HasChildren & {};
-const PlaceCard = ({
+type PlaceCardProps = PropsWithChildren<{
+  id: string;
+  title: string;
+  description: string;
+  address: string;
+  image: string;
+  userDto: UserDto;
+}>;
+const PlaceCard: FC<PlaceCardProps> = ({
   id,
   title,
   description,
@@ -84,6 +91,7 @@ const PlaceCard = ({
   const cardClickHandler = (event) => {
     const selection = window.getSelection();
 
+    if (!selection) return;
     if (selection.toString().length !== 0) {
       event.preventDefault();
       event.stopPropagation();
@@ -101,33 +109,31 @@ const PlaceCard = ({
   const placeInfo = { id, title, description, address, image: nImage };
 
   return (
-    <>
-      <div className={classes["place-card"]} onClick={cardClickHandler}>
-        <Link
-          to={{
-            pathname: `/place/${id}`,
-            state: { placeInfo, userDto },
-          }}
-        >
-          <img src={image} className={classes["place-image-full"]} />
-          <div className={classes["card-content"]}>
-            <h2 className={classes["place-title"]}>{oneLineTitle}</h2>
-            <div className={classes.wrapper}>
-              <div className={classes.scroll}>
-                <p className={classes.content}>{wrappedDescription}</p>
-              </div>
+    <div className={classes["place-card"]} onClick={cardClickHandler}>
+      <Link
+        to={{
+          pathname: `/place/${id}`,
+          state: { placeInfo, userDto },
+        }}
+      >
+        <img src={image} className={classes["place-image-full"]} />
+        <div className={classes["card-content"]}>
+          <h2 className={classes["place-title"]}>{oneLineTitle}</h2>
+          <div className={classes.wrapper}>
+            <div className={classes.scroll}>
+              <p className={classes.content}>{wrappedDescription}</p>
             </div>
-
-            <p className={classes["place-address"]}>
-              <strong style={{ color: "#C0C0C0" }}>Address: </strong>
-              {oneLineAddress}
-            </p>
           </div>
 
-          {children}
-        </Link>
-      </div>
-    </>
+          <p className={classes["place-address"]}>
+            <strong style={{ color: "#C0C0C0" }}>Address: </strong>
+            {oneLineAddress}
+          </p>
+        </div>
+
+        {children}
+      </Link>
+    </div>
   );
 };
 
