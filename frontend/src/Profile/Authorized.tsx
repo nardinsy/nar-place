@@ -18,8 +18,13 @@ import { Base64, NewPlace, PlaceDto } from "../sharedTypes/dtos";
 // import { PlaceDto } from "../../../backend/src/shared/dtos";
 
 const Authorized = ({ token }: { token: string }) => {
-  const authContext = useContext(AuthContext);
   console.log("User Component Render");
+
+  const authContext = useContext(AuthContext);
+  if (!authContext || !authContext.isLoggedin) {
+    throw new Error("User most be logged in, Please Login again");
+  }
+
   const [places, setPlaces] = useState<PlaceDto[]>([]);
 
   const history = useHistory();
@@ -215,9 +220,8 @@ const Authorized = ({ token }: { token: string }) => {
     const address = getApiAddress(ENDPOINTS.changeUsername);
 
     const data = await sendHttpRequest(address, requestOptions);
-    authContext.setUsername(newUsername);
 
-    // setUsername(newUsername);
+    authContext.setUsername(newUsername);
 
     console.log(data.message);
   };

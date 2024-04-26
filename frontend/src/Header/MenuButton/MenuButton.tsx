@@ -4,10 +4,13 @@ import AuthContext from "../../store/auth-context";
 import ProfileMenuDropdown from "../Dropdown/ProfileMenuDropdown";
 import AuthDropdown from "../Dropdown/AuthDropdown";
 import classes from "./MenuButton.module.css";
-import { MouseEvent } from "../../sharedTypes/types";
 
 const MenuButton = () => {
   const authContext = useContext(AuthContext);
+  if (!authContext)
+    throw new Error(
+      "Auth context is not provided, Please wrap component with AuthContextProvider"
+    );
 
   // const ref = useRef();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -65,7 +68,7 @@ const MenuButton = () => {
       onClick={showDropDownHandler}
       ref={ref}
     >
-      <MenuButtonIcon isLoggedin={authContext.isLoggedin} />
+      <MenuButtonIcon />
       {dropdown.show && dropdown.component}
     </div>
   );

@@ -5,6 +5,10 @@ import AuthContext from "../../store/auth-context";
 
 const NavLinks = () => {
   const authContext = useContext(AuthContext);
+  if (!authContext)
+    throw new Error(
+      "Auth context is not provided, Please wrap component with AuthContextProvider"
+    );
 
   const location = useLocation();
 

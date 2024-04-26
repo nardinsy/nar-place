@@ -10,6 +10,11 @@ import Users from "./user/pages/Users";
 
 const App: React.FC = (porps) => {
   const authContext = useContext(AuthContext);
+  if (!authContext)
+    throw new Error(
+      "Auth context is not provided, Please wrap component with AuthContextProvider"
+    );
+
   return (
     <>
       <MainHeader />

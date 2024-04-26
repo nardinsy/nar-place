@@ -8,6 +8,12 @@ import { UserLoginInformation } from "../../../../backend/src/shared/dtos";
 
 const LoginForm: React.FC = () => {
   const authContext = useContext(AuthContext);
+  if (!authContext)
+    throw new Error(
+      "Auth context is not provided, Please wrap component with AuthContextProvider"
+    );
+
+  if (authContext.isLoggedin) throw new Error("User is loggedin already.");
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);

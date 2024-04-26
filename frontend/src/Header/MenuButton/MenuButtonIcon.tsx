@@ -5,12 +5,16 @@ import classes from "./MenuButtonIcon.module.css";
 import Avatar from "../../Profile/UI/Avatar";
 import AuthContext from "../../store/auth-context";
 
-const MenuButtonIcon = ({ isLoggedin }: { isLoggedin: boolean }) => {
+const MenuButtonIcon = () => {
   const authContext = useContext(AuthContext);
+  if (!authContext)
+    throw new Error(
+      "Auth context is not provided, Please wrap component with AuthContextProvider"
+    );
 
   return (
     <>
-      {isLoggedin ? (
+      {authContext.isLoggedin ? (
         <Avatar
           pictureUrl={authContext.userPictureUrl}
           alt={authContext.username}

@@ -9,33 +9,36 @@ import {
 } from "../../../backend/src/shared/dtos";
 import { HasChildren } from "../helpers/props";
 
-interface AuthContextT {
-  isLoggedin: boolean;
-  token: string | undefined;
-  username: string | undefined;
-  userPictureUrl: string | undefined;
-  userId: string | undefined;
+interface LoggedOutAuthContextT {
+  isLoggedin: false;
   signup: (userinfo: UserSignupInformation) => Promise<void>;
   login: (userinfo: UserLoginInformation) => Promise<void>;
+}
+
+interface LoggedInAuthContextT {
+  isLoggedin: true;
+  token: string;
+  username: string;
+  userPictureUrl: string | undefined;
+  userId: string;
   logout: () => Promise<void>;
-  setPictureUrl: (picrute: string | undefined) => void;
+  setPictureUrl: (picture: string | undefined) => void;
   setUsername: (username: string) => void;
 }
 
-const defaultState = {
-  isLoggedin: false,
-  token: undefined,
-  username: undefined,
-  userPictureUrl: undefined,
-  userId: undefined,
-  signup: async (userInfo: UserSignupInformation) => {},
-  login: async (userInfo: UserLoginInformation) => {},
-  logout: async () => {},
-  setPictureUrl: (picture: string | undefined) => {},
-  setUsername: (username: string) => {},
-};
+type LoginInfo =
+  | {
+      isLoggedin: true;
+      token: string;
+      username: string;
+      userPictureUrl: string | undefined;
+      userId: string;
+    }
+  | { isLoggedin: false };
 
-const AuthContext = createContext<AuthContextT>(defaultState);
+type AuthContextT = LoggedInAuthContextT | LoggedOutAuthContextT;
+
+const AuthContext = createContext<AuthContextT | undefined>(undefined);
 
 const saveUserInfoToLocalStorage = (
   token: string,
@@ -52,13 +55,15 @@ const saveUserInfoToLocalStorage = (
 };
 
 export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
-  const [isLoggedin, setIsloggedin] = useState(false);
-  const [token, setToken] = useState<string | undefined>(undefined);
-  const [userId, setUserId] = useState<string | undefined>(undefined);
-  const [username, setUsername] = useState<string | undefined>(undefined);
-  const [userPictureUrl, setUserPictureUrl] = useState<string | undefined>(
-    undefined
-  );
+  const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
+
+  // const [isLoggedin, setIsloggedin] = useState(false);
+  // const [token, setToken] = useState<string | undefined>(undefined);
+  // const [userId, setUserId] = useState<string | undefined>(undefined);
+  // const [username, setUsername] = useState<string | undefined>(undefined);
+  // const [userPictureUrl, setUserPictureUrl] = useState<string | undefined>(
+  //   undefined
+  // );
 
   const history = useHistory();
 
@@ -121,9 +126,12 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   };
 
   const logout = async () => {
+    if (!loginInfo.isLoggedin) {
+      throw new Error("User must be logged in");
+    }
     const requestOptions = {
       method: "GET",
-      headers: { "Content-Type": "application/json", token },
+      headers: { "Content-Type": "application/json", token: loginInfo.token },
     };
     const address = getApiAddress(ENDPOINTS.logout);
     console.log(address);
@@ -137,11 +145,12 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   };
 
   const localLogout = () => {
-    setToken("");
-    setUserId("");
-    setUsername("");
-    setUserPictureUrl("");
-    setIsloggedin(false);
+    setLoginInfo({ isLoggedin: false });
+    // setToken("");
+    // setUserId("");
+    // setUsername("");
+    // setUserPictureUrl("");
+    // setIsloggedin(false);
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
@@ -156,41 +165,44 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     username: string,
     pictureUrl: string | undefined
   ) => {
-    setToken(token);
-    setUserId(userId);
-    setUsername(username);
-    setUserPictureUrl(pictureUrl);
-    setIsloggedin(true);
-
+    setLoginInfo({
+      isLoggedin: true,
+      token,
+      userId,
+      username,
+      userPictureUrl: pictureUrl,
+    });
     saveUserInfoToLocalStorage(token, userId, username, pictureUrl);
   };
 
   const setPictureUrlMethod = (picture: string | undefined) => {
-    setUserPictureUrl(picture);
+    // setUserPictureUrl(picture);
+    setLoginInfo((pre) => {
+      return { ...pre, userPictureUrl: picture };
+    });
   };
 
   const changeUsernameMethod = (username: string) => {
-    setUsername(username);
+    // setUsername(username);
+    setLoginInfo((pre) => {
+      return { ...pre, username };
+    });
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isLoggedin,
-        token,
-        username,
-        userPictureUrl,
-        userId,
-        signup,
-        login,
+  const value: AuthContextT = loginInfo.isLoggedin
+    ? {
+        isLoggedin: true,
+        token: loginInfo.token,
+        username: loginInfo.username,
+        userPictureUrl: loginInfo.userPictureUrl,
+        userId: loginInfo.userId,
         logout,
         setPictureUrl: setPictureUrlMethod,
         setUsername: changeUsernameMethod,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+      }
+    : { isLoggedin: false, signup, login };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthContext;

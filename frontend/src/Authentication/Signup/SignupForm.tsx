@@ -7,7 +7,13 @@ import classes from "./SignupForm.module.css";
 import { UserSignupInformation } from "../../../../backend/src/shared/dtos";
 
 const SignupForm = (props) => {
-  const userContext = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  if (!authContext)
+    throw new Error(
+      "Auth context is not provided, Please wrap component with AuthContextProvider"
+    );
+
+  if (authContext.isLoggedin) throw new Error("User is logged in already.");
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -36,7 +42,7 @@ const SignupForm = (props) => {
       password: passwordRef.current.value,
     };
 
-    await userContext.signup(userInfo);
+    await authContext.signup(userInfo);
   };
 
   return (

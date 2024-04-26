@@ -7,6 +7,13 @@ import Button from "../../Shared-UI/Button";
 const LogoutModal = (props) => {
   const history = useHistory();
   const authContext = useContext(AuthContext);
+  if (!authContext)
+    throw new Error(
+      "Auth context is not provided, Please wrap component with AuthContextProvider"
+    );
+
+  if (!authContext.isLoggedin)
+    throw new Error("User most be logged in to be able to logout");
 
   const logoutClient = async (event) => {
     event.preventDefault();
