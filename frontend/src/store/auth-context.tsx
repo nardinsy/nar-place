@@ -8,6 +8,7 @@ import {
   UserSignupInformation,
 } from "../../../backend/src/shared/dtos";
 import { HasChildren } from "../helpers/props";
+import { LoginResult } from "../sharedTypes/dtos";
 
 interface LoggedOutAuthContextT {
   isLoggedin: false;
@@ -74,6 +75,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
       const storedUserId = localStorage.getItem("userId")!;
       const storedUsername = localStorage.getItem("username")!;
       const storedUserPictureUrl = localStorage.getItem("userPictureUrl")!;
+
       localLogin(
         storedToken,
         storedUserId,
@@ -92,8 +94,10 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     };
     const address = getApiAddress(ENDPOINTS.signup);
     try {
-      const data = await sendHttpRequest(address, requestOptions);
-      localLogin(data.token, data.userId, data.username, undefined);
+      const data: LoginResult = await sendHttpRequest(address, requestOptions);
+      const { token, user, message } = data;
+
+      localLogin(token, user.userId, user.username, user.pictureUrl);
       history.replace("/");
     } catch (e) {
       console.log(e);
@@ -114,13 +118,15 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     };
     const address = getApiAddress(ENDPOINTS.login);
 
-    const data = await sendHttpRequest(address, requestOptions);
+    const data: LoginResult = await sendHttpRequest(address, requestOptions);
 
-    const pictureUrl = data.pictureUrl
-      ? createAbsoluteApiAddress(data.pictureUrl)
+    const { token, user, message } = data;
+
+    const pictureUrl = user.pictureUrl
+      ? createAbsoluteApiAddress(user.pictureUrl)
       : undefined;
 
-    localLogin(data.token, data.userId, data.username, pictureUrl);
+    localLogin(token, user.userId, user.username, pictureUrl);
 
     history.replace("/");
   };

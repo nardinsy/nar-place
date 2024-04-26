@@ -87,12 +87,15 @@ export const signup: RequestHandler = async (req, res, next) => {
     // console.log(error);
   }
 
-  const userInfo = new UserDto(newUser.id, username, undefined);
-  res.status(201).json({
-    message: "Signup user successfully.",
-    token: token,
-    userInfo,
-  });
+  const userDto = new UserDto(newUser.id, username, undefined, 0);
+
+  // res.status(201).json({
+  //   message: "Signup user successfully.",
+  //   token: token,
+  //   userInfo,
+  // });
+
+  res.status(200).json(new LoginResult(token, userDto));
 };
 
 export const login: RequestHandler = async (req, res, next) => {
@@ -135,7 +138,8 @@ export const login: RequestHandler = async (req, res, next) => {
     existingUser.username,
     existingUser.picture
       ? getProfilePictureUrl(existingUser.picture.toHexString())
-      : undefined
+      : undefined,
+    existingUser.places.length
   );
 
   res.status(200).json(new LoginResult(token, userDto));
