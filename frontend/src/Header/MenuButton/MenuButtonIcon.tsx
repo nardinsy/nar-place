@@ -1,16 +1,11 @@
-import { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import classes from "./MenuButtonIcon.module.css";
 import Avatar from "../../Profile/UI/Avatar";
-import AuthContext from "../../store/auth-context";
+import useAuthContext from "../../Hooks/Auth";
 
 const MenuButtonIcon = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext)
-    throw new Error(
-      "Auth context is not provided, Please wrap component with AuthContextProvider"
-    );
+  const authContext = useAuthContext();
 
   return (
     <>

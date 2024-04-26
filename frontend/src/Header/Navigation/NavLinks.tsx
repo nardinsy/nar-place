@@ -1,14 +1,9 @@
 import { NavLink, useLocation } from "react-router-dom";
 import classes from "./NavLinks.module.css";
-import { useContext } from "react";
-import AuthContext from "../../store/auth-context";
+import useAuthContext from "../../Hooks/Auth";
 
 const NavLinks = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext)
-    throw new Error(
-      "Auth context is not provided, Please wrap component with AuthContextProvider"
-    );
+  const authContext = useAuthContext();
 
   const location = useLocation();
 

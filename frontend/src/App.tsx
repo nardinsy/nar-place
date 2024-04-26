@@ -1,19 +1,20 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Route } from "react-router-dom";
 import MainHeader from "./Header/MainHeader";
 import AuthForms from "./Authentication/AuthForm";
 import Authorized from "./Profile/Authorized";
-import AuthContext from "./store/auth-context";
 import AnyUserPlaces from "./user/pages/AnyUserPlaces";
 import PlacePage from "./places/pages/PlacePage";
 import Users from "./user/pages/Users";
+import useAuthContext from "./Hooks/Auth";
 
 const App: React.FC = (porps) => {
-  const authContext = useContext(AuthContext);
-  if (!authContext)
-    throw new Error(
-      "Auth context is not provided, Please wrap component with AuthContextProvider"
-    );
+  // const authContext = useContext(AuthContext);
+  // if (!authContext)
+  //   throw new Error(
+  //     "Auth context is not provided, Please wrap component with AuthContextProvider"
+  //   );
+  const authContext = useAuthContext();
 
   return (
     <>

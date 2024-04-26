@@ -1,17 +1,13 @@
-import { useContext, useRef, MouseEvent } from "react";
+import { useRef, MouseEvent } from "react";
 import Button from "../../Shared-UI/Button";
-import AuthContext from "../../store/auth-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import classes from "./SignupForm.module.css";
 import { UserSignupInformation } from "../../../../backend/src/shared/dtos";
+import useAuthContext from "../../Hooks/Auth";
 
 const SignupForm = (props) => {
-  const authContext = useContext(AuthContext);
-  if (!authContext)
-    throw new Error(
-      "Auth context is not provided, Please wrap component with AuthContextProvider"
-    );
+  const authContext = useAuthContext();
 
   if (authContext.isLoggedin) throw new Error("User is logged in already.");
 

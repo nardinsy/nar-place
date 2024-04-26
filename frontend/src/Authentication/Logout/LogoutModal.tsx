@@ -1,16 +1,11 @@
-import { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import MessageModal from "../../Shared-UI/MessageModal";
-import AuthContext from "../../store/auth-context";
 import Button from "../../Shared-UI/Button";
+import useAuthContext from "../../Hooks/Auth";
 
 const LogoutModal = (props) => {
   const history = useHistory();
-  const authContext = useContext(AuthContext);
-  if (!authContext)
-    throw new Error(
-      "Auth context is not provided, Please wrap component with AuthContextProvider"
-    );
+  const authContext = useAuthContext();
 
   if (!authContext.isLoggedin)
     throw new Error("User most be logged in to be able to logout");

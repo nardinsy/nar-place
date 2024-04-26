@@ -1,7 +1,7 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import PlacesList from "../components/PlacesList";
-import AuthContext from "../../store/auth-context";
 import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
+import useAuthContext from "../../Hooks/Auth";
 
 type MyPlacePageProps = {
   places: PlaceDto[];
@@ -19,9 +19,9 @@ const MyPlacePage = ({
   console.log("Myplace Page Render");
 
   let userDto;
-  const authContext = useContext(AuthContext);
+  const authContext = useAuthContext();
 
-  if (authContext?.isLoggedin) {
+  if (authContext.isLoggedin) {
     userDto = new UserDto(
       authContext.userId,
       authContext.username,

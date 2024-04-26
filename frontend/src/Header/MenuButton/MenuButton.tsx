@@ -1,16 +1,12 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MenuButtonIcon from "./MenuButtonIcon";
-import AuthContext from "../../store/auth-context";
 import ProfileMenuDropdown from "../Dropdown/ProfileMenuDropdown";
 import AuthDropdown from "../Dropdown/AuthDropdown";
 import classes from "./MenuButton.module.css";
+import useAuthContext from "../../Hooks/Auth";
 
 const MenuButton = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext)
-    throw new Error(
-      "Auth context is not provided, Please wrap component with AuthContextProvider"
-    );
+  const authContext = useAuthContext();
 
   // const ref = useRef();
   const ref = useRef<HTMLDivElement | null>(null);

@@ -1,24 +1,21 @@
-import { useRef, useContext, useState, useEffect } from "react";
-import { Route, useHistory } from "react-router-dom/cjs/react-router-dom.min";
-
+import { useRef, useState } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-
-import AuthContext from "../../store/auth-context";
-import classes from "./ProfileEditForm.module.css";
-
 import Button from "../../Shared-UI/Button";
 import Avatar from "../UI/Avatar";
 import ImageUpload from "../../shared/ImageUpload";
 import PasswordChangeModal from "./PasswordChangeModal";
 import PictureModal from "../../shared/PictureModal";
+import useAuthContext from "../../Hooks/Auth";
+import classes from "./ProfileEditForm.module.css";
 
 const ProfileEditForm = ({
   changeUserImage,
   changePassword,
   changeUsername,
 }) => {
-  const authContext = useContext(AuthContext);
+  const authContext = useAuthContext();
   const userPictureUrl = authContext.userPictureUrl;
 
   const [avatarURL, setAvatarURL] = useState(userPictureUrl);

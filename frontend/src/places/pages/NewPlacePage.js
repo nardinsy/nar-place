@@ -1,15 +1,15 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 
-import AuthContext from "../../store/auth-context";
 import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
 
 import classes from "./NewPlacePage.module.css";
 
 import picturePlaceholder from "../../assets/Image-placeholder.png";
+import useAuthContext from "../../Hooks/Auth";
 
 const NewPlacePage = ({ addPlace }) => {
-  const authContext = useContext(AuthContext);
+  const authContext = useAuthContext();
 
   const [uploadedPicture, setUploadedPicture] = useState(undefined);
   const [file, setFile] = useState(undefined);

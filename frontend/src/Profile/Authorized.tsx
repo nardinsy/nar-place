@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Route } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import MyPlacePage from "../places/pages/MyPlacesPage";
@@ -11,17 +11,17 @@ import {
   createAbsoluteApiAddress,
   ENDPOINTS,
 } from "../helpers/api-url";
-import AuthContext from "../store/auth-context";
 import PictureModal from "../shared/PictureModal";
 import { Base64, NewPlace, PlaceDto } from "../sharedTypes/dtos";
+import useAuthContext from "../Hooks/Auth";
 
 // import { PlaceDto } from "../../../backend/src/shared/dtos";
 
 const Authorized = ({ token }: { token: string }) => {
   console.log("User Component Render");
 
-  const authContext = useContext(AuthContext);
-  if (!authContext || !authContext.isLoggedin) {
+  const authContext = useAuthContext();
+  if (!authContext.isLoggedin) {
     throw new Error("User most be logged in, Please Login again");
   }
 
