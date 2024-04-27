@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FC } from "react";
 import PlaceCard from "../UI/PlaceCard";
 import MessageModal from "../../Shared-UI/MessageModal";
 import EditPlaceModal from "./EditPlaceModal";
@@ -6,17 +6,26 @@ import Button from "../../Shared-UI/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import classes from "./EditablePlaceItem.module.css";
+import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
 
-// import fakeImage from "../../assets/is.jpg";
-// import im from "../../assets/2.jpg";
+interface EditablePlaceItemProps {
+  placeDto: PlaceDto;
+  userDto: UserDto;
+  editPlace: (placeInfo: any) => Promise<void>;
+  deletePlace: (placeId: any) => Promise<void>;
+}
 
-const EditablePlaceItem = ({ placeInfo, userDto, editPlace, deletePlace }) => {
+const EditablePlaceItem: FC<EditablePlaceItemProps> = ({
+  placeDto,
+  userDto,
+  editPlace,
+  deletePlace,
+}) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [selectedPlaceId, setSelectedPlaceId] = useState("");
 
-  const { id, title, description, pictureUrl, address } = placeInfo;
-  // console.log(placeInfo);
+  // const { id, title, description, pictureUrl, address } = placeDto;
 
   const showEditModalHandler = (event) => {
     event.preventDefault();
@@ -48,14 +57,7 @@ const EditablePlaceItem = ({ placeInfo, userDto, editPlace, deletePlace }) => {
 
   return (
     <>
-      <PlaceCard
-        id={id}
-        title={title}
-        description={description}
-        address={address}
-        image={pictureUrl}
-        userDto={userDto}
-      >
+      <PlaceCard placeDto={placeDto} userDto={userDto}>
         <div
           className={classes["place-edit-button"]}
           onClick={showEditModalHandler}
@@ -67,7 +69,7 @@ const EditablePlaceItem = ({ placeInfo, userDto, editPlace, deletePlace }) => {
       {showEditModal && (
         <EditPlaceModal
           editPlace={editPlace}
-          placeInfo={placeInfo}
+          placeDto={placeDto}
           closeEditModal={closeEditModal}
           onDeletePlace={deletePlaceHandler}
         />

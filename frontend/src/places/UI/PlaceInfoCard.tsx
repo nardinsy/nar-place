@@ -1,30 +1,35 @@
-import { useRef, useState } from "react";
+import { FC, useState } from "react";
 import classes from "./PlaceInfoCard.module.css";
 import Button from "../../Shared-UI/Button";
+import { PlaceDto } from "../../sharedTypes/dtos";
 
-// import img from "../../assets/3.jpg";
+interface PlaceInfoCardProps {
+  onSubmit: any;
+  placeDto: PlaceDto;
+  submitButtonName: string;
+  onCancel: any;
+  closeModal: any;
+  extraAction: any;
+}
 
-const PlaceInfoCard = ({
+const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
   onSubmit,
-  placeInfo = { title: "", description: "", address: "", image: "" },
+  // placeDto = { id: "", title: "", description: "", address: "", image: "" },
+  placeDto,
   submitButtonName,
   onCancel,
   closeModal,
   extraAction,
 }) => {
-  // const titleRef = useRef(placeInfo.title);
-  // const descriptionRef = useRef(placeInfo.description);
-  // const addressRef = useRef(placeInfo.address);
-
   const [titleValue, setTitleValue] = useState(
-    placeInfo.title ? placeInfo.title : ""
+    placeDto.title ? placeDto.title : ""
   );
 
   const [descriptionValue, setDescriptionValue] = useState(
-    placeInfo.description ? placeInfo.description : ""
+    placeDto.description ? placeDto.description : ""
   );
   const [addressValue, setAddressValue] = useState(
-    placeInfo.address ? placeInfo.address : ""
+    placeDto.address ? placeDto.address : ""
   );
 
   const titleChangeHandler = (event) => {
@@ -46,16 +51,26 @@ const PlaceInfoCard = ({
   const submitCardHandler = async (event) => {
     event.preventDefault();
 
+    const p = new PlaceDto(
+      titleValue,
+      descriptionValue,
+      addressValue,
+      placeDto.picture,
+      placeDto.id,
+      "",
+      ""
+    );
+
     const place = {
       title: titleValue,
       description: descriptionValue,
       address: addressValue,
-      image: placeInfo.image,
+      // image: placeDto.image,
     };
 
-    if (placeInfo.id) {
-      place.id = placeInfo.id;
-    }
+    // if (placeDto.id) {
+    //   place.id = placeDto.id;
+    // }
 
     await onSubmit(place);
     if (submitButtonName === "Save") {
@@ -70,7 +85,7 @@ const PlaceInfoCard = ({
 
   const extraActionHandler = async (event) => {
     event.preventDefault();
-    await extraAction.action(placeInfo.id);
+    await extraAction.action(placeDto.id);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import PlacesList from "../components/PlacesList";
 import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
 import useAuthContext from "../../Hooks/Auth";
@@ -10,12 +10,12 @@ type MyPlacePageProps = {
   deletePlace: (placeId: any) => Promise<void>;
 };
 
-const MyPlacePage = ({
+const MyPlacePage: FC<MyPlacePageProps> = ({
   places,
   getPlaces,
   editPlace,
   deletePlace,
-}: MyPlacePageProps) => {
+}) => {
   console.log("Myplace Page Render");
 
   let userDto;

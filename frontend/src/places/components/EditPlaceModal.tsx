@@ -3,7 +3,7 @@ import PlaceInfoCard from "../UI/PlaceInfoCard";
 
 const EditPlaceModal = ({
   editPlace,
-  placeInfo,
+  placeDto,
   closeEditModal,
   onDeletePlace,
 }) => {
@@ -14,7 +14,7 @@ const EditPlaceModal = ({
         submitButtonName="Save"
         closeModal={closeEditModal}
         onCancel={closeEditModal}
-        placeInfo={placeInfo}
+        placeDto={placeDto}
         extraAction={{
           action: onDeletePlace,
           "button-name": "Delete",

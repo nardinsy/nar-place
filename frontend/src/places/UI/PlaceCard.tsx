@@ -1,35 +1,26 @@
 import { useState, FC, PropsWithChildren } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import classes from "./PlaceCard.module.css";
-import { UserDto } from "../../sharedTypes/dtos";
+import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
 
 type PlaceCardProps = PropsWithChildren<{
-  id: string;
-  title: string;
-  description: string;
-  address: string;
-  image: string;
+  placeDto: PlaceDto;
   userDto: UserDto;
 }>;
-const PlaceCard: FC<PlaceCardProps> = ({
-  id,
-  title,
-  description,
-  address,
-  image,
-  userDto,
-  children,
-}) => {
+const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
   const [showPictureModal, setShowPictureModal] = useState(false);
 
-  const ellipsisDropdownItems = [
-    {
-      title: "Save As ...",
-      handler: (event) => {
-        //navigate to profile setting page
-      },
-    },
-  ];
+  // const ellipsisDropdownItems = [
+  //   {
+  //     title: "Save As ...",
+  //     handler: (event) => {
+  //       //navigate to profile setting page
+  //     },
+  //   },
+  // ];
+  const { id, title, description, address, pictureUrl } = placeDto;
+  // const placeInfo = { id, title, description, address, image: nImage };
+
   const titlelineWidth = 14;
   const descriptionLineWidth = 21;
   const addressLineWidth = 10;
@@ -100,23 +91,25 @@ const PlaceCard: FC<PlaceCardProps> = ({
       setShowPictureModal(true);
     }
   };
-  const nImage = image;
+  // const nImage = pictureUrl;
 
   const oneLineTitle = controlLineWidth(title, titlelineWidth);
   const oneLineAddress = controlLineWidth(address, addressLineWidth);
   const wrappedDescription = wordWrap(description, descriptionLineWidth);
-
-  const placeInfo = { id, title, description, address, image: nImage };
 
   return (
     <div className={classes["place-card"]} onClick={cardClickHandler}>
       <Link
         to={{
           pathname: `/place/${id}`,
-          state: { placeInfo, userDto },
+          state: { placeDto, userDto },
         }}
       >
-        <img src={image} className={classes["place-image-full"]} />
+        <img
+          src={pictureUrl}
+          alt={title}
+          className={classes["place-image-full"]}
+        />
         <div className={classes["card-content"]}>
           <h2 className={classes["place-title"]}>{oneLineTitle}</h2>
           <div className={classes.wrapper}>

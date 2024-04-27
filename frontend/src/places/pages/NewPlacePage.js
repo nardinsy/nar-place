@@ -1,13 +1,18 @@
-import { useState } from "react";
-
+import { useState, FC } from "react";
 import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
-
 import classes from "./NewPlacePage.module.css";
-
-import picturePlaceholder from "../../assets/Image-placeholder.png";
+import picturePlaceholder from "../../assets/picturePlaceholder.png";
 import useAuthContext from "../../Hooks/Auth";
 
+// interface NewPlacePageProps {
+//   addPlace: (place: {
+//     title: string,
+//     description: string,
+//     address: string,
+//     image: File,
+//   }) => Promise<void>;
+// }
 const NewPlacePage = ({ addPlace }) => {
   const authContext = useAuthContext();
 

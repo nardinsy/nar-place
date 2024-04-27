@@ -1,4 +1,6 @@
-import { useParams, useLocation } from "react-router-dom";
+import { FC } from "react";
+import { useLocation } from "react-router-dom";
+import { UserDto, PlaceDto } from "../../sharedTypes/dtos";
 import Avatar from "../../Profile/UI/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,15 +10,21 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import classes from "./PlacePage.module.css";
 
-const PlacePage = (props) => {
-  const { state } = useLocation();
-  // const { id, title, description, address, image } = state;
-  const { placeInfo, userDto } = state;
+const PlacePage: FC = () => {
+  const {
+    state,
+  }: {
+    state: {
+      placeDto: PlaceDto;
+      userDto: UserDto;
+    };
+  } = useLocation();
+  const { placeDto, userDto } = state;
 
-  const { id: placeID, title, description, address, image } = placeInfo;
-  const { userID, username, pictureUrl: userPictureUrl, placeCount } = userDto;
+  const { title, description, address, pictureUrl } = placeDto;
+  const { username, pictureUrl: userPictureUrl, placeCount } = userDto;
 
-  const placeId = useParams().placeId;
+  // const placeId = useParams().placeId;
 
   const titlelineWidth = 14;
   const descriptionLineWidth = 21;
@@ -59,14 +67,14 @@ const PlacePage = (props) => {
   return (
     <div className={classes["place-page-container"]}>
       <div className={classes["place-page-image-container"]}>
-        <img src={image} className={classes["place-image"]} />
+        <img src={pictureUrl} alt={title} className={classes["place-image"]} />
       </div>
 
       <div className={classes["place-page-info-container"]}>
         <div className={classes["place-creator-account-container"]}>
           <div className={classes["place-creator-account-info"]}>
             <div>
-              <Avatar pictureUrl={userPictureUrl} width={"4rem"} />
+              <Avatar pictureUrl={userPictureUrl} alt={title} width={"4rem"} />
             </div>
 
             <div>

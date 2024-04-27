@@ -1,18 +1,12 @@
+import { FC } from "react";
 import PlaceCard from "../UI/PlaceCard";
+import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
 
-const PlaceItem = ({ placeInfo, userDto }) => {
-  const { id, title, description, pictureUrl, address } = placeInfo;
-
-  return (
-    <PlaceCard
-      id={id}
-      title={title}
-      description={description}
-      address={address}
-      image={pictureUrl}
-      userDto={userDto}
-    />
-  );
+const PlaceItem: FC<{
+  placeDto: PlaceDto;
+  userDto: UserDto;
+}> = ({ placeDto, userDto }) => {
+  return <PlaceCard placeDto={placeDto} userDto={userDto} />;
 };
 
 export default PlaceItem;

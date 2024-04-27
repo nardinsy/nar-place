@@ -6,16 +6,20 @@ import classes from "./PlacesList.module.css";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
 
-interface PlaceListProps {
+interface PlacesListProps {
+  editable: boolean;
   userPlaces: PlaceDto[];
   userDto: UserDto;
-  editable: boolean;
-  editingCallbacks?: { editPlace: any; deletePlace: any };
+  editingCallbacks?: {
+    editPlace: (placeInfo: any) => Promise<void>;
+    deletePlace: (placeId: any) => Promise<void>;
+  };
 }
-const PlacesList: FC<PlaceListProps> = ({
+
+const PlacesList: FC<PlacesListProps> = ({
+  editable,
   userPlaces,
   userDto,
-  editable,
   editingCallbacks,
 }) => {
   if (userPlaces.length === 0) {
@@ -28,57 +32,39 @@ const PlacesList: FC<PlaceListProps> = ({
     );
   }
 
-  let places;
+  const places = editable ? editablePlaces() : notEditablePlaces();
 
-  const editablePlaces = () => {
+  function editablePlaces() {
+    if (!editingCallbacks)
+      throw new Error("Editable places require edit callbacks");
+
     return userPlaces.map((place) => {
       const absPlacePictureUrl = createAbsoluteApiAddress(place.pictureUrl);
+      const placeDto = { ...place, pictureUrl: absPlacePictureUrl };
       return (
         <li key={place.id}>
           <EditablePlaceItem
             key={place.id}
-            placeInfo={{
-              id: place.id,
-              title: place.title,
-              description: place.description,
-              address: place.address,
-              pictureUrl: absPlacePictureUrl,
-            }}
+            placeDto={placeDto}
             userDto={userDto}
-            editPlace={editingCallbacks?.editPlace}
-            deletePlace={editingCallbacks?.deletePlace}
+            editPlace={editingCallbacks.editPlace}
+            deletePlace={editingCallbacks.deletePlace}
           />
         </li>
       );
     });
-  };
+  }
 
-  const notEditablePlaces = () => {
+  function notEditablePlaces() {
     return userPlaces.map((place) => {
       const absPlacePictureUrl = createAbsoluteApiAddress(place.pictureUrl);
-
+      const placeDto = { ...place, pictureUrl: absPlacePictureUrl };
       return (
         <li key={place.id}>
-          <PlaceItem
-            key={place.id}
-            placeInfo={{
-              id: place.id,
-              title: place.title,
-              description: place.description,
-              address: place.address,
-              pictureUrl: absPlacePictureUrl,
-            }}
-            userDto={userDto}
-          />
+          <PlaceItem key={place.id} placeDto={placeDto} userDto={userDto} />
         </li>
       );
     });
-  };
-
-  if (editable) {
-    places = editablePlaces();
-  } else {
-    places = notEditablePlaces();
   }
 
   return <ul className={classes["places-container"]}>{places}</ul>;
