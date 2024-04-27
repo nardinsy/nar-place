@@ -4,15 +4,15 @@ import EditablePlaceItem from "./EditablePlaceItem";
 import Card from "../../Shared-UI/Card";
 import classes from "./PlacesList.module.css";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
-import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
+import { PlaceDto, UserDto, placeInfoCard } from "../../sharedTypes/dtos";
 
 interface PlacesListProps {
   editable: boolean;
   userPlaces: PlaceDto[];
   userDto: UserDto;
   editingCallbacks?: {
-    editPlace: (placeInfo: any) => Promise<void>;
-    deletePlace: (placeId: any) => Promise<void>;
+    editPlace: (placeInfo: placeInfoCard & { id: string }) => Promise<void>;
+    deletePlace: (placeId: string) => Promise<void>;
   };
 }
 

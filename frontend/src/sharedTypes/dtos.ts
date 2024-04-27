@@ -62,6 +62,16 @@ export interface NewPlace {
   picture: Base64<"jpeg">;
 }
 
+export interface placeInfoCard {
+  title: string;
+  description: string;
+  address: string;
+}
+
+export interface PlaceInfoCardWithPictire extends placeInfoCard {
+  picture: File;
+}
+
 export type Base64<imageType extends string> =
   `data:image/${imageType};base64${string}`;
 

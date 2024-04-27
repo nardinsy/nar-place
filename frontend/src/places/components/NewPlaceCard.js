@@ -5,7 +5,7 @@ import classes from "./NewPlace.module.css";
 import MessageModal from "../../Shared-UI/MessageModal";
 import Button from "../../Shared-UI/Button";
 
-const NewPlace = ({ addPlace }) => {
+const NewPlaceCard = ({ addPlace }) => {
   const [showMessageModal, setShowMessageModal] = useState(false);
   let history = useHistory();
 
@@ -47,7 +47,7 @@ const NewPlace = ({ addPlace }) => {
   );
 };
 
-export default NewPlace;
+export default NewPlaceCard;
 
 // const NewPlaceCard = ({ addPlace }) => {
 //   const titleRef = useRef("");

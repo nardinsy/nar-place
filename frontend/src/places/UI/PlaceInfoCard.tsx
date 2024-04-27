@@ -1,35 +1,35 @@
 import { FC, useState } from "react";
 import classes from "./PlaceInfoCard.module.css";
 import Button from "../../Shared-UI/Button";
-import { PlaceDto } from "../../sharedTypes/dtos";
+import { placeInfoCard } from "../../sharedTypes/dtos";
 
 interface PlaceInfoCardProps {
-  onSubmit: any;
-  placeDto: PlaceDto;
+  onSubmit: (place: placeInfoCard) => void;
   submitButtonName: string;
   onCancel: any;
-  closeModal: any;
-  extraAction: any;
+  closeModal?: any;
+  extraAction?: any;
+  placeInputs?: placeInfoCard;
 }
 
 const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
   onSubmit,
-  // placeDto = { id: "", title: "", description: "", address: "", image: "" },
-  placeDto,
+  placeInputs,
   submitButtonName,
   onCancel,
   closeModal,
   extraAction,
 }) => {
   const [titleValue, setTitleValue] = useState(
-    placeDto.title ? placeDto.title : ""
+    placeInputs ? placeInputs.title : ""
   );
 
   const [descriptionValue, setDescriptionValue] = useState(
-    placeDto.description ? placeDto.description : ""
+    placeInputs ? placeInputs.description : ""
   );
+
   const [addressValue, setAddressValue] = useState(
-    placeDto.address ? placeDto.address : ""
+    placeInputs ? placeInputs.address : ""
   );
 
   const titleChangeHandler = (event) => {
@@ -51,21 +51,10 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
   const submitCardHandler = async (event) => {
     event.preventDefault();
 
-    const p = new PlaceDto(
-      titleValue,
-      descriptionValue,
-      addressValue,
-      placeDto.picture,
-      placeDto.id,
-      "",
-      ""
-    );
-
     const place = {
       title: titleValue,
       description: descriptionValue,
       address: addressValue,
-      // image: placeDto.image,
     };
 
     // if (placeDto.id) {
@@ -85,7 +74,8 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
 
   const extraActionHandler = async (event) => {
     event.preventDefault();
-    await extraAction.action(placeDto.id);
+    if (!placeInputs) throw new Error("Extra action must have places id");
+    await extraAction.action();
   };
 
   return (

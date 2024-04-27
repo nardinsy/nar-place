@@ -6,12 +6,12 @@ import Button from "../../Shared-UI/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import classes from "./EditablePlaceItem.module.css";
-import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
+import { PlaceDto, UserDto, placeInfoCard } from "../../sharedTypes/dtos";
 
 interface EditablePlaceItemProps {
   placeDto: PlaceDto;
   userDto: UserDto;
-  editPlace: (placeInfo: any) => Promise<void>;
+  editPlace: (placeInfo: placeInfoCard & { id: string }) => Promise<void>;
   deletePlace: (placeId: any) => Promise<void>;
 }
 

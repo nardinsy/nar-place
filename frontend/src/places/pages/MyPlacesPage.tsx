@@ -1,13 +1,13 @@
 import { FC, useEffect } from "react";
 import PlacesList from "../components/PlacesList";
-import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
+import { PlaceDto, UserDto, placeInfoCard } from "../../sharedTypes/dtos";
 import useAuthContext from "../../Hooks/Auth";
 
 type MyPlacePageProps = {
   places: PlaceDto[];
   getPlaces: () => Promise<void>;
-  editPlace: (placeInfo: any) => Promise<void>;
-  deletePlace: (placeId: any) => Promise<void>;
+  editPlace: (placeInfo: placeInfoCard & { id: string }) => Promise<void>;
+  deletePlace: (placeId: string) => Promise<void>;
 };
 
 const MyPlacePage: FC<MyPlacePageProps> = ({

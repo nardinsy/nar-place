@@ -1,17 +1,17 @@
 import { useRef } from "react";
-
 const ImageUpload = ({ id, className, onChangeImage, children }) => {
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const pickImageHandler = (event) => {
     event.preventDefault();
 
-    const file = event.target.files[0];
+    const file: File = event.target.files[0];
     onChangeImage(file);
   };
 
   const triggerFileChangeHandler = (event) => {
     event.preventDefault();
+    if (!inputRef.current) throw new Error("Can not upload image succesfully");
     inputRef.current.click();
   };
 

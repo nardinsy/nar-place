@@ -2,26 +2,41 @@ import { useState, FC } from "react";
 import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
 import classes from "./NewPlacePage.module.css";
-import picturePlaceholder from "../../assets/picturePlaceholder.png";
+import picturePlaceholder from "../../assets/Image-placeholder.png";
 import useAuthContext from "../../Hooks/Auth";
+import {
+  placeInfoCard,
+  PlaceInfoCardWithPictire,
+} from "../../sharedTypes/dtos";
 
-// interface NewPlacePageProps {
-//   addPlace: (place: {
-//     title: string,
-//     description: string,
-//     address: string,
-//     image: File,
-//   }) => Promise<void>;
-// }
-const NewPlacePage = ({ addPlace }) => {
+interface NewPlacePageProps {
+  addPlace: (place: PlaceInfoCardWithPictire) => Promise<void>;
+}
+const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
   const authContext = useAuthContext();
+  if (!authContext.isLoggedin)
+    throw new Error("User is not logged in, Please log in again");
 
-  const [uploadedPicture, setUploadedPicture] = useState(undefined);
-  const [file, setFile] = useState(undefined);
+  const [uploadedPicture, setUploadedPicture] = useState<string>();
+  const [file, setFile] = useState<File | undefined>(undefined);
 
-  const changeNewPicture = (file) => {
+  const changeNewPicture = (file: File) => {
     setFile(file);
     setUploadedPicture(URL.createObjectURL(file));
+  };
+
+  const addNewPlace = (place: placeInfoCard) => {
+    if (!file)
+      throw new Error("Can not add place without file, try to add file");
+
+    const placeInfoCardWithPictire: PlaceInfoCardWithPictire = {
+      title: place.title,
+      description: place.description,
+      address: place.address,
+      picture: file,
+    };
+
+    addPlace(placeInfoCardWithPictire);
   };
 
   return (
@@ -30,6 +45,7 @@ const NewPlacePage = ({ addPlace }) => {
         <div className={classes["picture"]}>
           <img
             className={classes["uploaded-picture"]}
+            alt=""
             src={uploadedPicture ? uploadedPicture : picturePlaceholder}
           />
         </div>
@@ -46,9 +62,8 @@ const NewPlacePage = ({ addPlace }) => {
 
       <div className={classes["place-info"]}>
         <PlaceInfoCard
-          onSubmit={addPlace}
+          onSubmit={addNewPlace}
           submitButtonName="Post"
-          placeInfo={{ image: file }}
           onCancel={() => {
             setUploadedPicture(undefined);
             setFile(undefined);

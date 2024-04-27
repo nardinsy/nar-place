@@ -12,7 +12,13 @@ import {
   ENDPOINTS,
 } from "../helpers/api-url";
 import PictureModal from "../shared/PictureModal";
-import { Base64, NewPlace, PlaceDto } from "../sharedTypes/dtos";
+import {
+  Base64,
+  NewPlace,
+  PlaceDto,
+  PlaceInfoCardWithPictire,
+  placeInfoCard,
+} from "../sharedTypes/dtos";
 import useAuthContext from "../Hooks/Auth";
 
 // import { PlaceDto } from "../../../backend/src/shared/dtos";
@@ -29,13 +35,10 @@ const Authorized = ({ token }: { token: string }) => {
 
   const history = useHistory();
 
-  const addPlace: (place: {
-    title: string;
-    description: string;
-    address: string;
-    image: File;
-  }) => Promise<void> = async (place) => {
-    const newPLaceBlob = place.image;
+  const addPlace: (place: PlaceInfoCardWithPictire) => Promise<void> = async (
+    place
+  ) => {
+    const newPLaceBlob = place.picture;
 
     const reader = new FileReader();
 
@@ -59,7 +62,7 @@ const Authorized = ({ token }: { token: string }) => {
       };
 
       const data = await sendHttpRequest(address, requestOptions);
-      console.log(data.place);
+      // console.log(data.place);
       const placeData = new PlaceDto(
         data.place.title,
         data.place.description,
@@ -94,7 +97,7 @@ const Authorized = ({ token }: { token: string }) => {
     setPlaces(places);
   };
 
-  const editPlace = async (placeInfo) => {
+  const editPlace = async (placeInfo: placeInfoCard & { id: string }) => {
     const requestOptions = {
       method: "PATCH",
       headers: { "Content-Type": "application/json", token },
