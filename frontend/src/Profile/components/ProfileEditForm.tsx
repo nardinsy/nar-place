@@ -44,7 +44,7 @@ const ProfileEditForm = ({
     // blob:http://localhost:3000/055ee9ce-844c-43c2-9c4f-567c2da7b909
   };
 
-  const changePasswordHandler = (newPassword) => {
+  const changePasswordHandler = (newPassword: string) => {
     changePassword(newPassword);
     //show message
   };

@@ -7,11 +7,23 @@ const PasswordChangeModal = ({
   closeChangePasswordModal,
   onPasswordChange,
 }) => {
-  const passwordRef = useRef("");
-  const confirmPasswordRef = useRef("");
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
   const submitChangePassword = (event) => {
     event.preventDefault();
+    if (!passwordRef.current || !confirmPasswordRef.current) {
+      throw new Error("Please fill inputs");
+      //change style to red
+    }
+
+    if (
+      passwordRef.current.value === "" ||
+      confirmPasswordRef.current.value === ""
+    ) {
+      throw new Error("Please fill inputs");
+    }
+
     if (passwordRef.current.value === confirmPasswordRef.current.value) {
       onPasswordChange(passwordRef.current.value);
       closeChangePasswordModal();
