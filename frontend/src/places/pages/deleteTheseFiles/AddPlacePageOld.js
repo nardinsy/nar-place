@@ -1,4 +1,4 @@
-import NewPlaceCard from "../../components/NewPlaceCard";
+import NewPlaceCard from "./NewPlaceCard";
 import classes from "./AddPlacePage.module.css";
 
 const AddPlacePageOLD = ({ addPlace }) => {

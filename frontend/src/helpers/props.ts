@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 
 export type HasChildren = {
-  children: ReactElement | string | JSX.Element[] | ReactElement[];
+  children: ReactNode | ReactNode[];
 };
 export type WithChildren<T> = T & HasChildren;
 

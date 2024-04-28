@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-
+import { useState, useEffect, useRef, FC, ReactNode } from "react";
 import Avatar from "../Profile/UI/Avatar";
 import Dropdown from "../Header/Dropdown/DropdownCard";
 import Modal from "../Shared-UI/Modal";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsis,
@@ -11,10 +9,18 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-
 import classes from "./PictureModal.module.css";
+import { HasChildren } from "../helpers/props";
 
-const PictureModal = ({
+type PictureModalT = {
+  pictureUrl: string | undefined;
+  showChevrons: any;
+  ellipsisDropdownItems: any;
+  xMarkHandler: any;
+  children?: ReactNode | ReactNode[];
+};
+
+const PictureModal: FC<PictureModalT> = ({
   pictureUrl,
   showChevrons,
   ellipsisDropdownItems,
@@ -22,11 +28,14 @@ const PictureModal = ({
   children,
 }) => {
   const [showEllipsisDropdown, setShowEllipsisDropdown] = useState(false);
-  const ellipsisRef = useRef();
+  const ellipsisRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkIfClickedOutside = (event) => {
-      if (showEllipsisDropdown && !ellipsisRef.current.contains(event.target)) {
+      if (
+        showEllipsisDropdown &&
+        !ellipsisRef.current!.contains(event.target)
+      ) {
         event.preventDefault();
         setShowEllipsisDropdown(false);
       }
@@ -87,6 +96,7 @@ const PictureModal = ({
         pictureUrl={pictureUrl}
         width={"28rem"}
         cssClassName={classes["modal-picture"]}
+        alt={""}
       />
       {children}
     </Modal>

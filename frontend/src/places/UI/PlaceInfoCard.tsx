@@ -6,9 +6,13 @@ import { placeInfoCard } from "../../sharedTypes/dtos";
 interface PlaceInfoCardProps {
   onSubmit: (place: placeInfoCard) => void;
   submitButtonName: string;
-  onCancel: any;
-  closeModal?: any;
-  extraAction?: any;
+  onCancel: () => void;
+
+  closeModal?: () => void;
+  extraAction?: {
+    action: () => void;
+    "button-name": string;
+  };
   placeInputs?: placeInfoCard;
 }
 
@@ -50,6 +54,10 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
 
   const submitCardHandler = async (event) => {
     event.preventDefault();
+    if (!titleValue || !descriptionValue || !addressValue) {
+      throw new Error("Please fill inputs");
+    }
+    //here inputs border should turn to red
 
     const place = {
       title: titleValue,
@@ -62,7 +70,7 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
     // }
 
     await onSubmit(place);
-    if (submitButtonName === "Save") {
+    if (submitButtonName === "Save" && closeModal) {
       closeModal();
     }
   };
@@ -74,7 +82,8 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
 
   const extraActionHandler = async (event) => {
     event.preventDefault();
-    if (!placeInputs) throw new Error("Extra action must have places id");
+    if (!placeInputs || !extraAction) throw new Error("");
+
     await extraAction.action();
   };
 
@@ -85,7 +94,6 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
         type="text"
         className={classes["place-title"]}
         placeholder="Title"
-        // ref={titleRef}
         value={titleValue}
         onChange={titleChangeHandler}
       />
@@ -94,7 +102,6 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
         maxLength={210}
         className={classes["place-description"]}
         placeholder="Description about this place"
-        // ref={descriptionRef}
         value={descriptionValue}
         onChange={descriptionChangeHandler}
       />
@@ -102,7 +109,6 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
         maxLength={30}
         className={classes["place-address"]}
         placeholder="Address"
-        // ref={addressRef}
         value={addressValue}
         onChange={addressChangeHandler}
       />

@@ -1,5 +1,4 @@
-import { useRef, useState } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../Shared-UI/Button";
@@ -16,17 +15,19 @@ const ProfileEditForm = ({
   changeUsername,
 }) => {
   const authContext = useAuthContext();
+  if (!authContext.isLoggedin)
+    throw new Error("User in not logged in, Please login first");
+  //redirect to login form
+
   const userPictureUrl = authContext.userPictureUrl;
 
   const [avatarURL, setAvatarURL] = useState(userPictureUrl);
-  const [file, setFile] = useState("noChange");
+  const [file, setFile] = useState<File | "noChange">("noChange");
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [showPictureModal, setShowPictureModal] = useState(false);
+  const [username, setUsername] = useState(authContext.username);
 
-  const usernameRef = useRef("");
-  const emailRef = useRef("");
-
-  const history = useHistory();
+  // const history = useHistory();
 
   // useEffect(() => {
   //   setAvatarURL(userPictureUrl);
@@ -48,15 +49,15 @@ const ProfileEditForm = ({
     //show message
   };
 
+  const changeUsernameHandler = (event) => {
+    setUsername(event.target.value);
+  };
+
   const formSubmitHandler = async (event) => {
     event.preventDefault();
 
-    if (
-      authContext.username !== usernameRef.current.value &&
-      usernameRef.current.value !== ""
-    ) {
-      changeUsername(usernameRef.current.value);
-      //show message
+    if (username !== authContext.username) {
+      changeUsername(username);
     }
 
     if (file !== "noChange") {
@@ -111,12 +112,16 @@ const ProfileEditForm = ({
 
   return (
     <div className={classes["profile-edit-form-container"]}>
-      <form className={classes["profile-edit-form"]} id={1}>
+      <form className={classes["profile-edit-form"]} id={"1"}>
         <div className={classes["user-form-header"]}>
           <h2>Edit Profile</h2>
 
           <div className={classes["user-image"]} onClick={onImageClickHandler}>
-            <Avatar width={"9rem"} pictureUrl={avatarURL} />
+            <Avatar
+              width={"9rem"}
+              pictureUrl={avatarURL}
+              alt={authContext.username}
+            />
             <div>
               <ImageUpload
                 id={authContext.token}
@@ -132,13 +137,17 @@ const ProfileEditForm = ({
         <div className={classes["user-info"]}>
           <div className={classes.control}>
             <label>Username</label>
-            <input type="text" ref={usernameRef} />
+            <input
+              type="text"
+              value={username}
+              onChange={changeUsernameHandler}
+            />
           </div>
 
-          <div className={classes.control}>
+          {/* <div className={classes.control}>
             <label>Email</label>
             <input type="email" ref={emailRef} />
-          </div>
+          </div> */}
         </div>
 
         <div className={classes.actions}>

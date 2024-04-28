@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import PlaceInfoCard from "../UI/PlaceInfoCard";
+import PlaceInfoCard from "../../UI/PlaceInfoCard";
 import classes from "./NewPlace.module.css";
-import MessageModal from "../../Shared-UI/MessageModal";
-import Button from "../../Shared-UI/Button";
+import MessageModal from "../../../Shared-UI/MessageModal";
+import Button from "../../../Shared-UI/Button";
 
 const NewPlaceCard = ({ addPlace }) => {
   const [showMessageModal, setShowMessageModal] = useState(false);

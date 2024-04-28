@@ -1,8 +1,6 @@
 import { useRef } from "react";
-
 import Modal from "../../Shared-UI/Modal";
 import Button from "../../Shared-UI/Button";
-
 import classes from "./ProfileEditForm.module.css";
 
 const PasswordChangeModal = ({
