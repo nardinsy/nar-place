@@ -123,8 +123,6 @@ export const addPlace: AuthRequestHandler = async (user, req, res, next) => {
     console.log(error);
   }
 
-  // const placepictureId = placePicture._id.toHexString();
-  // pictureUrl: getPlacePictureUrl(placePicture._id.toHexString()),
   const placeDto = new PlaceDto(
     newPlace.title,
     newPlace.description,
@@ -135,18 +133,9 @@ export const addPlace: AuthRequestHandler = async (user, req, res, next) => {
     getPlacePictureUrl(placePicture._id.toHexString())
   );
 
-  console.log(placeDto);
   res.status(201).json({
     message: "Created new place.",
     place: placeDto,
-    // place: {
-    //   id: newPlace.id,
-    //   title: newPlace.title,
-    //   description: newPlace.description,
-    //   address: newPlace.address,
-    //   location: newPlace.location,
-    //   pictureUrl: getPlacePictureUrl(placePicture._id.toHexString()),
-    // },
   });
 };
 

@@ -17,12 +17,12 @@ const EditPlaceModal: FC<EditPlaceModalT> = ({
   onDeletePlace,
 }) => {
   const editPlaceHandler = (updatedplaceInfos: placeInfoCard) => {
-    const place = { ...updatedplaceInfos, id: placeDto.id };
+    const place = { ...updatedplaceInfos, id: placeDto.placeId };
     editPlace(place);
   };
 
   const deletePlaceHandler = () => {
-    onDeletePlace(placeDto.id);
+    onDeletePlace(placeDto.placeId);
   };
 
   return (

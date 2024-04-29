@@ -42,9 +42,9 @@ const PlacesList: FC<PlacesListProps> = ({
       const absPlacePictureUrl = createAbsoluteApiAddress(place.pictureUrl);
       const placeDto = { ...place, pictureUrl: absPlacePictureUrl };
       return (
-        <li key={place.id}>
+        <li key={place.placeId}>
           <EditablePlaceItem
-            key={place.id}
+            key={place.placeId}
             placeDto={placeDto}
             userDto={userDto}
             editPlace={editingCallbacks.editPlace}
@@ -60,8 +60,12 @@ const PlacesList: FC<PlacesListProps> = ({
       const absPlacePictureUrl = createAbsoluteApiAddress(place.pictureUrl);
       const placeDto = { ...place, pictureUrl: absPlacePictureUrl };
       return (
-        <li key={place.id}>
-          <PlaceItem key={place.id} placeDto={placeDto} userDto={userDto} />
+        <li key={place.placeId}>
+          <PlaceItem
+            key={place.placeId}
+            placeDto={placeDto}
+            userDto={userDto}
+          />
         </li>
       );
     });

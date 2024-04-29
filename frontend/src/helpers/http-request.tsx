@@ -13,8 +13,7 @@ const sendHttpRequest = async (
     const response = await fetch(address, requestOptions);
 
     if (response.ok) {
-      const data = await response.json();
-      return data;
+      return await response.json();
     }
   } catch (error) {
     console.log(error);

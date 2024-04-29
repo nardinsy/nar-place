@@ -18,7 +18,7 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
   //     },
   //   },
   // ];
-  const { id, title, description, address, pictureUrl } = placeDto;
+  const { placeId: id, title, description, address, pictureUrl } = placeDto;
   // const placeInfo = { id, title, description, address, image: nImage };
 
   const titlelineWidth = 14;

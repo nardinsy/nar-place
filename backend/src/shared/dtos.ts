@@ -27,8 +27,8 @@ export class PlaceDto {
     public title: string,
     public description: string,
     public address: string,
-    public picture: Types.ObjectId,
-    public readonly id: Types.ObjectId,
+    public pictureId: Types.ObjectId,
+    public readonly placeId: Types.ObjectId,
     public readonly creator: Types.ObjectId,
     public pictureUrl: string
   ) {}

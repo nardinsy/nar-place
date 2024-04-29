@@ -18,7 +18,9 @@ const Users = () => {
     };
     const address = getApiAddress(ENDPOINTS.getAllUsers);
 
-    const data = await sendHttpRequest(address, requestOptions);
+    const data: { message: string; usersInfo: UserDto[] } =
+      await sendHttpRequest(address, requestOptions);
+
     const usersData: UserDto[] = data.usersInfo;
     setUsers([...usersData]);
   };

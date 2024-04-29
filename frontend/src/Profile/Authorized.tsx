@@ -57,14 +57,16 @@ const Authorized = ({ token }: { token: string }) => {
         body: JSON.stringify(newplace),
       };
 
-      const data = await sendHttpRequest(address, requestOptions);
-      // console.log(data.place);
+      const data: {
+        message: string;
+        place: PlaceDto;
+      } = await sendHttpRequest(address, requestOptions);
       const placeData = new PlaceDto(
         data.place.title,
         data.place.description,
         data.place.address,
-        data.picture,
-        data.place.id,
+        data.place.pictureId,
+        data.place.placeId,
         data.place.creator,
         data.place.pictureUrl
       );
@@ -108,7 +110,7 @@ const Authorized = ({ token }: { token: string }) => {
 
     const data = await sendHttpRequest(address, requestOptions);
 
-    const editedPlace = places.find((place) => place.id === placeInfo.id);
+    const editedPlace = places.find((place) => place.placeId === placeInfo.id);
 
     if (editedPlace) {
       editedPlace.title = placeInfo.title;
@@ -134,7 +136,9 @@ const Authorized = ({ token }: { token: string }) => {
     console.log("message:", data.message);
 
     setPlaces((pre) => {
-      const filteredPLaces = places.filter((place) => place.id !== placeId);
+      const filteredPLaces = places.filter(
+        (place) => place.placeId !== placeId
+      );
       return filteredPLaces;
     });
   };
@@ -149,42 +153,24 @@ const Authorized = ({ token }: { token: string }) => {
       return;
     }
     let data;
-
     const reader = new FileReader();
 
     reader.onloadend = async () => {
       const newImageDataURLFormat = reader.result; //reader.result: data:image/jpeg;base64
-
       if (!newImageDataURLFormat) throw new Error("Can not read file");
 
-      try {
-        data = await sendHttpRequestForChangeProfilePicture(
-          newImageDataURLFormat
-        );
+      data = await sendHttpRequestForChangeProfilePicture(
+        newImageDataURLFormat
+      );
 
-        const absPictureUrl = createAbsoluteApiAddress(
-          data.userInfo.pictureUrl
-        );
-        // console.log(data);
-        // console.log(absPictureUrl);
-        localStorage.removeItem("userPictureUrl");
-        localStorage.setItem("userPictureUrl", absPictureUrl);
+      const absPictureUrl = createAbsoluteApiAddress(data.userInfo.pictureUrl);
 
-        // if (!authContext.userPictureUrl) {
-        //   const absPictureUrl = createAbsoluteApiAddress(data.pictureUrl);
-        //   localStorage.setItem("userPictureUrl", absPictureUrl);
-        // }
-
-        // changeUserProfileClientSide(data.pictureUrl);
-      } catch (error) {
-        //can not change image on server
-        console.log(error);
-      }
+      localStorage.removeItem("userPictureUrl");
+      localStorage.setItem("userPictureUrl", absPictureUrl);
     };
 
     reader.readAsDataURL(userNewImage);
     authContext.setPictureUrl(URL.createObjectURL(userNewImage));
-    // setUserPictureUrl(URL.createObjectURL(userNewImage));
   };
 
   const sendHttpRequestForChangeProfilePicture = async (
@@ -199,8 +185,7 @@ const Authorized = ({ token }: { token: string }) => {
     };
     const address = getApiAddress(ENDPOINTS.changeProfilePicture);
 
-    const data = await sendHttpRequest(address, requestOptions);
-    return data;
+    return await sendHttpRequest(address, requestOptions);
   };
 
   const changePassword = async (newPassword: string) => {
@@ -243,7 +228,6 @@ const Authorized = ({ token }: { token: string }) => {
 
       <Route path="/new">
         <NewPlacePage addPlace={addPlace} />
-        {/* <AddPlacePage addPlace={addPlace} /> */}
       </Route>
 
       <Route path="/logout">

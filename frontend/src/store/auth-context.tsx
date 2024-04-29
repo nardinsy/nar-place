@@ -57,15 +57,6 @@ const saveUserInfoToLocalStorage = (
 
 export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
-
-  // const [isLoggedin, setIsloggedin] = useState(false);
-  // const [token, setToken] = useState<string | undefined>(undefined);
-  // const [userId, setUserId] = useState<string | undefined>(undefined);
-  // const [username, setUsername] = useState<string | undefined>(undefined);
-  // const [userPictureUrl, setUserPictureUrl] = useState<string | undefined>(
-  //   undefined
-  // );
-
   const history = useHistory();
 
   useEffect(() => {
@@ -93,15 +84,12 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
       body: JSON.stringify(userInfo),
     };
     const address = getApiAddress(ENDPOINTS.signup);
-    try {
-      const data: LoginResult = await sendHttpRequest(address, requestOptions);
-      const { token, user, message } = data;
 
-      localLogin(token, user.userId, user.username, user.pictureUrl);
-      history.replace("/");
-    } catch (e) {
-      console.log(e);
-    }
+    const data: LoginResult = await sendHttpRequest(address, requestOptions);
+    const { token, user, message } = data;
+
+    localLogin(token, user.userId, user.username, user.pictureUrl);
+    history.replace("/");
   };
 
   const login = async (userInfo: UserLoginInformation) => {
@@ -140,23 +128,14 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
       headers: { "Content-Type": "application/json", token: loginInfo.token },
     };
     const address = getApiAddress(ENDPOINTS.logout);
-    console.log(address);
-    const data = await sendHttpRequest(address, requestOptions);
-    if (data.ok) {
-      console.log(data);
-      console.log(data.message);
-    }
+
+    await sendHttpRequest(address, requestOptions);
 
     localLogout();
   };
 
   const localLogout = () => {
     setLoginInfo({ isLoggedin: false });
-    // setToken("");
-    // setUserId("");
-    // setUsername("");
-    // setUserPictureUrl("");
-    // setIsloggedin(false);
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
