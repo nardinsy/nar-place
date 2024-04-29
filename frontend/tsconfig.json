@@ -15,7 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "paths": { "@backend/*": ["../backend/src/types/*"] }
   },

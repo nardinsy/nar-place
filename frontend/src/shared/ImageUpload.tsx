@@ -1,15 +1,30 @@
-import { useRef } from "react";
-const ImageUpload = ({ id, className, onChangeImage, children }) => {
+import { useRef, FC, ChangeEvent, MouseEvent } from "react";
+import { HasChildren } from "../helpers/props";
+
+type ImageUploadT = HasChildren & {
+  id: string;
+  className: string;
+  onChangeImage: (file: File) => void;
+};
+
+const ImageUpload: FC<ImageUploadT> = ({
+  id,
+  className,
+  onChangeImage,
+  children,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const pickImageHandler = (event) => {
+  const pickImageHandler = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-
-    const file: File = event.target.files[0];
-    onChangeImage(file);
+    const files = (event.target as HTMLInputElement).files;
+    if (files) {
+      const file: File = files[0];
+      onChangeImage(file);
+    }
   };
 
-  const triggerFileChangeHandler = (event) => {
+  const triggerFileChangeHandler = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!inputRef.current) throw new Error("Can not upload image succesfully");
     inputRef.current.click();

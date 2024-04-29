@@ -6,15 +6,10 @@ import Authorized from "./Profile/Authorized";
 import AnyUserPlaces from "./user/pages/AnyUserPlaces";
 import PlacePage from "./places/pages/PlacePage";
 import Users from "./user/pages/Users";
-import useAuthContext from "./Hooks/Auth";
+import useRequireAuthContext from "./Hooks/useRequireAuthContext";
 
 const App: React.FC = (porps) => {
-  // const authContext = useContext(AuthContext);
-  // if (!authContext)
-  //   throw new Error(
-  //     "Auth context is not provided, Please wrap component with AuthContextProvider"
-  //   );
-  const authContext = useAuthContext();
+  const authContext = useRequireAuthContext();
 
   return (
     <>

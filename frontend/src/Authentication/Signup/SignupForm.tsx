@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import classes from "./SignupForm.module.css";
 import { UserSignupInformation } from "../../../../backend/src/shared/dtos";
-import useAuthContext from "../../Hooks/Auth";
+import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
 
-const SignupForm = (props) => {
-  const authContext = useAuthContext();
+const SignupForm = () => {
+  const authContext = useRequireAuthContext();
 
   if (authContext.isLoggedin) throw new Error("User is logged in already.");
 
@@ -15,7 +15,7 @@ const SignupForm = (props) => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
 
-  const togglePasswordVisibilityHandler = (event) => {
+  const togglePasswordVisibilityHandler = () => {
     if (!passwordRef.current) return;
     if (passwordRef.current.type === "text") {
       passwordRef.current.type = "password";

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, FormEvent, ChangeEvent, MouseEvent } from "react";
 import classes from "./PlaceInfoCard.module.css";
 import Button from "../../Shared-UI/Button";
 import { placeInfoCard } from "../../sharedTypes/dtos";
@@ -36,11 +36,13 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
     placeInputs ? placeInputs.address : ""
   );
 
-  const titleChangeHandler = (event) => {
+  const titleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setTitleValue(event.target.value);
   };
 
-  const descriptionChangeHandler = (event) => {
+  const descriptionChangeHandler = (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     if (event.target.value.length > 300) {
       setDescriptionValue(event.target.value.slice(210));
     } else {
@@ -48,11 +50,11 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
     }
   };
 
-  const addressChangeHandler = (event) => {
+  const addressChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setAddressValue(event.target.value);
   };
 
-  const submitCardHandler = async (event) => {
+  const submitCardHandler = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!titleValue || !descriptionValue || !addressValue) {
       throw new Error("Please fill inputs");
@@ -75,12 +77,12 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
     }
   };
 
-  const cancelCardHandler = (event) => {
+  const cancelCardHandler = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onCancel();
   };
 
-  const extraActionHandler = async (event) => {
+  const extraActionHandler = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!placeInputs || !extraAction) throw new Error("");
 

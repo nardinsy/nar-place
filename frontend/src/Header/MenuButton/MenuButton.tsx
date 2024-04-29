@@ -3,10 +3,10 @@ import MenuButtonIcon from "./MenuButtonIcon";
 import ProfileMenuDropdown from "../Dropdown/ProfileMenuDropdown";
 import AuthDropdown from "../Dropdown/AuthDropdown";
 import classes from "./MenuButton.module.css";
-import useAuthContext from "../../Hooks/Auth";
+import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
 
 const MenuButton = () => {
-  const authContext = useAuthContext();
+  const authContext = useRequireAuthContext();
 
   // const ref = useRef();
   const ref = useRef<HTMLDivElement | null>(null);

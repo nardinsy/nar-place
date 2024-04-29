@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import AuthContext from "../store/auth-context";
 
-const useAuthContext = () => {
+const useRequireAuthContext = () => {
   const authContext = useContext(AuthContext);
 
   if (!authContext) {
@@ -13,4 +13,4 @@ const useAuthContext = () => {
   return authContext;
 };
 
-export default useAuthContext;
+export default useRequireAuthContext;

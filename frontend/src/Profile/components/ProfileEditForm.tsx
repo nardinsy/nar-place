@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FC, ChangeEvent, MouseEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../Shared-UI/Button";
@@ -6,15 +6,16 @@ import Avatar from "../UI/Avatar";
 import ImageUpload from "../../shared/ImageUpload";
 import PasswordChangeModal from "./PasswordChangeModal";
 import PictureModal from "../../shared/PictureModal";
-import useAuthContext from "../../Hooks/Auth";
+import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
 import classes from "./ProfileEditForm.module.css";
+import { ProfileSettingsPageT } from "../pages/ProfileSettingsPage";
 
-const ProfileEditForm = ({
+const ProfileEditForm: FC<ProfileSettingsPageT> = ({
   changeUserImage,
   changePassword,
   changeUsername,
 }) => {
-  const authContext = useAuthContext();
+  const authContext = useRequireAuthContext();
   if (!authContext.isLoggedin)
     throw new Error("User in not logged in, Please login first");
   //redirect to login form
@@ -33,7 +34,7 @@ const ProfileEditForm = ({
   //   setAvatarURL(userPictureUrl);
   // }, [userPictureUrl]);
 
-  const changeFormAvatar = (fileFormatFile) => {
+  const changeFormAvatar = (fileFormatFile: File) => {
     setFile(fileFormatFile);
     setAvatarURL(URL.createObjectURL(fileFormatFile));
 
@@ -49,11 +50,11 @@ const ProfileEditForm = ({
     //show message
   };
 
-  const changeUsernameHandler = (event) => {
+  const changeUsernameHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
 
-  const formSubmitHandler = async (event) => {
+  const formSubmitHandler = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     if (username !== authContext.username) {
@@ -66,7 +67,7 @@ const ProfileEditForm = ({
     }
   };
 
-  const openChangePasswordModal = (event) => {
+  const openChangePasswordModal = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setShowChangePasswordModal(true);
   };
@@ -75,9 +76,10 @@ const ProfileEditForm = ({
     setShowChangePasswordModal(false);
   };
 
-  const onImageClickHandler = (event) => {
+  const onImageClickHandler = (event: MouseEvent<HTMLDivElement>) => {
     // event.preventDefault();
-    if (event.target.tagName === "IMG") {
+    const element = event.target as HTMLElement;
+    if (element.tagName === "IMG") {
       // window.open(authContext.userPictureUrl, "_blank");
       // history.push("/photo");
       setShowPictureModal(true);
@@ -91,7 +93,7 @@ const ProfileEditForm = ({
   const ellipsisDropdownItems = [
     {
       title: "Delete",
-      handler: (event) => {
+      handler: () => {
         const result = window.confirm(
           "Are you sure you want to reset your current avatar?"
         );
@@ -104,7 +106,7 @@ const ProfileEditForm = ({
     },
     {
       title: "Save As ...",
-      handler: (event) => {
+      handler: () => {
         //navigate to profile setting page
       },
     },

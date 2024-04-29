@@ -2,10 +2,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import classes from "./MenuButtonIcon.module.css";
 import Avatar from "../../Profile/UI/Avatar";
-import useAuthContext from "../../Hooks/Auth";
+import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
 
 const MenuButtonIcon = () => {
-  const authContext = useAuthContext();
+  const authContext = useRequireAuthContext();
 
   return (
     <>

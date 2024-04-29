@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
-import {
-  useParams,
-  useLocation,
-} from "react-router-dom/cjs/react-router-dom.min";
+import { useParams, useLocation } from "react-router-dom";
 import sendHttpRequest from "../../helpers/http-request";
 import PlacesList from "../../places/components/PlacesList";
 import { ENDPOINTS, getApiAddress } from "../../helpers/api-url";
 import { UserDto } from "../../sharedTypes/dtos";
 
+interface LocationState {
+  userDto: UserDto;
+}
+
 const AnyUserPlaces = () => {
   const [loadedPlaces, setLoadedPlaces] = useState([]);
-
-  const userId = useParams().userId;
-  const { state } = useLocation();
-  const userDto: UserDto = state.userDto;
+  const { userId } = useParams() as { userId: string };
+  // const userId = useParams().userId;
+  const { state } = useLocation<LocationState>();
+  const userDto = state.userDto;
   // userInfo = { id, username, pictureUrl, placeCount };
 
   useEffect(() => {

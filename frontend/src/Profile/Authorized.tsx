@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Route } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 import MyPlacePage from "../places/pages/MyPlacesPage";
 import LogoutModal from "../Authentication/Logout/LogoutModal";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage";
@@ -11,7 +10,6 @@ import {
   createAbsoluteApiAddress,
   ENDPOINTS,
 } from "../helpers/api-url";
-import PictureModal from "../shared/PictureModal";
 import {
   Base64,
   NewPlace,
@@ -19,14 +17,12 @@ import {
   PlaceInfoCardWithPictire,
   placeInfoCard,
 } from "../sharedTypes/dtos";
-import useAuthContext from "../Hooks/Auth";
-
-// import { PlaceDto } from "../../../backend/src/shared/dtos";
+import useRequireAuthContext from "../Hooks/useRequireAuthContext";
 
 const Authorized = ({ token }: { token: string }) => {
   console.log("User Component Render");
 
-  const authContext = useAuthContext();
+  const authContext = useRequireAuthContext();
   if (!authContext.isLoggedin) {
     throw new Error("User most be logged in, Please Login again");
   }
@@ -125,7 +121,7 @@ const Authorized = ({ token }: { token: string }) => {
     console.log("message:", data.message);
   };
 
-  const deletePlace = async (placeId) => {
+  const deletePlace = async (placeId: string) => {
     const requestOptions = {
       method: "DELETE",
       headers: { "Content-Type": "application/json", token },
@@ -143,14 +139,12 @@ const Authorized = ({ token }: { token: string }) => {
     });
   };
 
-  const changeUserImage = async (userNewImage) => {
+  const changeUserImage = async (userNewImage: File | undefined) => {
     // imuserNewImage: File {name: '2021-10-22 7.18.jpg', lastModified: 1704866449845, lastModifiedDate: Wed Jan 10 2024 09:30:49 GMT+0330 (Iran Standard Time), webkitRelativePath: '', size: 1156073, …}
 
     if (!userNewImage) {
-      const data = await sendHttpRequestForChangeProfilePicture(undefined);
-
+      await sendHttpRequestForChangeProfilePicture(undefined);
       localStorage.removeItem("userPictureUrl");
-
       authContext.setPictureUrl(undefined);
       return;
     }
@@ -161,13 +155,18 @@ const Authorized = ({ token }: { token: string }) => {
     reader.onloadend = async () => {
       const newImageDataURLFormat = reader.result; //reader.result: data:image/jpeg;base64
 
+      if (!newImageDataURLFormat) throw new Error("Can not read file");
+
       try {
         data = await sendHttpRequestForChangeProfilePicture(
           newImageDataURLFormat
         );
 
-        const absPictureUrl = createAbsoluteApiAddress(data.pictureUrl);
-
+        const absPictureUrl = createAbsoluteApiAddress(
+          data.userInfo.pictureUrl
+        );
+        // console.log(data);
+        // console.log(absPictureUrl);
         localStorage.removeItem("userPictureUrl");
         localStorage.setItem("userPictureUrl", absPictureUrl);
 
@@ -188,7 +187,9 @@ const Authorized = ({ token }: { token: string }) => {
     // setUserPictureUrl(URL.createObjectURL(userNewImage));
   };
 
-  const sendHttpRequestForChangeProfilePicture = async (pictureFile) => {
+  const sendHttpRequestForChangeProfilePicture = async (
+    pictureFile: string | ArrayBuffer | undefined
+  ) => {
     const userNewImage = { image: pictureFile };
 
     const requestOptions = {
@@ -202,7 +203,7 @@ const Authorized = ({ token }: { token: string }) => {
     return data;
   };
 
-  const changePassword = async (newPassword) => {
+  const changePassword = async (newPassword: string) => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
@@ -214,7 +215,7 @@ const Authorized = ({ token }: { token: string }) => {
     console.log(data.message);
   };
 
-  const changeUsername = async (newUsername) => {
+  const changeUsername = async (newUsername: string) => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },

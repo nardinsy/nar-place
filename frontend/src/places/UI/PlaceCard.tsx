@@ -1,5 +1,5 @@
-import { useState, FC, PropsWithChildren } from "react";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { useState, FC, PropsWithChildren, MouseEvent } from "react";
+import { Link } from "react-router-dom";
 import classes from "./PlaceCard.module.css";
 import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
 
@@ -25,7 +25,7 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
   const descriptionLineWidth = 21;
   const addressLineWidth = 10;
 
-  const controlLineWidth = (text, lineLength) => {
+  const controlLineWidth = (text: string, lineLength: number) => {
     let result = "";
     if (text.length > lineLength) {
       const splitetText = text.split(" ");
@@ -49,7 +49,7 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
     return result;
   };
 
-  function wordWrap(str, maxWidth) {
+  function wordWrap(str: string, maxWidth: number) {
     let newLineStr = "\n";
     let done = false;
     let res = "";
@@ -74,12 +74,12 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
     return res + str;
   }
 
-  function testWhite(x) {
+  function testWhite(x: string) {
     let white = new RegExp(/^\s$/);
     return white.test(x.charAt(0));
   }
 
-  const cardClickHandler = (event) => {
+  const cardClickHandler = (event: MouseEvent<HTMLDivElement>) => {
     const selection = window.getSelection();
 
     if (!selection) return;

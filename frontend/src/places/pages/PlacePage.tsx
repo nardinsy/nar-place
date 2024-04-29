@@ -30,7 +30,7 @@ const PlacePage: FC = () => {
   const descriptionLineWidth = 21;
   const addressLineWidth = 10;
 
-  function wordWrap(str, maxWidth) {
+  function wordWrap(str: string, maxWidth: number) {
     let newLineStr = "\n";
     let done = false;
     let res = "";
@@ -55,7 +55,7 @@ const PlacePage: FC = () => {
     return res + str;
   }
 
-  function testWhite(x) {
+  function testWhite(x: string) {
     let white = new RegExp(/^\s$/);
     return white.test(x.charAt(0));
   }

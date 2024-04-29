@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, FC, ReactNode } from "react";
+import { useState, useEffect, useRef, FC, ReactNode, MouseEvent } from "react";
 import Avatar from "../Profile/UI/Avatar";
 import Dropdown from "../Header/Dropdown/DropdownCard";
 import Modal from "../Shared-UI/Modal";
@@ -31,24 +31,22 @@ const PictureModal: FC<PictureModalT> = ({
   const ellipsisRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const checkIfClickedOutside = (event) => {
-      if (
-        showEllipsisDropdown &&
-        !ellipsisRef.current!.contains(event.target)
-      ) {
+    const checkIfClickedOutside = (event: Event) => {
+      const element = event.target as HTMLElement;
+      if (showEllipsisDropdown && !ellipsisRef.current!.contains(element)) {
         event.preventDefault();
         setShowEllipsisDropdown(false);
       }
     };
 
-    window.addEventListener("mousedown", checkIfClickedOutside);
+    window.addEventListener("mousedown", checkIfClickedOutside, true);
 
     return () => {
       window.removeEventListener("mousedown", checkIfClickedOutside);
     };
   }, [showEllipsisDropdown]);
 
-  const ellipsisClickHandler = (event) => {
+  const ellipsisClickHandler = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     setShowEllipsisDropdown(true);
@@ -56,7 +54,7 @@ const PictureModal: FC<PictureModalT> = ({
     //delete picture back to profile setting page
   };
 
-  const closePictureModalHandler = (event) => {
+  const closePictureModalHandler = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     xMarkHandler();
   };

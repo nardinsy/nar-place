@@ -3,7 +3,7 @@ import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
 import classes from "./NewPlacePage.module.css";
 import picturePlaceholder from "../../assets/Image-placeholder.png";
-import useAuthContext from "../../Hooks/Auth";
+import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
 import {
   placeInfoCard,
   PlaceInfoCardWithPictire,
@@ -13,7 +13,7 @@ interface NewPlacePageProps {
   addPlace: (place: PlaceInfoCardWithPictire) => Promise<void>;
 }
 const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
-  const authContext = useAuthContext();
+  const authContext = useRequireAuthContext();
   if (!authContext.isLoggedin)
     throw new Error("User is not logged in, Please log in again");
 

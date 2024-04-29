@@ -17,7 +17,7 @@ const AuthForms = ({ title }: { title: Title }) => {
     setAuthFormsTitle(formTitle);
   };
 
-  const authenticationModalCloseHandler = (event) => {
+  const authenticationModalCloseHandler = (event: MouseEvent) => {
     event.stopPropagation();
     history.replace("/");
   };

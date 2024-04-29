@@ -1,23 +1,23 @@
 import { useHistory } from "react-router-dom";
 import MessageModal from "../../Shared-UI/MessageModal";
 import Button from "../../Shared-UI/Button";
-import useAuthContext from "../../Hooks/Auth";
+import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
 
-const LogoutModal = (props) => {
+const LogoutModal = () => {
   const history = useHistory();
-  const authContext = useAuthContext();
+  const authContext = useRequireAuthContext();
 
   if (!authContext.isLoggedin)
     throw new Error("User most be logged in to be able to logout");
 
-  const logoutClient = async (event) => {
+  const logoutClient = async (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
     await authContext.logout();
     history.replace("/");
   };
 
-  const cancelLogoutHandler = (event) => {
+  const cancelLogoutHandler = (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
     history.replace("/");

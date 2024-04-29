@@ -1,4 +1,4 @@
-import { useState, FC } from "react";
+import { useState, FC, MouseEvent } from "react";
 import PlaceCard from "../UI/PlaceCard";
 import MessageModal from "../../Shared-UI/MessageModal";
 import EditPlaceModal from "./EditPlaceModal";
@@ -27,7 +27,7 @@ const EditablePlaceItem: FC<EditablePlaceItemProps> = ({
 
   // const { id, title, description, pictureUrl, address } = placeDto;
 
-  const showEditModalHandler = (event) => {
+  const showEditModalHandler = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     setShowEditModal(true);
@@ -37,19 +37,19 @@ const EditablePlaceItem: FC<EditablePlaceItemProps> = ({
     setShowEditModal(false);
   };
 
-  const deletePlaceHandler = (id) => {
+  const deletePlaceHandler = (id: string) => {
     setShowEditModal(false);
     setShowMessageModal(true);
     setSelectedPlaceId(id);
   };
 
-  const confirmToDeleteByUserHandler = async (event) => {
+  const confirmToDeleteByUserHandler = async (event: MouseEvent) => {
     event.preventDefault();
     setShowMessageModal(false);
     await deletePlace(selectedPlaceId);
   };
 
-  const cancelToDeleteByUserHandler = (event) => {
+  const cancelToDeleteByUserHandler = (event: MouseEvent) => {
     event.preventDefault();
     setShowMessageModal(false);
     setShowEditModal(true);

@@ -1,16 +1,21 @@
-import { useRef } from "react";
+import { useRef, MouseEvent, FC } from "react";
 import Modal from "../../Shared-UI/Modal";
 import Button from "../../Shared-UI/Button";
 import classes from "./ProfileEditForm.module.css";
 
-const PasswordChangeModal = ({
+interface PasswordChangeModalT {
+  closeChangePasswordModal: () => void;
+  onPasswordChange: (newPassword: string) => void;
+}
+
+const PasswordChangeModal: FC<PasswordChangeModalT> = ({
   closeChangePasswordModal,
   onPasswordChange,
 }) => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
-  const submitChangePassword = (event) => {
+  const submitChangePassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!passwordRef.current || !confirmPasswordRef.current) {
       throw new Error("Please fill inputs");
