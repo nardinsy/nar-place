@@ -1,4 +1,4 @@
-import { FC, useState, FormEvent, ChangeEvent, MouseEvent } from "react";
+import { FC, useState, ChangeEvent, MouseEvent } from "react";
 import classes from "./PlaceInfoCard.module.css";
 import Button from "../../Shared-UI/Button";
 import { placeInfoCard } from "../../sharedTypes/dtos";
@@ -16,6 +16,12 @@ interface PlaceInfoCardProps {
   placeInputs?: placeInfoCard;
 }
 
+interface FormINputValidation {
+  title: boolean;
+  description: boolean;
+  address: boolean;
+}
+
 const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
   onSubmit,
   placeInputs,
@@ -24,47 +30,87 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
   closeModal,
   extraAction,
 }) => {
-  const [titleValue, setTitleValue] = useState(
-    placeInputs ? placeInputs.title : ""
-  );
+  const [formINputs, setInfos] = useState<placeInfoCard>({
+    title: placeInputs ? placeInputs.title : "",
+    description: placeInputs ? placeInputs.description : "",
+    address: placeInputs ? placeInputs.address : "",
+  });
 
-  const [descriptionValue, setDescriptionValue] = useState(
-    placeInputs ? placeInputs.description : ""
-  );
-
-  const [addressValue, setAddressValue] = useState(
-    placeInputs ? placeInputs.address : ""
-  );
+  const [formInputsIsvalid, setFormInputsIsvalid] =
+    useState<FormINputValidation>({
+      title: true,
+      description: true,
+      address: true,
+    });
 
   const titleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setTitleValue(event.target.value);
+    if (!formInputsIsvalid.title) {
+      formInputsIsvalid.title = event.target.value ? true : false;
+    }
+    setInfos({ ...formINputs, title: event.target.value });
   };
 
   const descriptionChangeHandler = (
     event: ChangeEvent<HTMLTextAreaElement>
   ) => {
+    if (!formInputsIsvalid.description) {
+      formInputsIsvalid.description =
+        event.target.value.length > 7 ? true : false;
+    }
+
     if (event.target.value.length > 300) {
-      setDescriptionValue(event.target.value.slice(210));
+      setInfos({ ...formINputs, description: event.target.value.slice(210) });
     } else {
-      setDescriptionValue(event.target.value);
+      setInfos({ ...formINputs, description: event.target.value });
     }
   };
 
   const addressChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setAddressValue(event.target.value);
+    if (!formInputsIsvalid.address) {
+      formInputsIsvalid.address = event.target.value ? true : false;
+    }
+    setInfos({ ...formINputs, address: event.target.value });
+  };
+
+  const inputValidation: (infos: placeInfoCard) => boolean = (infos) => {
+    const { title, description, address } = infos;
+    if (title && description && address) {
+      return true;
+    }
+
+    const futureState = {
+      title: formInputsIsvalid.title,
+      description: formInputsIsvalid.description,
+      address: formInputsIsvalid.address,
+    };
+
+    if (!title) {
+      futureState.title = false;
+    }
+
+    if (!description) {
+      futureState.description = false;
+    }
+
+    if (!address) {
+      futureState.address = false;
+    }
+
+    console.log(futureState);
+    setFormInputsIsvalid(futureState);
+
+    return false;
   };
 
   const submitCardHandler = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (!titleValue || !descriptionValue || !addressValue) {
-      throw new Error("Please fill inputs");
-    }
-    //here inputs border should turn to red
+
+    if (!inputValidation(formINputs)) return;
 
     const place = {
-      title: titleValue,
-      description: descriptionValue,
-      address: addressValue,
+      title: formINputs.title,
+      description: formINputs.description,
+      address: formINputs.address,
     };
 
     // if (placeDto.id) {
@@ -94,24 +140,36 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
       <input
         maxLength={30}
         type="text"
-        className={classes["place-title"]}
+        className={
+          formInputsIsvalid.title
+            ? `${classes.inputs}`
+            : `${classes.inputs} ${classes.invalid}`
+        }
         placeholder="Title"
-        value={titleValue}
+        value={formINputs.title}
         onChange={titleChangeHandler}
       />
 
       <textarea
         maxLength={210}
-        className={classes["place-description"]}
+        className={
+          formInputsIsvalid.description
+            ? `${classes[`place-description`]}`
+            : `${classes[`place-description`]} ${classes.invalid}`
+        }
         placeholder="Description about this place"
-        value={descriptionValue}
+        value={formINputs.description}
         onChange={descriptionChangeHandler}
       />
       <input
         maxLength={30}
-        className={classes["place-address"]}
+        className={
+          formInputsIsvalid.address
+            ? `${classes.inputs}`
+            : `${classes.inputs} ${classes.invalid}`
+        }
         placeholder="Address"
-        value={addressValue}
+        value={formINputs.address}
         onChange={addressChangeHandler}
       />
 
