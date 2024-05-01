@@ -3,8 +3,23 @@ import Card from "../../Shared-UI/Card";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import classes from "./UsersList.module.css";
 import { UserDto } from "../../sharedTypes/dtos";
+import Spinner from "../../Shared-UI/Spinner";
 
-const UsersList = ({ users }: { users: UserDto[] }) => {
+const UsersList = ({
+  users,
+  loading,
+}: {
+  users: UserDto[];
+  loading: boolean;
+}) => {
+  if (loading) {
+    return (
+      <div className={classes.center}>
+        <Spinner />
+      </div>
+    );
+  }
+
   if (users.length === 0) {
     return (
       <div className={classes.center}>
@@ -19,7 +34,6 @@ const UsersList = ({ users }: { users: UserDto[] }) => {
     const pictureUrl = user.pictureUrl
       ? createAbsoluteApiAddress(user.pictureUrl)
       : undefined;
-
     return (
       <UserItem
         key={user.userId}
@@ -29,7 +43,6 @@ const UsersList = ({ users }: { users: UserDto[] }) => {
       />
     );
   });
-
   return <ul className={classes["users-list"]}>{userItems}</ul>;
 };
 

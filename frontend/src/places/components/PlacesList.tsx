@@ -5,9 +5,11 @@ import Card from "../../Shared-UI/Card";
 import classes from "./PlacesList.module.css";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import { PlaceDto, UserDto, placeInfoCard } from "../../sharedTypes/dtos";
+import Spinner from "../../Shared-UI/Spinner";
 
 interface PlacesListProps {
   editable: boolean;
+  loading: boolean;
   userPlaces: PlaceDto[];
   userDto: UserDto;
   editingCallbacks?: {
@@ -18,10 +20,19 @@ interface PlacesListProps {
 
 const PlacesList: FC<PlacesListProps> = ({
   editable,
+  loading,
   userPlaces,
   userDto,
   editingCallbacks,
 }) => {
+  if (loading) {
+    return (
+      <div className={classes.center}>
+        <Spinner />
+      </div>
+    );
+  }
+
   if (userPlaces.length === 0) {
     return (
       <div className={classes.center}>

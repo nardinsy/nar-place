@@ -28,6 +28,7 @@ const Authorized = ({ token }: { token: string }) => {
   }
 
   const [places, setPlaces] = useState<PlaceDto[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
@@ -93,6 +94,7 @@ const Authorized = ({ token }: { token: string }) => {
     console.log("getPlace api message:", data.mesaage);
     const places = data.places;
     setPlaces(places);
+    setLoading(false);
   };
 
   const editPlace = async (placeInfo: placeInfoCard & { id: string }) => {
@@ -223,6 +225,7 @@ const Authorized = ({ token }: { token: string }) => {
           getPlaces={getPlaces}
           editPlace={editPlace}
           deletePlace={deletePlace}
+          loading={loading}
         />
       </Route>
 

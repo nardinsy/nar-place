@@ -11,11 +11,11 @@ interface LocationState {
 
 const AnyUserPlaces = () => {
   const [loadedPlaces, setLoadedPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const { userId } = useParams() as { userId: string };
-  // const userId = useParams().userId;
   const { state } = useLocation<LocationState>();
   const userDto = state.userDto;
-  // userInfo = { id, username, pictureUrl, placeCount };
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -27,6 +27,7 @@ const AnyUserPlaces = () => {
 
       const data = await sendHttpRequest(address, requestOptions);
       setLoadedPlaces(data.places);
+      setLoading(false);
     };
     fetchPlaces();
   }, [userId]);
@@ -37,6 +38,7 @@ const AnyUserPlaces = () => {
         userPlaces={loadedPlaces}
         userDto={userDto}
         editable={false}
+        loading={loading}
       />
     </div>
   );

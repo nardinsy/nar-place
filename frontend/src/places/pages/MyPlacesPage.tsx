@@ -8,6 +8,7 @@ type MyPlacePageProps = {
   getPlaces: () => Promise<void>;
   editPlace: (placeInfo: placeInfoCard & { id: string }) => Promise<void>;
   deletePlace: (placeId: string) => Promise<void>;
+  loading: boolean;
 };
 
 const MyPlacePage: FC<MyPlacePageProps> = ({
@@ -15,6 +16,7 @@ const MyPlacePage: FC<MyPlacePageProps> = ({
   getPlaces,
   editPlace,
   deletePlace,
+  loading,
 }) => {
   console.log("Myplace Page Render");
 
@@ -47,6 +49,7 @@ const MyPlacePage: FC<MyPlacePageProps> = ({
         userDto={userDto}
         editable={true}
         editingCallbacks={{ editPlace, deletePlace }}
+        loading={loading}
       />
     </div>
   );

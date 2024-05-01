@@ -1,0 +1,22 @@
+.loading {
+  color: gray;
+  word-wrap: 0.5px;
+}
+
+.spinner {
+  font-size: 2rem;
+  color: gray;
+  animation: rotateIcon;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes rotateIcon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}

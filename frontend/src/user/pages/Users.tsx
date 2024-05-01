@@ -7,6 +7,7 @@ import { UserDto } from "../../sharedTypes/dtos";
 //fetch all users
 const Users = () => {
   const [users, setUsers] = useState<UserDto[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getUsers();
@@ -17,17 +18,20 @@ const Users = () => {
       method: "GET",
     };
     const address = getApiAddress(ENDPOINTS.getAllUsers);
+    let data: { message: string; usersInfo: UserDto[] };
 
-    const data: { message: string; usersInfo: UserDto[] } =
-      await sendHttpRequest(address, requestOptions);
+    setLoading(true);
+
+    data = await sendHttpRequest(address, requestOptions);
 
     const usersData: UserDto[] = data.usersInfo;
     setUsers([...usersData]);
+    setLoading(false);
   };
 
   return (
     <div>
-      <UsersList users={users} />;
+      <UsersList users={users} loading={loading} />;
     </div>
   );
 };
