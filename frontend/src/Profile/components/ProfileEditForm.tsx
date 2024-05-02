@@ -1,12 +1,12 @@
 import { useState, FC, ChangeEvent, MouseEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../Shared-UI/Button";
+import Button from "../../shared-UI/Button";
 import Avatar from "../UI/Avatar";
 import ImageUpload from "../../shared/ImageUpload";
 import PasswordChangeModal from "./PasswordChangeModal";
 import PictureModal from "../../shared/PictureModal";
-import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
+import useRequireAuthContext from "../../hooks/useRequireAuthContext";
 import classes from "./ProfileEditForm.module.css";
 import { ProfileSettingsPageT } from "../pages/ProfileSettingsPage";
 

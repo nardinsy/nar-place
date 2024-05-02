@@ -1,6 +1,6 @@
 import { useRef, MouseEvent, FC } from "react";
-import Modal from "../../Shared-UI/Modal";
-import Button from "../../Shared-UI/Button";
+import Modal from "../../shared-UI/Modal";
+import Button from "../../shared-UI/Button";
 import classes from "./ProfileEditForm.module.css";
 
 interface PasswordChangeModalT {

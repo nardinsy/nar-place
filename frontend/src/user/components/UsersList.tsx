@@ -1,9 +1,9 @@
 import UserItem from "./UserItem";
-import Card from "../../Shared-UI/Card";
+import Card from "../../shared-UI/Card";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import classes from "./UsersList.module.css";
-import { UserDto } from "../../sharedTypes/dtos";
-import Spinner from "../../Shared-UI/Spinner";
+import { UserDto } from "../../helpers/dtos";
+import Spinner from "../../shared-UI/Spinner";
 
 const UsersList = ({
   users,

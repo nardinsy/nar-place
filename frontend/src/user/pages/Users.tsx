@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import UsersList from "../components/UsersList";
 import sendHttpRequest from "../../helpers/http-request";
 import { ENDPOINTS, getApiAddress } from "../../helpers/api-url";
-import { UserDto } from "../../sharedTypes/dtos";
+import { UserDto } from "../../helpers/dtos";
 
 //fetch all users
 const Users = () => {
@@ -17,16 +17,18 @@ const Users = () => {
     const requestOptions = {
       method: "GET",
     };
+
     const address = getApiAddress(ENDPOINTS.getAllUsers);
     let data: { message: string; usersInfo: UserDto[] };
 
     setLoading(true);
+    setTimeout(async () => {
+      data = await sendHttpRequest(address, requestOptions);
 
-    data = await sendHttpRequest(address, requestOptions);
-
-    const usersData: UserDto[] = data.usersInfo;
-    setUsers([...usersData]);
-    setLoading(false);
+      const usersData: UserDto[] = data.usersInfo;
+      setUsers([...usersData]);
+      setLoading(false);
+    }, 2000);
   };
 
   return (

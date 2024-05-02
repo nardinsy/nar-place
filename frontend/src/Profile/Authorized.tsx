@@ -16,8 +16,8 @@ import {
   PlaceDto,
   PlaceInfoCardWithPictire,
   placeInfoCard,
-} from "../sharedTypes/dtos";
-import useRequireAuthContext from "../Hooks/useRequireAuthContext";
+} from "../helpers/dtos";
+import useRequireAuthContext from "../hooks/useRequireAuthContext";
 
 const Authorized = ({ token }: { token: string }) => {
   console.log("User Component Render");

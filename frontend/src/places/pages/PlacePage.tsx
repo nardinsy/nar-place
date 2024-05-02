@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useLocation } from "react-router-dom";
-import { UserDto, PlaceDto } from "../../sharedTypes/dtos";
+import { UserDto, PlaceDto } from "../../helpers/dtos";
 import Avatar from "../../Profile/UI/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,8 +21,8 @@ const PlacePage: FC = () => {
   } = useLocation();
   const { placeDto, userDto } = state;
 
-  const { title, description, address, pictureUrl } = placeDto;
-  const { username, pictureUrl: userPictureUrl, placeCount } = userDto;
+  const { title, description, address, pictureUrl, creator } = placeDto;
+  const { username, pictureUrl: userPictureUrl, placeCount, userId } = userDto;
 
   // const placeId = useParams().placeId;
 
@@ -85,9 +85,13 @@ const PlacePage: FC = () => {
             </div>
           </div>
 
-          <div className={classes["place-creator-account_follow_button"]}>
-            Follow
-          </div>
+          {userId !== creator ? (
+            <div className={classes["place-creator-account_follow_button"]}>
+              Follow
+            </div>
+          ) : (
+            <span></span>
+          )}
         </div>
 
         <div className={classes["place-info"]}>

@@ -1,7 +1,7 @@
 import { useState, FC, PropsWithChildren, MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import classes from "./PlaceCard.module.css";
-import { PlaceDto, UserDto } from "../../sharedTypes/dtos";
+import { PlaceDto, UserDto } from "../../helpers/dtos";
 
 type PlaceCardProps = PropsWithChildren<{
   placeDto: PlaceDto;

@@ -1,6 +1,6 @@
 import { FC } from "react";
-import Modal from "../../Shared-UI/Modal";
-import { PlaceDto, placeInfoCard } from "../../sharedTypes/dtos";
+import Modal from "../../shared-UI/Modal";
+import { PlaceDto, placeInfoCard } from "../../helpers/dtos";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
 
 type EditPlaceModalT = {

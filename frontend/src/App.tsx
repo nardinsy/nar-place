@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route } from "react-router-dom";
 import MainHeader from "./Header/MainHeader";
 import AuthForms from "./Authentication/AuthForm";
@@ -6,10 +6,17 @@ import Authorized from "./Profile/Authorized";
 import AnyUserPlaces from "./user/pages/AnyUserPlaces";
 import PlacePage from "./places/pages/PlacePage";
 import Users from "./user/pages/Users";
-import useRequireAuthContext from "./Hooks/useRequireAuthContext";
+import useRequireAuthContext from "./hooks/useRequireAuthContext";
 
 const App: React.FC = (porps) => {
   const authContext = useRequireAuthContext();
+  // const [loggedUserId, setLoggedUserId] = useState<string | undefined>(
+  //   undefined
+  // );
+
+  // if (authContext.isLoggedin) {
+  //   setLoggedUserId(authContext.userId);
+  // }
 
   return (
     <>

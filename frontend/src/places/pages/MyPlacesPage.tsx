@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import PlacesList from "../components/PlacesList";
-import { PlaceDto, UserDto, placeInfoCard } from "../../sharedTypes/dtos";
-import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
+import { PlaceDto, UserDto, placeInfoCard } from "../../helpers/dtos";
+import useRequireAuthContext from "../../hooks/useRequireAuthContext";
 
 type MyPlacePageProps = {
   places: PlaceDto[];

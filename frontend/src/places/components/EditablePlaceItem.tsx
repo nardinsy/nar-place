@@ -1,12 +1,12 @@
 import { useState, FC, MouseEvent } from "react";
 import PlaceCard from "../UI/PlaceCard";
-import MessageModal from "../../Shared-UI/MessageModal";
+import MessageModal from "../../shared-UI/MessageModal";
 import EditPlaceModal from "./EditPlaceModal";
-import Button from "../../Shared-UI/Button";
+import Button from "../../shared-UI/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import classes from "./EditablePlaceItem.module.css";
-import { PlaceDto, UserDto, placeInfoCard } from "../../sharedTypes/dtos";
+import { PlaceDto, UserDto, placeInfoCard } from "../../helpers/dtos";
 
 interface EditablePlaceItemProps {
   placeDto: PlaceDto;

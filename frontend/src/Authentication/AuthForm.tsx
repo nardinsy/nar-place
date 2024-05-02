@@ -1,6 +1,6 @@
 import { useState, MouseEvent } from "react";
 import { useHistory } from "react-router-dom";
-import Modal from "../Shared-UI/Modal";
+import Modal from "../shared-UI/Modal";
 import LoginForm from "./Login/LoginForm";
 import SignupForm from "./Signup/SignupForm";
 import classes from "./AuthForms.module.css";

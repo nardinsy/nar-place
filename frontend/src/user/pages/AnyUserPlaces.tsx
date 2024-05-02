@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import sendHttpRequest from "../../helpers/http-request";
 import PlacesList from "../../places/components/PlacesList";
 import { ENDPOINTS, getApiAddress } from "../../helpers/api-url";
-import { UserDto } from "../../sharedTypes/dtos";
+import { UserDto } from "../../helpers/dtos";
 
 interface LocationState {
   userDto: UserDto;

@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../Profile/UI/Avatar";
-import Card from "../../Shared-UI/Card";
-import { UserDto } from "../../sharedTypes/dtos";
+import Card from "../../shared-UI/Card";
+import { UserDto } from "../../helpers/dtos";
 import classes from "./UserItem.module.css";
 
 type UserItemProps = { userDto: UserDto; key: string };

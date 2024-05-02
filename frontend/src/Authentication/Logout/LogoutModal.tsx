@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
-import MessageModal from "../../Shared-UI/MessageModal";
-import Button from "../../Shared-UI/Button";
-import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
+import MessageModal from "../../shared-UI/MessageModal";
+import Button from "../../shared-UI/Button";
+import useRequireAuthContext from "../../hooks/useRequireAuthContext";
 
 const LogoutModal = () => {
   const history = useHistory();

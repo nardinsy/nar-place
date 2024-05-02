@@ -1,10 +1,10 @@
 import { useRef, MouseEvent } from "react";
-import Button from "../../Shared-UI/Button";
+import Button from "../../shared-UI/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import classes from "./SignupForm.module.css";
 import { UserSignupInformation } from "../../../../backend/src/shared/dtos";
-import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
+import useRequireAuthContext from "../../hooks/useRequireAuthContext";
 
 const SignupForm = () => {
   const authContext = useRequireAuthContext();

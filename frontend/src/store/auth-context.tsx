@@ -8,7 +8,7 @@ import {
   UserSignupInformation,
 } from "../../../backend/src/shared/dtos";
 import { HasChildren } from "../helpers/props";
-import { LoginResult } from "../sharedTypes/dtos";
+import { LoginResult } from "../helpers/dtos";
 
 interface LoggedOutAuthContextT {
   isLoggedin: false;

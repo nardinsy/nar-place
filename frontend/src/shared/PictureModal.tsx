@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, FC, ReactNode, MouseEvent } from "react";
 import Avatar from "../Profile/UI/Avatar";
 import Dropdown from "../Header/Dropdown/DropdownCard";
-import Modal from "../Shared-UI/Modal";
+import Modal from "../shared-UI/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsis,

@@ -1,11 +1,11 @@
 import { FC } from "react";
 import PlaceItem from "./PlaceItem";
 import EditablePlaceItem from "./EditablePlaceItem";
-import Card from "../../Shared-UI/Card";
+import Card from "../../shared-UI/Card";
 import classes from "./PlacesList.module.css";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
-import { PlaceDto, UserDto, placeInfoCard } from "../../sharedTypes/dtos";
-import Spinner from "../../Shared-UI/Spinner";
+import { PlaceDto, UserDto, placeInfoCard } from "../../helpers/dtos";
+import Spinner from "../../shared-UI/Spinner";
 
 interface PlacesListProps {
   editable: boolean;

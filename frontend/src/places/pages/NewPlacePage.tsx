@@ -3,11 +3,8 @@ import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
 import classes from "./NewPlacePage.module.css";
 import picturePlaceholder from "../../assets/Image-placeholder.png";
-import useRequireAuthContext from "../../Hooks/useRequireAuthContext";
-import {
-  placeInfoCard,
-  PlaceInfoCardWithPictire,
-} from "../../sharedTypes/dtos";
+import useRequireAuthContext from "../../hooks/useRequireAuthContext";
+import { placeInfoCard, PlaceInfoCardWithPictire } from "../../helpers/dtos";
 
 interface NewPlacePageProps {
   addPlace: (place: PlaceInfoCardWithPictire) => Promise<void>;

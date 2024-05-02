@@ -1,7 +1,7 @@
 import { FC, useState, ChangeEvent, MouseEvent } from "react";
 import classes from "./PlaceInfoCard.module.css";
-import Button from "../../Shared-UI/Button";
-import { placeInfoCard } from "../../sharedTypes/dtos";
+import Button from "../../shared-UI/Button";
+import { placeInfoCard } from "../../helpers/dtos";
 
 interface PlaceInfoCardProps {
   onSubmit: (place: placeInfoCard) => void;
