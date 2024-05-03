@@ -79,8 +79,6 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   }, []);
 
   const signup = async (userInfo: UserSignupInformation) => {
-    console.log("Signup");
-
     const data = await backend.signup(userInfo);
     const { token, user } = data;
 
@@ -89,7 +87,6 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   };
 
   const login = async (userInfo: UserLoginInformation) => {
-    console.log("Login");
     if (userInfo.email.length === 0 || userInfo.password.length === 0) {
       console.log("Please enter email or password");
       return;

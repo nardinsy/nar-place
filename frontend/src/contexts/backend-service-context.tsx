@@ -15,6 +15,20 @@ import { ENDPOINTS, getApiAddress } from "../helpers/api-url";
 import sendHttpRequest, { MyRequestOptions } from "../helpers/http-request";
 
 class BackedServiceImpl implements BackendService {
+  async getAllUsers(): Promise<UserDto[]> {
+    const requestOptions = {
+      method: "GET",
+    };
+
+    const address = getApiAddress(ENDPOINTS.getAllUsers);
+    const data: { usersInfo: UserDto[] } = await sendHttpRequest(
+      address,
+      requestOptions
+    );
+
+    return data.usersInfo;
+  }
+
   async signup(userInfo: UserSignupInformation): Promise<LoginResult> {
     const requestOptions: MyRequestOptions = {
       method: "POST",
@@ -50,7 +64,7 @@ class BackedServiceImpl implements BackendService {
   async changeProfilePicture(
     pictureFile: string | ArrayBuffer | undefined,
     token: string
-  ): Promise<{ message: string; userInfo: UserDto }> {
+  ): Promise<{ userInfo: UserDto }> {
     const userNewImage = { image: pictureFile };
 
     const requestOptions = {
@@ -63,10 +77,7 @@ class BackedServiceImpl implements BackendService {
     return await sendHttpRequest(address, requestOptions);
   }
 
-  async changePassword(
-    newPassword: string,
-    token: string
-  ): Promise<{ message: string }> {
+  async changePassword(newPassword: string, token: string): Promise<void> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
@@ -77,10 +88,7 @@ class BackedServiceImpl implements BackendService {
     return await sendHttpRequest(address, requestOptions);
   }
 
-  async changeUsername(
-    newUsername: string,
-    token: string
-  ): Promise<{ message: string }> {
+  async changeUsername(newUsername: string, token: string): Promise<void> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
@@ -91,36 +99,18 @@ class BackedServiceImpl implements BackendService {
     return await sendHttpRequest(address, requestOptions);
   }
 
-  async deletePlace(
-    placeId: string,
-    token: string
-  ): Promise<{ message: string }> {
-    const requestOptions = {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json", token },
-    };
-    const address = getApiAddress(ENDPOINTS.deletePlace, placeId);
-
-    return await sendHttpRequest(address, requestOptions);
-  }
-
-  async getPlaces(
-    token: string
-  ): Promise<{ mesaage: string; places: PlaceDto[] }> {
+  async getLoggedUserPlaces(token: string): Promise<{ places: PlaceDto[] }> {
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json", token },
     };
 
-    const address = getApiAddress(ENDPOINTS.getPlaces);
+    const address = getApiAddress(ENDPOINTS.getLoggedUserPlaces);
 
     return await sendHttpRequest(address, requestOptions);
   }
 
-  async addPlace(
-    place: NewPlace,
-    token: string
-  ): Promise<{ message: string; place: PlaceDto }> {
+  async addPlace(place: NewPlace, token: string): Promise<{ place: PlaceDto }> {
     const address = getApiAddress(ENDPOINTS.addPlace);
 
     const requestOptions = {
@@ -135,7 +125,7 @@ class BackedServiceImpl implements BackendService {
   async editPlace(
     placeInfo: placeInfoCard & { id: string },
     token: string
-  ): Promise<{ message: string; place: PlaceDto }> {
+  ): Promise<{ place: PlaceDto }> {
     const requestOptions = {
       method: "PATCH",
       headers: { "Content-Type": "application/json", token },
@@ -151,28 +141,26 @@ class BackedServiceImpl implements BackendService {
     return await sendHttpRequest(address, requestOptions);
   }
 
-  async getuserPlaces(
+  async deletePlaceById(placeId: string, token: string): Promise<void> {
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json", token },
+    };
+    const address = getApiAddress(ENDPOINTS.deletePlaceById, placeId);
+
+    return await sendHttpRequest(address, requestOptions);
+  }
+
+  async getAnyUserPlacesByUserId(
     userId: string
-  ): Promise<{ mesaage: string; places: PlaceDto[] }> {
-    const address = getApiAddress(ENDPOINTS.getuserPlaces, userId);
+  ): Promise<{ places: PlaceDto[] }> {
+    const address = getApiAddress(ENDPOINTS.getAnyUserPlacesByUserId, userId);
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
 
     return await sendHttpRequest(address, requestOptions);
-  }
-
-  async getAllUsers(): Promise<UserDto[]> {
-    const requestOptions = {
-      method: "GET",
-    };
-
-    const address = getApiAddress(ENDPOINTS.getAllUsers);
-    const data: { message: string; usersInfo: UserDto[] } =
-      await sendHttpRequest(address, requestOptions);
-
-    return data.usersInfo;
   }
 }
 

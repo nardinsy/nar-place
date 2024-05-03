@@ -2,11 +2,11 @@ import { check } from "express-validator";
 import routerAuth from "../lib/router-auth";
 import {
   getPlaces,
-  getUserPlaces,
+  getLoggedUserPlaces,
   addPlace,
   editPlaceById,
   deletePlaceById,
-  getOtherUserPlacesByUserId,
+  getAnyUserPlacesByUserId,
   getPlacePictureByUrl,
 } from "../controllers/places-controller";
 
@@ -33,12 +33,12 @@ const placeRouter = routerAuth();
 //   res.json({ message: "test ok" });
 // });
 
-placeRouter.get("/", getPlaces);
+// placeRouter.get("/", getPlaces);
 
-placeRouter.getAuth("/userPlaces", getUserPlaces);
+placeRouter.getAuth("/userPlaces", getLoggedUserPlaces);
 
 placeRouter.postAuth(
-  "/addPlace",
+  "/add-place",
   [
     check("title").not().isEmpty(),
     check("description").isLength({ min: 5 }),
@@ -48,14 +48,14 @@ placeRouter.postAuth(
 );
 
 placeRouter.patchAuth(
-  "/edit",
+  "/edit-place",
   [check("title").not().isEmpty(), check("description").isLength({ min: 5 })],
   editPlaceById
 );
 
-placeRouter.deleteAuth("/:pid", deletePlaceById);
+placeRouter.deleteAuth("/delete-place/:pid", deletePlaceById);
 
-placeRouter.get("/placesByUserId/:uid", getOtherUserPlacesByUserId);
+placeRouter.get("/any-user-places-by-userId/:uid", getAnyUserPlacesByUserId);
 
 placeRouter.get("/place-picture/:id", getPlacePictureByUrl);
 

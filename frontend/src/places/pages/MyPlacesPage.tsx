@@ -5,7 +5,7 @@ import useRequireAuthContext from "../../hooks/useRequireAuthContext";
 
 type MyPlacePageProps = {
   places: PlaceDto[];
-  getPlaces: () => Promise<void>;
+  getLoggedUserPlaces: () => Promise<void>;
   editPlace: (placeInfo: placeInfoCard & { id: string }) => Promise<void>;
   deletePlace: (placeId: string) => Promise<void>;
   loading: boolean;
@@ -13,7 +13,7 @@ type MyPlacePageProps = {
 
 const MyPlacePage: FC<MyPlacePageProps> = ({
   places,
-  getPlaces,
+  getLoggedUserPlaces,
   editPlace,
   deletePlace,
   loading,
@@ -37,7 +37,7 @@ const MyPlacePage: FC<MyPlacePageProps> = ({
 
   useEffect(() => {
     if (places.length === 0) {
-      getPlaces();
+      getLoggedUserPlaces();
       console.log("Get places through myPlacesPage");
     }
   }, []);

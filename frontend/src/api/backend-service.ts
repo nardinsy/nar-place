@@ -21,24 +21,14 @@ export interface BackendService {
     pictureFile: string | ArrayBuffer | undefined,
     token: string
   ): Promise<{
-    message: string;
     userInfo: UserDto;
   }>;
 
-  changePassword(
-    newPassword: string,
-    token: string
-  ): Promise<{ message: string }>;
+  changePassword(newPassword: string, token: string): Promise<void>;
 
-  changeUsername(
-    newUsername: string,
-    token: string
-  ): Promise<{ message: string }>;
+  changeUsername(newUsername: string, token: string): Promise<void>;
 
-  deletePlace(placeId: string, token: string): Promise<{ message: string }>;
-
-  getPlaces(token: string): Promise<{
-    mesaage: string;
+  getLoggedUserPlaces(token: string): Promise<{
     places: PlaceDto[];
   }>;
 
@@ -46,17 +36,17 @@ export interface BackendService {
     place: NewPlace,
     token: string
   ): Promise<{
-    message: string;
     place: PlaceDto;
   }>;
 
   editPlace(
     placeInfo: placeInfoCard & { id: string },
     token: string
-  ): Promise<{ message: string; place: PlaceDto }>;
+  ): Promise<{ place: PlaceDto }>;
 
-  getuserPlaces(userId: string): Promise<{
-    mesaage: string;
+  deletePlaceById(placeId: string, token: string): Promise<void>;
+
+  getAnyUserPlacesByUserId(userId: string): Promise<{
     places: PlaceDto[];
   }>;
 }

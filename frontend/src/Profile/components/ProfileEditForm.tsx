@@ -11,7 +11,7 @@ import classes from "./ProfileEditForm.module.css";
 import { ProfileSettingsPageT } from "../pages/ProfileSettingsPage";
 
 const ProfileEditForm: FC<ProfileSettingsPageT> = ({
-  changeUserImage,
+  changeProfilePicture,
   changePassword,
   changeUsername,
 }) => {
@@ -62,7 +62,7 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
     }
 
     if (file !== "noChange") {
-      changeUserImage(file);
+      changeProfilePicture(file);
       //show message
     }
   };
@@ -99,7 +99,7 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
         );
 
         if (result) {
-          changeUserImage(undefined);
+          changeProfilePicture(undefined);
           setAvatarURL(undefined);
         }
       },

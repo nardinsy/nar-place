@@ -1,7 +1,7 @@
 import { check } from "express-validator";
 import routerAuth from "../lib/router-auth";
 import {
-  getUsers,
+  getAllUsers,
   signup,
   login,
   logout,
@@ -14,7 +14,7 @@ import {
 
 const usersRouter = routerAuth();
 
-usersRouter.get("/", getUsers);
+usersRouter.get("/", getAllUsers);
 
 usersRouter.post(
   "/signup",
@@ -30,14 +30,12 @@ usersRouter.post("/login", login);
 
 usersRouter.getAuth("/logout", logout);
 
-usersRouter.postAuth("/editUserInfo", editUserInfo);
+usersRouter.postAuth("/change/profile-picture", changeProfilePicture);
 
-usersRouter.postAuth("/changeProfilePicture", changeProfilePicture);
+usersRouter.postAuth("/change/password", changePassword);
+
+usersRouter.postAuth("/change/username", changeUsername);
 
 usersRouter.get("/profile-picture/:uid", getUserProfilePicture);
-
-usersRouter.postAuth("/changePassword", changePassword);
-
-usersRouter.postAuth("/changeUsername", changeUsername);
-
+// usersRouter.postAuth("/editUserInfo", editUserInfo);
 export default usersRouter;

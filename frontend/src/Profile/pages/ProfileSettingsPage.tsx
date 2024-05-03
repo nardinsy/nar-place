@@ -2,20 +2,20 @@ import ProfileEditForm from "../components/ProfileEditForm";
 import { FC } from "react";
 
 export interface ProfileSettingsPageT {
-  changeUserImage: (userNewImage: File | undefined) => Promise<void>;
+  changeProfilePicture: (userNewImage: File | undefined) => Promise<void>;
   changePassword: (newPassword: string) => Promise<void>;
   changeUsername: (newUsername: string) => Promise<void>;
 }
 
 const ProfileSettingsPage: FC<ProfileSettingsPageT> = ({
-  changeUserImage,
+  changeProfilePicture,
   changePassword,
   changeUsername,
 }) => {
   return (
     <div>
       <ProfileEditForm
-        changeUserImage={changeUserImage}
+        changeProfilePicture={changeProfilePicture}
         changePassword={changePassword}
         changeUsername={changeUsername}
       />

@@ -20,7 +20,7 @@ const AnyUserPlaces = () => {
 
   useEffect(() => {
     const fetchPlaces = async () => {
-      const data = await backend.getuserPlaces(userId);
+      const data = await backend.getAnyUserPlacesByUserId(userId);
       setLoadedPlaces(data.places);
       setLoading(false);
     };

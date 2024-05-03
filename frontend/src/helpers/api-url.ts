@@ -21,19 +21,20 @@ const BASE_URL = "http://192.168.1.6:5000/api/";
 
 export enum ENDPOINTS {
   getAllUsers = "users",
+
   signup = "users/signup",
   login = "users/login",
   logout = "users/logout",
-  changeProfilePicture = "users/changeProfilePicture",
-  profilePicture = "users/profile-picture/",
-  changePassword = "users/changePassword",
-  changeUsername = "users/changeUsername",
-  deletePlace = `places/`,
-  getPlaces = "places/userPlaces",
-  addPlace = "places/addPlace",
-  editPlace = "places/edit",
-  getuserPlaces = "places/placesByUserId/",
-  placePicture = "places/place-picture/",
+
+  changeProfilePicture = "users/change/profile-picture",
+  changePassword = "users/change/password",
+  changeUsername = "users/change/username",
+
+  getLoggedUserPlaces = "places/userPlaces",
+  addPlace = "places/add-place",
+  editPlace = "places/edit-place",
+  deletePlaceById = `places/delete-place/`,
+  getAnyUserPlacesByUserId = "places/any-user-places-by-userId/",
 }
 
 const getApiAddress = (endPoint: ENDPOINTS, param?: string) => {

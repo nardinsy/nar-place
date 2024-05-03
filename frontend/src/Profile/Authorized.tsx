@@ -4,12 +4,7 @@ import MyPlacePage from "../places/pages/MyPlacesPage";
 import LogoutModal from "../Authentication/Logout/LogoutModal";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import NewPlacePage from "../places/pages/NewPlacePage";
-import sendHttpRequest from "../helpers/http-request";
-import {
-  getApiAddress,
-  createAbsoluteApiAddress,
-  ENDPOINTS,
-} from "../helpers/api-url";
+import { createAbsoluteApiAddress } from "../helpers/api-url";
 import {
   Base64,
   NewPlace,
@@ -33,6 +28,14 @@ const Authorized = ({ token }: { token: string }) => {
 
   const backend = useRequiredBackend();
   const history = useHistory();
+
+  const getLoggedUserPlaces = async () => {
+    const data = await backend.getLoggedUserPlaces(token);
+
+    const places = data.places;
+    setPlaces(places);
+    setLoading(false);
+  };
 
   const addPlace: (place: PlaceInfoCardWithPictire) => Promise<void> = async (
     place
@@ -72,14 +75,6 @@ const Authorized = ({ token }: { token: string }) => {
     reader.readAsDataURL(newPLaceBlob);
   };
 
-  const getPlaces = async () => {
-    const data = await backend.getPlaces(token);
-
-    const places = data.places;
-    setPlaces(places);
-    setLoading(false);
-  };
-
   const editPlace = async (placeInfo: placeInfoCard & { id: string }) => {
     const data = await backend.editPlace(placeInfo, token);
 
@@ -94,8 +89,8 @@ const Authorized = ({ token }: { token: string }) => {
     setPlaces((pre) => [...pre]);
   };
 
-  const deletePlace = async (placeId: string) => {
-    await backend.deletePlace(placeId, token);
+  const deletePlaceById = async (placeId: string) => {
+    await backend.deletePlaceById(placeId, token);
 
     console.log("delete place front");
 
@@ -104,7 +99,7 @@ const Authorized = ({ token }: { token: string }) => {
     });
   };
 
-  const changeUserImage = async (userNewImage: File | undefined) => {
+  const changeProfilePicture = async (userNewImage: File | undefined) => {
     // imuserNewImage: File {name: '2021-10-22 7.18.jpg', lastModified: 1704866449845, lastModifiedDate: Wed Jan 10 2024 09:30:49 GMT+0330 (Iran Standard Time), webkitRelativePath: '', size: 1156073, …}
 
     if (!userNewImage) {
@@ -114,7 +109,7 @@ const Authorized = ({ token }: { token: string }) => {
       return;
     }
 
-    let data: { message: string; userInfo: UserDto };
+    let data: { userInfo: UserDto };
     const reader = new FileReader();
 
     reader.onloadend = async () => {
@@ -157,9 +152,9 @@ const Authorized = ({ token }: { token: string }) => {
       <Route path="/myplace">
         <MyPlacePage
           places={places}
-          getPlaces={getPlaces}
+          getLoggedUserPlaces={getLoggedUserPlaces}
           editPlace={editPlace}
-          deletePlace={deletePlace}
+          deletePlace={deletePlaceById}
           loading={loading}
         />
       </Route>
@@ -174,7 +169,7 @@ const Authorized = ({ token }: { token: string }) => {
 
       <Route path="/profile-settings">
         <ProfileSettingsPage
-          changeUserImage={changeUserImage}
+          changeProfilePicture={changeProfilePicture}
           changePassword={changePassword}
           changeUsername={changeUsername}
         />

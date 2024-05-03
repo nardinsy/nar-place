@@ -30,7 +30,7 @@ export const getPlaces: RequestHandler = async (req, res, next) => {
   res.json({ places: placesDto });
 };
 
-export const getUserPlaces: AuthRequestHandler = async (
+export const getLoggedUserPlaces: AuthRequestHandler = async (
   user,
   req,
   res,
@@ -67,7 +67,6 @@ export const getUserPlaces: AuthRequestHandler = async (
   });
 
   res.json({
-    mesaage: "Get user's places successfully",
     places: placesWithPictureUrl,
   });
 };
@@ -134,7 +133,6 @@ export const addPlace: AuthRequestHandler = async (user, req, res, next) => {
   );
 
   res.status(201).json({
-    message: "Created new place.",
     place: placeDto,
   });
 };
@@ -215,9 +213,7 @@ export const editPlaceById: AuthRequestHandler = async (
     getPlacePictureUrl(place.picture._id.toHexString())
   );
 
-  res
-    .status(200)
-    .json({ message: "Plcas update successfully", place: placeDto });
+  res.status(200).json({ place: placeDto });
 };
 
 export const deletePlaceById: AuthRequestHandler = async (
@@ -266,7 +262,7 @@ export const deletePlaceById: AuthRequestHandler = async (
   res.status(200).json({ message: "Place removed successfully." });
 };
 
-export const getOtherUserPlacesByUserId: RequestHandler = async (
+export const getAnyUserPlacesByUserId: RequestHandler = async (
   req,
   res,
   next

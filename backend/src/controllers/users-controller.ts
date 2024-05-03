@@ -16,7 +16,7 @@ const getProfilePictureUrl = (id: string): string => {
   return `users/profile-picture/${id}`;
 };
 
-export const getUsers: RequestHandler = async (req, res, next) => {
+export const getAllUsers: RequestHandler = async (req, res, next) => {
   const result = await User.find().exec();
 
   const usersInfo = result.map((user) => {
@@ -31,7 +31,7 @@ export const getUsers: RequestHandler = async (req, res, next) => {
     );
   });
 
-  res.json({ message: "Get users successfully", usersInfo });
+  res.json({ usersInfo });
 };
 
 export const signup: RequestHandler = async (req, res, next) => {
@@ -88,8 +88,6 @@ export const signup: RequestHandler = async (req, res, next) => {
   }
 
   const userDto = new UserDto(newUser.id, username, undefined, 0);
-
-  // res.status(201).json({
   //   message: "Signup user successfully.",
   //   token: token,
   //   userInfo,
@@ -146,7 +144,7 @@ export const login: RequestHandler = async (req, res, next) => {
 };
 
 export const logout: AuthRequestHandler = async (user, req, res, next) => {
-  res.json({ message: "User logged out successfully" });
+  res.status(200).json({});
 };
 
 export const editUserInfo: AuthRequestHandler = async (
@@ -232,9 +230,7 @@ export const changeProfilePicture: AuthRequestHandler = async (
   );
 
   res.status(201).json({
-    message: "Edit user image successfully.",
     userInfo,
-    // pictureUrl: getProfilePictureUrl(userPicture.id),
   });
 };
 
@@ -285,7 +281,7 @@ export const changePassword: AuthRequestHandler = async (
     );
   }
 
-  res.status(200).json({ message: "Changed password successfully" });
+  res.status(200).json({});
 };
 
 export const changeUsername: AuthRequestHandler = async (
@@ -306,7 +302,7 @@ export const changeUsername: AuthRequestHandler = async (
     );
   }
 
-  res.status(200).json({ message: "Changed username successfully" });
+  res.status(200).json({});
 };
 
 const generateToken = async (user: IUser): Promise<string> => {
