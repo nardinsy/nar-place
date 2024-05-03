@@ -10,13 +10,6 @@ import useRequireAuthContext from "./hooks/useRequireAuthContext";
 
 const App: React.FC = (porps) => {
   const authContext = useRequireAuthContext();
-  // const [loggedUserId, setLoggedUserId] = useState<string | undefined>(
-  //   undefined
-  // );
-
-  // if (authContext.isLoggedin) {
-  //   setLoggedUserId(authContext.userId);
-  // }
 
   return (
     <>

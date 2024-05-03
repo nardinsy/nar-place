@@ -9,6 +9,7 @@ import {
 } from "../../../backend/src/shared/dtos";
 import { HasChildren } from "../helpers/props";
 import { LoginResult } from "../helpers/dtos";
+import useRequiredBackend from "../hooks/use-required-backend";
 
 interface LoggedOutAuthContextT {
   isLoggedin: false;
@@ -58,6 +59,7 @@ const saveUserInfoToLocalStorage = (
 export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
   const history = useHistory();
+  const backend = useRequiredBackend();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -77,38 +79,24 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   }, []);
 
   const signup = async (userInfo: UserSignupInformation) => {
-    console.log("here");
-    const requestOptions: MyRequestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userInfo),
-    };
-    const address = getApiAddress(ENDPOINTS.signup);
+    console.log("Signup");
 
-    const data: LoginResult = await sendHttpRequest(address, requestOptions);
-    const { token, user, message } = data;
+    const data = await backend.signup(userInfo);
+    const { token, user } = data;
 
     localLogin(token, user.userId, user.username, user.pictureUrl);
     history.replace("/");
   };
 
   const login = async (userInfo: UserLoginInformation) => {
-    console.log("login");
+    console.log("Login");
     if (userInfo.email.length === 0 || userInfo.password.length === 0) {
       console.log("Please enter email or password");
       return;
     }
 
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userInfo),
-    };
-    const address = getApiAddress(ENDPOINTS.login);
-
-    const data: LoginResult = await sendHttpRequest(address, requestOptions);
-
-    const { token, user, message } = data;
+    const data = await backend.login(userInfo);
+    const { token, user } = data;
 
     const pictureUrl = user.pictureUrl
       ? createAbsoluteApiAddress(user.pictureUrl)
@@ -123,13 +111,8 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     if (!loginInfo.isLoggedin) {
       throw new Error("User must be logged in");
     }
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json", token: loginInfo.token },
-    };
-    const address = getApiAddress(ENDPOINTS.logout);
 
-    await sendHttpRequest(address, requestOptions);
+    await backend.logout(loginInfo.token);
 
     localLogout();
   };

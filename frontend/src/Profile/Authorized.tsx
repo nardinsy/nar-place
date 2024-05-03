@@ -15,21 +15,23 @@ import {
   NewPlace,
   PlaceDto,
   PlaceInfoCardWithPictire,
+  UserDto,
   placeInfoCard,
 } from "../helpers/dtos";
 import useRequireAuthContext from "../hooks/useRequireAuthContext";
+import useRequiredBackend from "../hooks/use-required-backend";
 
 const Authorized = ({ token }: { token: string }) => {
   console.log("User Component Render");
-
+  const [places, setPlaces] = useState<PlaceDto[]>([]);
+  const [loading, setLoading] = useState(true);
   const authContext = useRequireAuthContext();
+
   if (!authContext.isLoggedin) {
     throw new Error("User most be logged in, Please Login again");
   }
 
-  const [places, setPlaces] = useState<PlaceDto[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  const backend = useRequiredBackend();
   const history = useHistory();
 
   const addPlace: (place: PlaceInfoCardWithPictire) => Promise<void> = async (
@@ -50,18 +52,8 @@ const Authorized = ({ token }: { token: string }) => {
         picture: newImageDataURLFormat,
       };
 
-      const address = getApiAddress(ENDPOINTS.addPlace);
+      const data = await backend.addPlace(newplace, token);
 
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json", token },
-        body: JSON.stringify(newplace),
-      };
-
-      const data: {
-        message: string;
-        place: PlaceDto;
-      } = await sendHttpRequest(address, requestOptions);
       const placeData = new PlaceDto(
         data.place.title,
         data.place.description,
@@ -73,7 +65,6 @@ const Authorized = ({ token }: { token: string }) => {
       );
 
       setPlaces((pre) => (pre ? [...pre, placeData] : [placeData]));
-      console.log(data.message);
 
       history.push("/myplace");
     };
@@ -82,35 +73,15 @@ const Authorized = ({ token }: { token: string }) => {
   };
 
   const getPlaces = async () => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json", token },
-    };
+    const data = await backend.getPlaces(token);
 
-    const address = getApiAddress(ENDPOINTS.getPlaces);
-
-    const data = await sendHttpRequest(address, requestOptions);
-
-    console.log("getPlace api message:", data.mesaage);
     const places = data.places;
     setPlaces(places);
     setLoading(false);
   };
 
   const editPlace = async (placeInfo: placeInfoCard & { id: string }) => {
-    const requestOptions = {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({
-        id: placeInfo.id,
-        title: placeInfo.title,
-        description: placeInfo.description,
-        address: placeInfo.address,
-      }),
-    };
-    const address = getApiAddress(ENDPOINTS.editPlace);
-
-    const data = await sendHttpRequest(address, requestOptions);
+    const data = await backend.editPlace(placeInfo, token);
 
     const editedPlace = places.find((place) => place.placeId === placeInfo.id);
 
@@ -121,27 +92,15 @@ const Authorized = ({ token }: { token: string }) => {
     }
 
     setPlaces((pre) => [...pre]);
-
-    console.log("message:", data.message);
   };
 
   const deletePlace = async (placeId: string) => {
-    const requestOptions = {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json", token },
-    };
-    const address = getApiAddress(ENDPOINTS.deletePlace, placeId);
-
-    const data = await sendHttpRequest(address, requestOptions);
+    await backend.deletePlace(placeId, token);
 
     console.log("delete place front");
-    console.log("message:", data.message);
 
     setPlaces((pre) => {
-      const filteredPLaces = places.filter(
-        (place) => place.placeId !== placeId
-      );
-      return filteredPLaces;
+      return places.filter((place) => place.placeId !== placeId);
     });
   };
 
@@ -154,7 +113,8 @@ const Authorized = ({ token }: { token: string }) => {
       authContext.setPictureUrl(undefined);
       return;
     }
-    let data;
+
+    let data: { message: string; userInfo: UserDto };
     const reader = new FileReader();
 
     reader.onloadend = async () => {
@@ -165,7 +125,9 @@ const Authorized = ({ token }: { token: string }) => {
         newImageDataURLFormat
       );
 
-      const absPictureUrl = createAbsoluteApiAddress(data.userInfo.pictureUrl);
+      if (!data) throw new Error("error");
+      const url = data.userInfo.pictureUrl as string;
+      const absPictureUrl = createAbsoluteApiAddress(url);
 
       localStorage.removeItem("userPictureUrl");
       localStorage.setItem("userPictureUrl", absPictureUrl);
@@ -178,43 +140,16 @@ const Authorized = ({ token }: { token: string }) => {
   const sendHttpRequestForChangeProfilePicture = async (
     pictureFile: string | ArrayBuffer | undefined
   ) => {
-    const userNewImage = { image: pictureFile };
-
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify(userNewImage),
-    };
-    const address = getApiAddress(ENDPOINTS.changeProfilePicture);
-
-    return await sendHttpRequest(address, requestOptions);
+    return await backend.changeProfilePicture(pictureFile, token);
   };
 
   const changePassword = async (newPassword: string) => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ password: newPassword }),
-    };
-    const address = getApiAddress(ENDPOINTS.changePassword);
-
-    const data = await sendHttpRequest(address, requestOptions);
-    console.log(data.message);
+    await backend.changePassword(newPassword, token);
   };
 
   const changeUsername = async (newUsername: string) => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ username: newUsername }),
-    };
-    const address = getApiAddress(ENDPOINTS.changeUsername);
-
-    const data = await sendHttpRequest(address, requestOptions);
-
+    await backend.changeUsername(newUsername, token);
     authContext.setUsername(newUsername);
-
-    console.log(data.message);
   };
 
   return (

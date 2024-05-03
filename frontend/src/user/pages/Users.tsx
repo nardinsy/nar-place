@@ -1,35 +1,34 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import UsersList from "../components/UsersList";
-import sendHttpRequest from "../../helpers/http-request";
-import { ENDPOINTS, getApiAddress } from "../../helpers/api-url";
 import { UserDto } from "../../helpers/dtos";
+import { BackendService } from "../../api/backend-service";
+import useRequiredBackend from "../../hooks/use-required-backend";
 
 //fetch all users
 const Users = () => {
   const [users, setUsers] = useState<UserDto[] | []>([]);
   const [loading, setLoading] = useState(true);
+  const backend = useRequiredBackend();
 
   useEffect(() => {
     getUsers();
   }, []);
 
-  const getUsers = async () => {
-    const requestOptions = {
-      method: "GET",
-    };
-
-    const address = getApiAddress(ENDPOINTS.getAllUsers);
-    let data: { message: string; usersInfo: UserDto[] };
-
+  const getUsers = useCallback(async () => {
     setLoading(true);
-    setTimeout(async () => {
-      data = await sendHttpRequest(address, requestOptions);
+    const usersData = await backend.getAllUsers();
 
-      const usersData: UserDto[] = data.usersInfo;
-      setUsers([...usersData]);
-      setLoading(false);
-    }, 2000);
-  };
+    setUsers([...usersData]);
+    setLoading(false);
+  }, [setLoading, setUsers, backend]);
+
+  // const getUsers = async () => {
+  //   setLoading(true);
+  //   const usersData = await backend.getAllUsers();
+
+  //   setUsers([...usersData]);
+  //   setLoading(false);
+  // };
 
   return (
     <div>

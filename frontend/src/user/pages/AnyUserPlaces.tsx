@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import sendHttpRequest from "../../helpers/http-request";
 import PlacesList from "../../places/components/PlacesList";
-import { ENDPOINTS, getApiAddress } from "../../helpers/api-url";
-import { UserDto } from "../../helpers/dtos";
+import { UserDto, PlaceDto } from "../../helpers/dtos";
+import useRequiredBackend from "../../hooks/use-required-backend";
 
 interface LocationState {
   userDto: UserDto;
 }
 
 const AnyUserPlaces = () => {
-  const [loadedPlaces, setLoadedPlaces] = useState([]);
+  const [loadedPlaces, setLoadedPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const backend = useRequiredBackend();
 
   const { userId } = useParams() as { userId: string };
   const { state } = useLocation<LocationState>();
@@ -19,13 +20,7 @@ const AnyUserPlaces = () => {
 
   useEffect(() => {
     const fetchPlaces = async () => {
-      const address = getApiAddress(ENDPOINTS.getuserPlaces, userId);
-      const requestOptions = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-
-      const data = await sendHttpRequest(address, requestOptions);
+      const data = await backend.getuserPlaces(userId);
       setLoadedPlaces(data.places);
       setLoading(false);
     };
