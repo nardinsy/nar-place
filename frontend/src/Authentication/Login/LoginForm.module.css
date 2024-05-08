@@ -43,3 +43,8 @@
 .eye-icon:hover {
   color: rgb(80, 74, 74);
 }
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}

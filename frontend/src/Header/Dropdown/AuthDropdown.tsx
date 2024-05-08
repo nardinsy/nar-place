@@ -30,7 +30,7 @@ const AuthDropdown = ({
           handler: showLoginFormModal,
         },
       ]}
-    ></Dropdown>
+    />
   );
 };
 

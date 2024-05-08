@@ -1,9 +1,9 @@
 import { NavLink, useLocation } from "react-router-dom";
 import classes from "./NavLinks.module.css";
-import useRequireAuthContext from "../../hooks/useRequireAuthContext";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
 const NavLinks = () => {
-  const authContext = useRequireAuthContext();
+  const authContext = useRequiredAuthContext();
 
   const location = useLocation();
 

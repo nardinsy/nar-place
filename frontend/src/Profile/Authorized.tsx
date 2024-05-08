@@ -13,14 +13,15 @@ import {
   UserDto,
   placeInfoCard,
 } from "../helpers/dtos";
-import useRequireAuthContext from "../hooks/useRequireAuthContext";
+import useRequiredAuthContext from "../hooks/use-required-authContext";
 import useRequiredBackend from "../hooks/use-required-backend";
 
-const Authorized = ({ token }: { token: string }) => {
-  console.log("User Component Render");
+const Authorized = () => {
+  console.log("Authorized Component Render");
+
   const [places, setPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const authContext = useRequireAuthContext();
+  const authContext = useRequiredAuthContext();
 
   if (!authContext.isLoggedin) {
     throw new Error("User most be logged in, Please Login again");
@@ -30,7 +31,7 @@ const Authorized = ({ token }: { token: string }) => {
   const history = useHistory();
 
   const getLoggedUserPlaces = async () => {
-    const data = await backend.getLoggedUserPlaces(token);
+    const data = await backend.getLoggedUserPlaces(authContext.token);
 
     const places = data.places;
     setPlaces(places);
@@ -55,7 +56,7 @@ const Authorized = ({ token }: { token: string }) => {
         picture: newImageDataURLFormat,
       };
 
-      const data = await backend.addPlace(newplace, token);
+      const data = await backend.addPlace(newplace, authContext.token);
 
       const placeData = new PlaceDto(
         data.place.title,
@@ -76,7 +77,7 @@ const Authorized = ({ token }: { token: string }) => {
   };
 
   const editPlace = async (placeInfo: placeInfoCard & { id: string }) => {
-    const data = await backend.editPlace(placeInfo, token);
+    const data = await backend.editPlace(placeInfo, authContext.token);
 
     const editedPlace = places.find((place) => place.placeId === placeInfo.id);
 
@@ -90,7 +91,7 @@ const Authorized = ({ token }: { token: string }) => {
   };
 
   const deletePlaceById = async (placeId: string) => {
-    await backend.deletePlaceById(placeId, token);
+    await backend.deletePlaceById(placeId, authContext.token);
 
     console.log("delete place front");
 
@@ -135,15 +136,15 @@ const Authorized = ({ token }: { token: string }) => {
   const sendHttpRequestForChangeProfilePicture = async (
     pictureFile: string | ArrayBuffer | undefined
   ) => {
-    return await backend.changeProfilePicture(pictureFile, token);
+    return await backend.changeProfilePicture(pictureFile, authContext.token);
   };
 
   const changePassword = async (newPassword: string) => {
-    await backend.changePassword(newPassword, token);
+    await backend.changePassword(newPassword, authContext.token);
   };
 
   const changeUsername = async (newUsername: string) => {
-    await backend.changeUsername(newUsername, token);
+    await backend.changeUsername(newUsername, authContext.token);
     authContext.setUsername(newUsername);
   };
 

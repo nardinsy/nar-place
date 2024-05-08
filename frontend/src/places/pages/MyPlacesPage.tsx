@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import PlacesList from "../components/PlacesList";
 import { PlaceDto, UserDto, placeInfoCard } from "../../helpers/dtos";
-import useRequireAuthContext from "../../hooks/useRequireAuthContext";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
 type MyPlacePageProps = {
   places: PlaceDto[];
@@ -21,7 +21,7 @@ const MyPlacePage: FC<MyPlacePageProps> = ({
   console.log("Myplace Page Render");
 
   let userDto;
-  const authContext = useRequireAuthContext();
+  const authContext = useRequiredAuthContext();
 
   if (authContext.isLoggedin) {
     userDto = new UserDto(
@@ -36,10 +36,7 @@ const MyPlacePage: FC<MyPlacePageProps> = ({
   }
 
   useEffect(() => {
-    if (places.length === 0) {
-      getLoggedUserPlaces();
-      console.log("Get places through myPlacesPage");
-    }
+    getLoggedUserPlaces();
   }, []);
 
   return (

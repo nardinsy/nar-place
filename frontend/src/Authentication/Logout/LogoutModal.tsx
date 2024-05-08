@@ -1,11 +1,11 @@
 import { useHistory } from "react-router-dom";
 import MessageModal from "../../shared-UI/MessageModal";
 import Button from "../../shared-UI/Button";
-import useRequireAuthContext from "../../hooks/useRequireAuthContext";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
 const LogoutModal = () => {
   const history = useHistory();
-  const authContext = useRequireAuthContext();
+  const authContext = useRequiredAuthContext();
 
   if (!authContext.isLoggedin)
     throw new Error("User most be logged in to be able to logout");

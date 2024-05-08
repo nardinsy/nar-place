@@ -37,14 +37,12 @@ export enum ENDPOINTS {
   getAnyUserPlacesByUserId = "places/any-user-places-by-userId/",
 }
 
-const getApiAddress = (endPoint: ENDPOINTS, param?: string) => {
+const getApiAddress = (endPoint: string, param?: string) => {
   if (param) {
-    // return `${BASE_URL}${END_POINTS[endPoint]}${param}`;
     return `${BASE_URL}${endPoint}${param}`;
   }
 
   return `${BASE_URL}${endPoint}`;
-  // return `${BASE_URL}${END_POINTS[endPoint]}`;
 };
 
 const createAbsoluteApiAddress = (relativePath: string) => {

@@ -6,7 +6,7 @@ import Avatar from "../UI/Avatar";
 import ImageUpload from "../../shared/ImageUpload";
 import PasswordChangeModal from "./PasswordChangeModal";
 import PictureModal from "../../shared/PictureModal";
-import useRequireAuthContext from "../../hooks/useRequireAuthContext";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import classes from "./ProfileEditForm.module.css";
 import { ProfileSettingsPageT } from "../pages/ProfileSettingsPage";
 
@@ -15,7 +15,7 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
   changePassword,
   changeUsername,
 }) => {
-  const authContext = useRequireAuthContext();
+  const authContext = useRequiredAuthContext();
   if (!authContext.isLoggedin)
     throw new Error("User in not logged in, Please login first");
   //redirect to login form

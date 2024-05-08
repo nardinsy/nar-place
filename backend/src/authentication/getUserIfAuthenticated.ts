@@ -12,7 +12,7 @@ const getUserIfAuthenticated = async (
   let decodedToken: JwtData;
 
   try {
-    // decodedToken = jwt.verify(token, privateKey) as JwtData;
+    decodedToken = jwt.verify(token, privateKey) as JwtData;
     // decodedToken: {
     //   userId: '65e08b9b240cdd0c6532a78c',
     //   email: 'f5@gmail.com',
@@ -25,8 +25,8 @@ const getUserIfAuthenticated = async (
     return undefined;
   }
 
-  // const user = await User.findOne({ email: decodedToken.email });
-  const user = await User.findOne({ email: "nardin@gmail.com" });
+  const user = await User.findOne({ email: decodedToken.email });
+  // const user = await User.findOne({ email: "nardin@gmail.com" });
 
   if (user) {
     return user as IUser;

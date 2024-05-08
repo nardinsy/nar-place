@@ -24,8 +24,6 @@ const PlacePage: FC = () => {
   const { title, description, address, pictureUrl, creator } = placeDto;
   const { username, pictureUrl: userPictureUrl, placeCount, userId } = userDto;
 
-  // const placeId = useParams().placeId;
-
   const titlelineWidth = 14;
   const descriptionLineWidth = 21;
   const addressLineWidth = 10;

@@ -17,28 +17,28 @@ const ProfileMenuDropdown = ({
   return (
     <Dropdown
       items={[
-        {
-          title: "Message",
-          handler: (event) => {
-            closeDropdown(event);
-            console.log("Message page");
-          },
-        },
-        {
-          title: "Notification",
-          handler: (event) => {
-            closeDropdown(event);
-            console.log("Notification Page");
-          },
-        },
-        {
-          title: "Profile Settings",
-          handler: (event) => {
-            closeDropdown(event);
-            //navigate to profile setting page
-            history.replace("/profile-settings");
-          },
-        },
+        // {
+        //   title: "Message",
+        //   handler: (event) => {
+        //     closeDropdown(event);
+        //     console.log("Message page");
+        //   },
+        // },
+        // {
+        //   title: "Notification",
+        //   handler: (event) => {
+        //     closeDropdown(event);
+        //     console.log("Notification Page");
+        //   },
+        // },
+        // {
+        //   title: "Profile Settings",
+        //   handler: (event) => {
+        //     closeDropdown(event);
+        //     //navigate to profile setting page
+        //     history.replace("/profile-settings");
+        //   },
+        // },
         {
           title: "App Settings",
           handler: (event) => {

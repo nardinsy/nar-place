@@ -1,14 +1,11 @@
 import { createContext, useState, useEffect, FC } from "react";
 import { useHistory } from "react-router-dom";
-import sendHttpRequest, { MyRequestOptions } from "../helpers/http-request";
-import { getApiAddress, createAbsoluteApiAddress } from "../helpers/api-url";
-import { ENDPOINTS } from "../helpers/api-url";
+import { createAbsoluteApiAddress } from "../helpers/api-url";
 import {
   UserLoginInformation,
   UserSignupInformation,
 } from "../../../backend/src/shared/dtos";
 import { HasChildren } from "../helpers/props";
-import { LoginResult } from "../helpers/dtos";
 import useRequiredBackend from "../hooks/use-required-backend";
 
 interface LoggedOutAuthContextT {
@@ -115,6 +112,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   };
 
   const localLogout = () => {
+    console.log("here");
     setLoginInfo({ isLoggedin: false });
     localStorage.removeItem("token");
     localStorage.removeItem("userId");

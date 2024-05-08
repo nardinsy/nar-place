@@ -20,9 +20,8 @@ class BackedServiceImpl implements BackendService {
       method: "GET",
     };
 
-    const address = getApiAddress(ENDPOINTS.getAllUsers);
     const data: { usersInfo: UserDto[] } = await sendHttpRequest(
-      address,
+      ENDPOINTS.getAllUsers,
       requestOptions
     );
 
@@ -35,9 +34,8 @@ class BackedServiceImpl implements BackendService {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userInfo),
     };
-    const address = getApiAddress(ENDPOINTS.signup);
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(ENDPOINTS.signup, requestOptions);
   }
 
   async login(userInfo: UserLoginInformation): Promise<LoginResult> {
@@ -46,9 +44,8 @@ class BackedServiceImpl implements BackendService {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userInfo),
     };
-    const address = getApiAddress(ENDPOINTS.login);
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(ENDPOINTS.login, requestOptions);
   }
 
   async logout(token: string): Promise<void> {
@@ -56,9 +53,8 @@ class BackedServiceImpl implements BackendService {
       method: "GET",
       headers: { "Content-Type": "application/json", token },
     };
-    const address = getApiAddress(ENDPOINTS.logout);
 
-    await sendHttpRequest(address, requestOptions);
+    await sendHttpRequest(ENDPOINTS.logout, requestOptions);
   }
 
   async changeProfilePicture(
@@ -72,9 +68,11 @@ class BackedServiceImpl implements BackendService {
       headers: { "Content-Type": "application/json", token },
       body: JSON.stringify(userNewImage),
     };
-    const address = getApiAddress(ENDPOINTS.changeProfilePicture);
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(
+      ENDPOINTS.changeProfilePicture,
+      requestOptions
+    );
   }
 
   async changePassword(newPassword: string, token: string): Promise<void> {
@@ -83,9 +81,8 @@ class BackedServiceImpl implements BackendService {
       headers: { "Content-Type": "application/json", token },
       body: JSON.stringify({ password: newPassword }),
     };
-    const address = getApiAddress(ENDPOINTS.changePassword);
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(ENDPOINTS.changePassword, requestOptions);
   }
 
   async changeUsername(newUsername: string, token: string): Promise<void> {
@@ -94,9 +91,8 @@ class BackedServiceImpl implements BackendService {
       headers: { "Content-Type": "application/json", token },
       body: JSON.stringify({ username: newUsername }),
     };
-    const address = getApiAddress(ENDPOINTS.changeUsername);
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(ENDPOINTS.changeUsername, requestOptions);
   }
 
   async getLoggedUserPlaces(token: string): Promise<{ places: PlaceDto[] }> {
@@ -105,21 +101,17 @@ class BackedServiceImpl implements BackendService {
       headers: { "Content-Type": "application/json", token },
     };
 
-    const address = getApiAddress(ENDPOINTS.getLoggedUserPlaces);
-
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(ENDPOINTS.getLoggedUserPlaces, requestOptions);
   }
 
   async addPlace(place: NewPlace, token: string): Promise<{ place: PlaceDto }> {
-    const address = getApiAddress(ENDPOINTS.addPlace);
-
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
       body: JSON.stringify(place),
     };
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(ENDPOINTS.addPlace, requestOptions);
   }
 
   async editPlace(
@@ -136,9 +128,8 @@ class BackedServiceImpl implements BackendService {
         address: placeInfo.address,
       }),
     };
-    const address = getApiAddress(ENDPOINTS.editPlace);
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(ENDPOINTS.editPlace, requestOptions);
   }
 
   async deletePlaceById(placeId: string, token: string): Promise<void> {
@@ -146,21 +137,27 @@ class BackedServiceImpl implements BackendService {
       method: "DELETE",
       headers: { "Content-Type": "application/json", token },
     };
-    const address = getApiAddress(ENDPOINTS.deletePlaceById, placeId);
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(
+      ENDPOINTS.deletePlaceById,
+      requestOptions,
+      placeId
+    );
   }
 
   async getAnyUserPlacesByUserId(
     userId: string
   ): Promise<{ places: PlaceDto[] }> {
-    const address = getApiAddress(ENDPOINTS.getAnyUserPlacesByUserId, userId);
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
 
-    return await sendHttpRequest(address, requestOptions);
+    return await sendHttpRequest(
+      ENDPOINTS.getAnyUserPlacesByUserId,
+      requestOptions,
+      userId
+    );
   }
 }
 

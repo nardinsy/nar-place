@@ -1,3 +1,4 @@
+import { ENDPOINTS, getApiAddress } from "./api-url";
 export interface MyRequestOptions {
   // method: "GET" | "POST" | "PATCH" | "DELETE";
   method: string;
@@ -6,9 +7,11 @@ export interface MyRequestOptions {
 }
 
 const sendHttpRequest = async (
-  address: string,
-  requestOptions: MyRequestOptions
+  endpoint: ENDPOINTS,
+  requestOptions: MyRequestOptions,
+  params?: string
 ) => {
+  const address = getApiAddress(endpoint, params);
   try {
     const response = await fetch(address, requestOptions);
 

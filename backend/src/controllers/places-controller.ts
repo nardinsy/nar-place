@@ -16,6 +16,7 @@ export const getPlacePictureUrl = (id: string) => {
 
 export const getPlaces: RequestHandler = async (req, res, next) => {
   const places = await Place.find().exec();
+
   const placesDto = places.map((place) => {
     return new PlaceDto(
       place.title,

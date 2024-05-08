@@ -6,10 +6,10 @@ import Authorized from "./Profile/Authorized";
 import AnyUserPlaces from "./user/pages/AnyUserPlaces";
 import PlacePage from "./places/pages/PlacePage";
 import Users from "./user/pages/Users";
-import useRequireAuthContext from "./hooks/useRequireAuthContext";
+import useRequiredAuthContext from "./hooks/use-required-authContext";
 
 const App: React.FC = (porps) => {
-  const authContext = useRequireAuthContext();
+  const authContext = useRequiredAuthContext();
 
   return (
     <>
@@ -35,7 +35,7 @@ const App: React.FC = (porps) => {
         <PlacePage />
       </Route>
 
-      {authContext.isLoggedin && <Authorized token={authContext.token!} />}
+      {authContext.isLoggedin && <Authorized />}
     </>
   );
 };

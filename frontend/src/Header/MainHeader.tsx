@@ -7,9 +7,7 @@ const MainHeader = () => {
   return (
     <header className={classes["main-header"]}>
       <div className={classes["main-header-container"]}>
-        <div>
-          <Logo />
-        </div>
+        <Logo />
 
         <NavLinks />
 

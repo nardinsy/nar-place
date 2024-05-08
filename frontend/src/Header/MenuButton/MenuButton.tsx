@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import MenuButtonIcon from "./MenuButtonIcon";
 import ProfileMenuDropdown from "../Dropdown/ProfileMenuDropdown";
 import AuthDropdown from "../Dropdown/AuthDropdown";
 import classes from "./MenuButton.module.css";
-import useRequireAuthContext from "../../hooks/useRequireAuthContext";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
 const MenuButton = () => {
-  const authContext = useRequireAuthContext();
+  const authContext = useRequiredAuthContext();
 
-  // const ref = useRef();
   const ref = useRef<HTMLDivElement | null>(null);
 
   const [dropdown, setDropdown] = useState<{
@@ -18,6 +17,7 @@ const MenuButton = () => {
     show: false,
     component: undefined,
   });
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -37,26 +37,29 @@ const MenuButton = () => {
     };
   }, [isMenuOpen]);
 
-  const closeDropdown = (event: any) => {
+  const closeDropdown = useCallback((event: any) => {
     event.preventDefault();
     event.stopPropagation();
     setDropdown({ show: false, component: undefined });
-  };
+  }, []);
 
-  const showDropDownHandler = (event: any) => {
-    if (!dropdown.show) {
-      const component = authContext.isLoggedin ? (
-        <ProfileMenuDropdown closeDropdown={closeDropdown} />
-      ) : (
-        <AuthDropdown closeDropdown={closeDropdown} />
-      );
-      setDropdown({ show: true, component });
-      setIsMenuOpen(true);
-    } else {
-      closeDropdown(event);
-      setIsMenuOpen(false);
-    }
-  };
+  const showDropDownHandler = useCallback(
+    (event: any) => {
+      if (!dropdown.show) {
+        const component = authContext.isLoggedin ? (
+          <ProfileMenuDropdown closeDropdown={closeDropdown} />
+        ) : (
+          <AuthDropdown closeDropdown={closeDropdown} />
+        );
+        setDropdown({ show: true, component });
+        setIsMenuOpen(true);
+      } else {
+        closeDropdown(event);
+        setIsMenuOpen(false);
+      }
+    },
+    [dropdown.show, authContext.isLoggedin]
+  );
 
   return (
     <div

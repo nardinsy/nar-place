@@ -34,14 +34,7 @@ const UsersList = ({
     const pictureUrl = user.pictureUrl
       ? createAbsoluteApiAddress(user.pictureUrl)
       : undefined;
-    return (
-      <UserItem
-        key={user.userId}
-        userDto={
-          new UserDto(user.userId, user.username, pictureUrl, user.placeCount)
-        }
-      />
-    );
+    return <UserItem key={user.userId} userDto={{ ...user, pictureUrl }} />;
   });
   return <ul className={classes["users-list"]}>{userItems}</ul>;
 };

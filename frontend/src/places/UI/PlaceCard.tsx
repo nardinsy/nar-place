@@ -19,7 +19,6 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
   //   },
   // ];
   const { placeId: id, title, description, address, pictureUrl } = placeDto;
-  // const placeInfo = { id, title, description, address, image: nImage };
 
   const titlelineWidth = 14;
   const descriptionLineWidth = 21;
@@ -91,7 +90,6 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
       setShowPictureModal(true);
     }
   };
-  // const nImage = pictureUrl;
 
   const oneLineTitle = controlLineWidth(title, titlelineWidth);
   const oneLineAddress = controlLineWidth(address, addressLineWidth);
@@ -131,14 +129,3 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
 };
 
 export default PlaceCard;
-
-{
-  /* {showPictureModal && (
-        <PictureModal
-        pictureUrl={image}
-        showChevrons={true}
-        ellipsisDropdownItems={ellipsisDropdownItems}
-        xMarkHandler={() => setShowPictureModal(false)}
-        />
-      )} */
-}

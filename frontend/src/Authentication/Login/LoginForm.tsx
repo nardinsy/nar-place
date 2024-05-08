@@ -4,10 +4,10 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared-UI/Button";
 import classes from "./LoginForm.module.css";
 import { UserLoginInformation } from "../../../../backend/src/shared/dtos";
-import useRequireAuthContext from "../../hooks/useRequireAuthContext";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
 const LoginForm: React.FC = () => {
-  const authContext = useRequireAuthContext();
+  const authContext = useRequiredAuthContext();
 
   if (authContext.isLoggedin) throw new Error("User is loggedin already.");
 
@@ -35,6 +35,7 @@ const LoginForm: React.FC = () => {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     };
+
     authContext.login(userInfo);
   };
 
