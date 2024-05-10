@@ -15,6 +15,9 @@ import {
 } from "../helpers/dtos";
 import useRequiredAuthContext from "../hooks/use-required-authContext";
 import useRequiredBackend from "../hooks/use-required-backend";
+import useRequiredToastContext from "../hooks/use-required-toastContext";
+import { generateToastObject } from "../helpers/generateToastObject";
+import { ToastTypes } from "../contexts/toast-context";
 
 const Authorized = () => {
   console.log("Authorized Component Render");
@@ -22,6 +25,7 @@ const Authorized = () => {
   const [places, setPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
   const authContext = useRequiredAuthContext();
+  const toastCtx = useRequiredToastContext();
 
   if (!authContext.isLoggedin) {
     throw new Error("User most be logged in, Please Login again");
@@ -36,6 +40,11 @@ const Authorized = () => {
     const places = data.places;
     setPlaces(places);
     setLoading(false);
+  };
+
+  const addToast = (type: ToastTypes, message: string) => {
+    const toast = generateToastObject(type, message);
+    toastCtx.addToast(toast);
   };
 
   const addPlace: (place: PlaceInfoCardWithPictire) => Promise<void> = async (
@@ -70,6 +79,7 @@ const Authorized = () => {
 
       setPlaces((pre) => (pre ? [...pre, placeData] : [placeData]));
 
+      addToast("success", "Add place successfully");
       history.push("/myplace");
     };
 
@@ -88,6 +98,7 @@ const Authorized = () => {
     }
 
     setPlaces((pre) => [...pre]);
+    addToast("success", "Edit place successfully");
   };
 
   const deletePlaceById = async (placeId: string) => {
@@ -98,6 +109,8 @@ const Authorized = () => {
     setPlaces((pre) => {
       return places.filter((place) => place.placeId !== placeId);
     });
+
+    addToast("success", "Delete place successfully");
   };
 
   const changeProfilePicture = async (userNewImage: File | undefined) => {
@@ -131,6 +144,8 @@ const Authorized = () => {
 
     reader.readAsDataURL(userNewImage);
     authContext.setPictureUrl(URL.createObjectURL(userNewImage));
+
+    addToast("success", "Change profile picture successfully");
   };
 
   const sendHttpRequestForChangeProfilePicture = async (
@@ -141,11 +156,15 @@ const Authorized = () => {
 
   const changePassword = async (newPassword: string) => {
     await backend.changePassword(newPassword, authContext.token);
+
+    addToast("success", "Change password successfully");
   };
 
   const changeUsername = async (newUsername: string) => {
     await backend.changeUsername(newUsername, authContext.token);
     authContext.setUsername(newUsername);
+
+    addToast("success", "Change username successfully");
   };
 
   return (

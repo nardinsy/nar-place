@@ -31,21 +31,21 @@ const ProfileMenuDropdown = ({
         //     console.log("Notification Page");
         //   },
         // },
-        // {
-        //   title: "Profile Settings",
-        //   handler: (event) => {
-        //     closeDropdown(event);
-        //     //navigate to profile setting page
-        //     history.replace("/profile-settings");
-        //   },
-        // },
         {
-          title: "App Settings",
+          title: "Profile Settings",
           handler: (event) => {
             closeDropdown(event);
             //navigate to profile setting page
+            history.replace("/profile-settings");
           },
         },
+        // {
+        //   title: "App Settings",
+        //   handler: (event) => {
+        //     closeDropdown(event);
+        //     //navigate to profile setting page
+        //   },
+        // },
         {
           title: "Logout",
           handler: showLogoutMessageModal,

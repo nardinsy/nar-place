@@ -1,0 +1,40 @@
+.toasts {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  /* flex-direction: column; */
+  flex-flow: column wrap;
+  align-items: flex-end;
+  z-index: 120;
+}
+
+.toast {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 0.4rem;
+  border-radius: 5px;
+  color: gray;
+  background-color: white;
+  box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
+  /* transition: all 5s ease-out; */
+}
+
+.toast-icon {
+  padding: 0 1rem;
+}
+
+.toast-close-btn {
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem 1rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+.toast-close-btn:hover {
+  color: rgb(202, 61, 61);
+}
