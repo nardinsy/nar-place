@@ -16,9 +16,9 @@ root.render(
     <ToastContexProvider>
       <BackendContextProvider>
         <AuthContextProvider>
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
+          {/* <React.StrictMode> */}
+          <App />
+          {/* </React.StrictMode> */}
         </AuthContextProvider>
       </BackendContextProvider>
     </ToastContexProvider>

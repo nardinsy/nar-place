@@ -16,8 +16,6 @@ import {
 import useRequiredAuthContext from "../hooks/use-required-authContext";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
-import { generateToastObject } from "../helpers/generateToastObject";
-import { ToastTypes } from "../contexts/toast-context";
 
 const Authorized = () => {
   console.log("Authorized Component Render");
@@ -25,7 +23,7 @@ const Authorized = () => {
   const [places, setPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
   const authContext = useRequiredAuthContext();
-  const toastCtx = useRequiredToastContext();
+  const addToast = useRequiredToastContext().addToast;
 
   if (!authContext.isLoggedin) {
     throw new Error("User most be logged in, Please Login again");
@@ -42,10 +40,10 @@ const Authorized = () => {
     setLoading(false);
   };
 
-  const addToast = (type: ToastTypes, message: string) => {
-    const toast = generateToastObject(type, message);
-    toastCtx.addToast(toast);
-  };
+  // const addToast = (type: ToastTypes, message: string) => {
+  //   const toast = generateToastObject(type, message);
+  //   toastCtx.addToast(toast);
+  // };
 
   const addPlace: (place: PlaceInfoCardWithPictire) => Promise<void> = async (
     place

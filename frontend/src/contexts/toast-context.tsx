@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useCallback, useState } from "react";
 
 export type ToastTypes = "success" | "error";
 
@@ -11,7 +11,7 @@ export type Toast = {
 
 type ToastContexT = {
   toasts: Toast[] | undefined;
-  addToast: (toast: { id: string; type: ToastTypes; message: string }) => void;
+  addToast: (type: ToastTypes, message: string) => void;
   closeToast: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
@@ -20,26 +20,29 @@ export const ToastContext = createContext<ToastContexT | undefined>(undefined);
 export const ToastContexProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[] | undefined>(undefined);
 
-  const addToast = (toast: {
-    id: string;
-    type: ToastTypes;
-    message: string;
-  }) => {
-    const timer = setTimeout(() => {
-      const id = toast.id;
-      const deletedToastList = toasts?.filter((toast) => toast.id !== id);
-      setToasts(deletedToastList);
-      clearTimeout(timer);
-    }, 5000);
+  const generateToastObject = useCallback(
+    (type: ToastTypes, message: string) => {
+      const id = String(Math.random());
 
-    const newToast: Toast = {
-      id: toast.id,
-      type: toast.type,
-      message: toast.message,
-      timer,
-    };
+      const timer = setTimeout(() => {
+        const deletedToastList = toasts?.filter((toast) => toast.id !== id);
+        setToasts(deletedToastList);
+        clearTimeout(timer);
+      }, 5000);
 
-    setToasts((pre) => (pre ? [...pre, newToast] : [newToast]));
+      return {
+        id,
+        type,
+        message,
+        timer,
+      } as Toast;
+    },
+    []
+  );
+
+  const addToast = (type: ToastTypes, message: string) => {
+    const toast = generateToastObject(type, message);
+    setToasts((pre) => (pre ? [...pre, toast] : [toast]));
   };
 
   const closeToast = (e: React.MouseEvent<HTMLElement>) => {
