@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { ToastContext } from "../contexts/toast-context";
+import { ToastServiceContext } from "../contexts/toast-service-context";
 
 const useRequiredToastContext = () => {
-  const toastCtx = useContext(ToastContext);
+  const toastCtx = useContext(ToastServiceContext);
 
   if (!toastCtx) {
     throw new Error(

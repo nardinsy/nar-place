@@ -23,7 +23,8 @@ const Authorized = () => {
   const [places, setPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
   const authContext = useRequiredAuthContext();
-  const addToast = useRequiredToastContext().addToast;
+  const showSuccessToast = useRequiredToastContext().showSuccess;
+  const showErrorToast = useRequiredToastContext().showError;
 
   if (!authContext.isLoggedin) {
     throw new Error("User most be logged in, Please Login again");
@@ -77,7 +78,7 @@ const Authorized = () => {
 
       setPlaces((pre) => (pre ? [...pre, placeData] : [placeData]));
 
-      addToast("success", "Add place successfully");
+      showSuccessToast("Add place successfully");
       history.push("/myplace");
     };
 
@@ -96,7 +97,7 @@ const Authorized = () => {
     }
 
     setPlaces((pre) => [...pre]);
-    addToast("success", "Edit place successfully");
+    showSuccessToast("Edit place successfully");
   };
 
   const deletePlaceById = async (placeId: string) => {
@@ -108,7 +109,7 @@ const Authorized = () => {
       return places.filter((place) => place.placeId !== placeId);
     });
 
-    addToast("success", "Delete place successfully");
+    showSuccessToast("Delete place successfully");
   };
 
   const changeProfilePicture = async (userNewImage: File | undefined) => {
@@ -143,7 +144,7 @@ const Authorized = () => {
     reader.readAsDataURL(userNewImage);
     authContext.setPictureUrl(URL.createObjectURL(userNewImage));
 
-    addToast("success", "Change profile picture successfully");
+    showSuccessToast("Change profile picture successfully");
   };
 
   const sendHttpRequestForChangeProfilePicture = async (
@@ -155,14 +156,14 @@ const Authorized = () => {
   const changePassword = async (newPassword: string) => {
     await backend.changePassword(newPassword, authContext.token);
 
-    addToast("success", "Change password successfully");
+    showSuccessToast("Change password successfully");
   };
 
   const changeUsername = async (newUsername: string) => {
     await backend.changeUsername(newUsername, authContext.token);
     authContext.setUsername(newUsername);
 
-    addToast("success", "Change username successfully");
+    showSuccessToast("Change username successfully");
   };
 
   return (

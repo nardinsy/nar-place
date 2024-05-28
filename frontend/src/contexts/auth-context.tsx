@@ -7,6 +7,7 @@ import {
 } from "../../../backend/src/shared/dtos";
 import { HasChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
+import useRequiredToastContext from "../hooks/use-required-toastContext";
 
 interface LoggedOutAuthContextT {
   isLoggedin: false;
@@ -57,6 +58,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
   const history = useHistory();
   const backend = useRequiredBackend();
+  const showSuccessToast = useRequiredToastContext().showSuccess;
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -80,6 +82,8 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     const { token, user } = data;
 
     localLogin(token, user.userId, user.username, user.pictureUrl);
+    showSuccessToast(`Hey ${user.username}, welcome to Narplace 🤗`);
+
     history.replace("/");
   };
 
@@ -97,6 +101,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
       : undefined;
 
     localLogin(token, user.userId, user.username, pictureUrl);
+    showSuccessToast(`Hey ${user.username}, welcome to Narplace 🤗`);
 
     history.replace("/");
   };
@@ -112,13 +117,13 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   };
 
   const localLogout = () => {
-    console.log("here");
     setLoginInfo({ isLoggedin: false });
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
     localStorage.removeItem("userPictureUrl");
 
+    showSuccessToast("See you soon, have fun 🫡");
     history.replace("/");
   };
 

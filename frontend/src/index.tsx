@@ -5,7 +5,7 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./contexts/auth-context";
 import { BackendContextProvider } from "./contexts/backend-service-context";
-import { ToastContexProvider } from "./contexts/toast-context";
+import { ToastServiceContexProvider } from "./contexts/toast-service-context";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <BrowserRouter>
-    <ToastContexProvider>
+    <ToastServiceContexProvider>
       <BackendContextProvider>
         <AuthContextProvider>
           {/* <React.StrictMode> */}
@@ -21,7 +21,7 @@ root.render(
           {/* </React.StrictMode> */}
         </AuthContextProvider>
       </BackendContextProvider>
-    </ToastContexProvider>
+    </ToastServiceContexProvider>
   </BrowserRouter>
 );
 

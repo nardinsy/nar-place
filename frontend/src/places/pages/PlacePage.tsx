@@ -83,13 +83,9 @@ const PlacePage: FC = () => {
             </div>
           </div>
 
-          {userId !== creator ? (
-            <div className={classes["place-creator-account_follow_button"]}>
-              Follow
-            </div>
-          ) : (
-            <span></span>
-          )}
+          <div className={classes["place-creator-account_follow_button"]}>
+            Follow
+          </div>
         </div>
 
         <div className={classes["place-info"]}>

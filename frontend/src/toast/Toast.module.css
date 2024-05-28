@@ -21,6 +21,23 @@
   background-color: white;
   box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
   /* transition: all 5s ease-out; */
+  animation-name: slidein;
+  animation-duration: 0.4s;
+}
+
+@keyframes slidein {
+  0% {
+    transform: translateX(100%);
+  }
+  60% {
+    transform: translateX(-15%);
+  }
+  80% {
+    transform: translateX(5%);
+  }
+  80% {
+    transform: translateX(0%);
+  }
 }
 
 .toast-icon {
