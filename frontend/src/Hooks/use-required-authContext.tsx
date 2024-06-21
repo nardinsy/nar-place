@@ -6,7 +6,7 @@ const useRequiredAuthContext = () => {
 
   if (!authContext) {
     throw new Error(
-      "useAuthContext has to be used within <AuthContex.Provider>"
+      "useAuthContext has to be used within <AuthContext.Provider>"
     );
   }
 

@@ -12,16 +12,14 @@ const sendHttpRequest = async (
   params?: string
 ) => {
   const address = getApiAddress(endpoint, params);
-  try {
-    const response = await fetch(address, requestOptions);
 
-    if (response.ok) {
-      return await response.json();
-    }
-  } catch (error) {
-    console.log(error);
-    throw error;
+  const response = await fetch(address, requestOptions);
+
+  if (response.ok) {
+    return await response.json();
   }
+
+  throw new Error("Oops, something went wrong, please try again");
 };
 
 export default sendHttpRequest;

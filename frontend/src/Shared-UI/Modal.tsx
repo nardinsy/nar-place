@@ -14,6 +14,7 @@ const Backdrop = ({
 type ModalOverlayProps = HasChildren & {
   cssClassName: string | undefined;
 };
+
 const ModalOverlay: FC<ModalOverlayProps> = ({
   cssClassName,
   children,

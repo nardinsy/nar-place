@@ -7,7 +7,7 @@ const useRequiredBackend: () => BackendService = () => {
 
   if (!backendContext) {
     throw new Error(
-      "useRequiredBackend has to be used within <BackendContex.Provider>"
+      "useRequiredBackend has to be used within <BackendContext.Provider>"
     );
   }
 

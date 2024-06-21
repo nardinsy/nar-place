@@ -36,7 +36,7 @@ type LoginInfo =
     }
   | { isLoggedin: false };
 
-type AuthContextT = LoggedInAuthContextT | LoggedOutAuthContextT;
+export type AuthContextT = LoggedInAuthContextT | LoggedOutAuthContextT;
 
 const AuthContext = createContext<AuthContextT | undefined>(undefined);
 
@@ -88,10 +88,10 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   };
 
   const login = async (userInfo: UserLoginInformation) => {
-    if (userInfo.email.length === 0 || userInfo.password.length === 0) {
-      console.log("Please enter email or password");
-      return;
-    }
+    // if (userInfo.email.length === 0 || userInfo.password.length === 0) {
+    //   console.log("Please enter email or password");
+    //   return;
+    // }
 
     const data = await backend.login(userInfo);
     const { token, user } = data;
