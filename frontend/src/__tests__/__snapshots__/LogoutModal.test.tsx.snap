@@ -39,7 +39,358 @@ exports[`Logout modal cancel correctly 1`] = `
 </body>
 `;
 
+exports[`Logout modal cancels correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
 exports[`Logout modal logout correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Logout modal logs out correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Logout modal navigates to home page 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Logout modal on cancel button click cancels correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Logout modal on cancel button click navigates to home page 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Logout modal on log out button click logs out correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Logout modal on log out button click navigates to home page 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Logout modal on log out button click on cancel button click cancels correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="backdrop"
+    />
+    <div
+      class="modal undefined"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="message-container"
+        >
+          <div
+            class="message"
+          >
+            Do you want to log out?
+          </div>
+          <div>
+            <button
+              class="button undefined button-submit"
+            >
+              Logout
+            </button>
+            <button
+              class="button undefined button-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Logout modal on log out button click on cancel button click navigates to home page 1`] = `
 <body>
   <div>
     <div

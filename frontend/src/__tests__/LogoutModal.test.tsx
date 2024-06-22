@@ -49,7 +49,7 @@ describe("Logout modal", () => {
     ReactDOM.createPortal = oldCreatePortal;
   });
 
-  test("logout correctly", async () => {
+  test("logs out correctly", async () => {
     const { logout, baseElement } = renderLogoutModal();
 
     const logoutButton = screen.getByRole("button", {
@@ -67,7 +67,7 @@ describe("Logout modal", () => {
     expect(mockHistoryReplace).toHaveBeenCalledWith("/");
   });
 
-  test("cancel correctly", () => {
+  test("cancels correctly", () => {
     const { baseElement } = renderLogoutModal();
 
     const cancelButton = screen.getByRole("button", {
