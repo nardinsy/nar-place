@@ -15,7 +15,7 @@ const Dropdown = ({ items }: { items: item[] }) => {
   });
 
   return (
-    <div className={classes["dropdown-container"]}>
+    <div className={classes["dropdown-container"]} data-testid="drop">
       <ul className={classes["dropdown-items"]}>{rows}</ul>
     </div>
   );

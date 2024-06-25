@@ -22,6 +22,7 @@ const MenuButton = () => {
 
   useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
+      console.log("ok");
       if (!ref.current) return;
 
       if (isMenuOpen && !ref.current.contains(e.target)) {
@@ -53,16 +54,17 @@ const MenuButton = () => {
         );
         setDropdown({ show: true, component });
         setIsMenuOpen(true);
-      } else {
-        closeDropdown(event);
-        setIsMenuOpen(false);
+        return;
       }
+      closeDropdown(event);
+      setIsMenuOpen(false);
     },
     [dropdown.show, authContext.isLoggedin]
   );
 
   return (
     <div
+      data-testid="menu-button"
       className={classes["header-menu-button-container"]}
       onClick={showDropDownHandler}
       ref={ref}
