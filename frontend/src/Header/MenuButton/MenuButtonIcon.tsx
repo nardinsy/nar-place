@@ -16,7 +16,11 @@ const MenuButtonIcon = () => {
           width={"50px"}
         />
       ) : (
-        <FontAwesomeIcon icon={faCircleUser} className={classes.avatar} />
+        <FontAwesomeIcon
+          data-testid="icon"
+          icon={faCircleUser}
+          className={classes.avatar}
+        />
       )}
     </>
   );

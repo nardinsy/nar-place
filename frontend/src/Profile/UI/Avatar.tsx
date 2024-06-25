@@ -30,6 +30,7 @@ const Avatar = ({
   if (!pictureUrl) {
     content = (
       <FontAwesomeIcon
+        data-testid="no-image"
         icon={faCircleUser}
         className={classes.avatar}
         style={{ width: width, height: width }}

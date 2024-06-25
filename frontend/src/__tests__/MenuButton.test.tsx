@@ -3,7 +3,7 @@ import "@testing-library/jest-dom";
 import MenuButton from "../Header/MenuButton/MenuButton";
 import AuthContext, { AuthContextT } from "../contexts/auth-context";
 
-const renderMenuButton = () => {
+const renderMenuButtonUserLoggedout = () => {
   const authProviderValue = {
     isLoggedin: false,
     signup: jest.fn(async (userInfo) => Promise.resolve()),
@@ -58,7 +58,7 @@ describe("menu button when logged in", () => {
 });
 
 test("close dropdown when click outside", () => {
-  renderMenuButton();
+  renderMenuButtonUserLoggedout();
 
   const menuBtn = screen.getByTestId("menu-button");
   fireEvent.click(menuBtn);
@@ -67,4 +67,23 @@ test("close dropdown when click outside", () => {
   fireEvent.click(outside);
 
   expect(screen.queryByTestId("drop")).not.toBeInTheDocument();
+});
+
+describe("menu button when logged out", () => {
+  test("on click show AuthDropdown", () => {
+    renderMenuButtonUserLoggedout();
+    const menuBtn = screen.getByTestId("menu-button");
+    fireEvent.click(menuBtn);
+
+    expect(screen.getByText("Sign up")).toBeInTheDocument();
+  });
+
+  test("close ProfileMenuDropdown", () => {
+    renderMenuButtonWithUserLoggedin();
+    const menuBtn = screen.getByTestId("menu-button");
+    fireEvent.click(menuBtn);
+    fireEvent.click(menuBtn);
+
+    expect(screen.queryByText("Sign up")).not.toBeInTheDocument();
+  });
 });
