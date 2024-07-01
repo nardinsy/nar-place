@@ -27,7 +27,7 @@ const PlacesList: FC<PlacesListProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className={classes.center}>
+      <div className={classes.center} data-testid="spinner">
         <Spinner />
       </div>
     );
