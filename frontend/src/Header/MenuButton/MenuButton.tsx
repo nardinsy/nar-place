@@ -22,7 +22,6 @@ const MenuButton = () => {
 
   useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
-      console.log("ok");
       if (!ref.current) return;
 
       if (isMenuOpen && !ref.current.contains(e.target)) {

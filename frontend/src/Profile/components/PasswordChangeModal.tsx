@@ -1,7 +1,12 @@
-import { useRef, MouseEvent, FC } from "react";
+import { MouseEvent, FC, useState } from "react";
 import Modal from "../../shared-UI/Modal";
 import Button from "../../shared-UI/Button";
 import classes from "./ProfileEditForm.module.css";
+import {
+  PasswordValidationResult,
+  getValidationMessage,
+  validateNewPassword,
+} from "../../helpers/inputsValidation";
 
 interface PasswordChangeModalT {
   closeChangePasswordModal: () => void;
@@ -12,44 +17,91 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
   closeChangePasswordModal,
   onPasswordChange,
 }) => {
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const submitChangePassword = (event: MouseEvent<HTMLButtonElement>) => {
+  const [invalidPassword, setInvalidPassword] = useState({
+    password: false,
+    confirmPassword: false,
+    message: "",
+  });
+
+  const submitChangePassword = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (!passwordRef.current || !confirmPasswordRef.current) {
-      throw new Error("Please fill inputs");
-      //change style to red
-    }
+    // const { result, invalidInput } = validateNewPassword(
+    //   password,
+    //   confirmPassword
+    // );
+    const result = PasswordValidationResult.valid;
+    const invalidInput = "password";
 
-    if (
-      passwordRef.current.value === "" ||
-      confirmPasswordRef.current.value === ""
-    ) {
-      throw new Error("Please fill inputs");
-    }
-
-    if (passwordRef.current.value === confirmPasswordRef.current.value) {
-      onPasswordChange(passwordRef.current.value);
+    console.log(password);
+    if (result === PasswordValidationResult.valid) {
+      await onPasswordChange(password);
       closeChangePasswordModal();
-    } else {
-      console.log("Please enter currect password");
+      return;
     }
+
+    handleInvalidPassword(result, invalidInput!);
+  };
+
+  const handleInvalidPassword = (
+    result: PasswordValidationResult,
+    invalidInput: "password" | "confirm" | "both"
+  ) => {
+    const message = getValidationMessage(result);
+
+    setInvalidPassword({
+      password: invalidInput === "both" || invalidInput === "password",
+      confirmPassword: invalidInput === "both" || invalidInput === "confirm",
+      message,
+    });
   };
 
   return (
     <Modal onBackdropClick={closeChangePasswordModal}>
       <div className={classes["user-info"]}>
         <div className={classes.control}>
-          <label>Password</label>
-          <input type="password" ref={passwordRef} />
+          <label htmlFor="password">Password</label>
+          <input
+            className={invalidPassword.password ? `${classes.invalid}` : ``}
+            id="password"
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoFocus
+          />
         </div>
 
         <div className={classes.control}>
-          <label>Confirm Password</label>
-          <input type="password" ref={confirmPasswordRef} />
+          <label htmlFor="confirm">Confirm Password</label>
+          <input
+            className={
+              invalidPassword.confirmPassword ? `${classes.invalid}` : ``
+            }
+            id="confirm"
+            type={showPassword ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
+
+        <div className={classes.message}>
+          {invalidPassword.message ? <span>⚠️ </span> : ""}
+          {invalidPassword.message}
+        </div>
+
+        <div className={classes["toggle-show"]}>
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={() => setShowPassword((pre) => !pre)}
+          />
+          <span> </span>Show password
         </div>
       </div>
+
       <div className={classes.actions}>
         <Button
           type="submit"
