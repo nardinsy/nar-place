@@ -1,8 +1,8 @@
 const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 // const isValidUsername = /.*/;
-const isValidPassword = /.*/;
-// const isValidPassword =
-//   /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
+// const isValidPassword = /.*/;
+const isValidPassword =
+  /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
 
 export enum PasswordValidationResult {
   valid,

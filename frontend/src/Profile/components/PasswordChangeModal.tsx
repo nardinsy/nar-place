@@ -29,21 +29,18 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
 
   const submitChangePassword = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    // const { result, invalidInput } = validateNewPassword(
-    //   password,
-    //   confirmPassword
-    // );
-    const result = PasswordValidationResult.valid;
-    const invalidInput = "password";
+    const { result, invalidInput } = validateNewPassword(
+      password,
+      confirmPassword
+    );
 
-    console.log(password);
-    if (result === PasswordValidationResult.valid) {
-      await onPasswordChange(password);
-      closeChangePasswordModal();
+    if (result !== PasswordValidationResult.valid) {
+      handleInvalidPassword(result, invalidInput!);
       return;
     }
 
-    handleInvalidPassword(result, invalidInput!);
+    await onPasswordChange(password);
+    closeChangePasswordModal();
   };
 
   const handleInvalidPassword = (
@@ -51,7 +48,7 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
     invalidInput: "password" | "confirm" | "both"
   ) => {
     const message = getValidationMessage(result);
-
+    console.log(message);
     setInvalidPassword({
       password: invalidInput === "both" || invalidInput === "password",
       confirmPassword: invalidInput === "both" || invalidInput === "confirm",
@@ -87,7 +84,7 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
           />
         </div>
 
-        <div className={classes.message}>
+        <div data-testid="error-message" className={classes.message}>
           {invalidPassword.message ? <span>⚠️ </span> : ""}
           {invalidPassword.message}
         </div>
