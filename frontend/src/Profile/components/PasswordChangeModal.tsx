@@ -48,7 +48,7 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
     invalidInput: "password" | "confirm" | "both"
   ) => {
     const message = getValidationMessage(result);
-    console.log(message);
+
     setInvalidPassword({
       password: invalidInput === "both" || invalidInput === "password",
       confirmPassword: invalidInput === "both" || invalidInput === "confirm",
