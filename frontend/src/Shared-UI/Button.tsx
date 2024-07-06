@@ -3,6 +3,7 @@ import { HasChildren } from "../helpers/props";
 import classes from "./Button.module.css";
 
 type ButtonProps = HasChildren & {
+  id?: string;
   className?: string;
   action: "submit" | "cancel" | "delete" | "edit";
   onClick: Function;
@@ -11,6 +12,7 @@ type ButtonProps = HasChildren & {
 };
 
 const Button: FC<ButtonProps> = ({
+  id,
   className,
   action,
   onClick,
@@ -28,6 +30,7 @@ const Button: FC<ButtonProps> = ({
 
   return (
     <button
+      data-testid={id}
       type={type}
       className={classNames}
       onClick={clickButtonHandler}
