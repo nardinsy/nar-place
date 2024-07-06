@@ -1,10 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import LogoutModal from "../Authentication/Logout/LogoutModal";
-import AuthContext, { AuthContextT } from "../contexts/auth-context";
+import AuthContext from "../contexts/auth-context";
 import { BrowserRouter } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { ReactNode, ReactPortal } from "react";
+import { authProviderValueLoggedinProps } from "../testHelpers/test-helper";
 
 const mockHistoryReplace = jest.fn();
 
@@ -16,16 +17,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 const renderLogoutModal = () => {
-  const authProviderValue = {
-    isLoggedin: true,
-    token: "1234",
-    username: "nardin",
-    userPictureUrl: undefined,
-    userId: "1234",
-    logout: jest.fn(() => Promise.resolve()),
-    setPictureUrl: jest.fn(),
-    setUsername: jest.fn(),
-  } satisfies AuthContextT;
+  const authProviderValue = authProviderValueLoggedinProps;
 
   const { baseElement } = render(
     <BrowserRouter>

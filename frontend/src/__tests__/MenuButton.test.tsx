@@ -1,14 +1,14 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import MenuButton from "../Header/MenuButton/MenuButton";
-import AuthContext, { AuthContextT } from "../contexts/auth-context";
+import AuthContext from "../contexts/auth-context";
+import {
+  authProviderValueLoggedinProps,
+  authProviderValueLoggedoutProps,
+} from "../testHelpers/test-helper";
 
 const renderMenuButtonUserLoggedout = () => {
-  const authProviderValue = {
-    isLoggedin: false,
-    signup: jest.fn(async (userInfo) => Promise.resolve()),
-    login: jest.fn((userInfo) => Promise.resolve()),
-  } satisfies AuthContextT;
+  const authProviderValue = authProviderValueLoggedoutProps;
 
   render(
     <AuthContext.Provider value={authProviderValue}>
@@ -18,18 +18,9 @@ const renderMenuButtonUserLoggedout = () => {
 };
 
 const renderMenuButtonWithUserLoggedin = () => {
-  const authProviderValue = {
-    isLoggedin: true,
-    token: "1234",
-    username: "nardin",
-    userPictureUrl: undefined,
-    userId: "1234",
-    logout: jest.fn(() => Promise.resolve()),
-    setPictureUrl: jest.fn(),
-    setUsername: jest.fn(),
-  } satisfies AuthContextT;
+  const authProviderValue = authProviderValueLoggedinProps;
 
-  const { container, baseElement } = render(
+  const { baseElement } = render(
     <AuthContext.Provider value={authProviderValue}>
       <MenuButton />
     </AuthContext.Provider>

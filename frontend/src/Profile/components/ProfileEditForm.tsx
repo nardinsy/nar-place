@@ -3,7 +3,7 @@ import Button from "../../shared-UI/Button";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import { ProfileSettingsPageT } from "../pages/ProfileSettingsPage";
 import ProfileEditFormUserPicture from "./ProfileEditFormUserPicture";
-import EditPassword from "./EditPassword";
+import EditPasswordButton from "./EditPasswordButton";
 import EditUserInfoForm from "./EditUserInfoForm";
 import { validateNewUsername } from "../../helpers/inputsValidation";
 import classes from "./ProfileEditForm.module.css";
@@ -80,7 +80,7 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
             Update Info
           </Button>
 
-          <EditPassword changePassword={changePassword} />
+          <EditPasswordButton changePassword={changePassword} />
         </div>
       </form>
     </div>

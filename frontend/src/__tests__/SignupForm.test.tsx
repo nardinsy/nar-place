@@ -1,14 +1,11 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SignupForm from "../Authentication/Signup/SignupForm";
-import AuthContext, { AuthContextT } from "../contexts/auth-context";
+import AuthContext from "../contexts/auth-context";
+import { authProviderValueLoggedoutProps } from "../testHelpers/test-helper";
 
 const renderSignupForm = () => {
-  const authProviderValue = {
-    isLoggedin: false,
-    signup: jest.fn(async (userInfo) => Promise.resolve()),
-    login: jest.fn((userInfo) => Promise.resolve()),
-  } satisfies AuthContextT;
+  const authProviderValue = authProviderValueLoggedoutProps;
 
   render(
     <AuthContext.Provider value={authProviderValue}>
@@ -40,7 +37,7 @@ describe("Signup form", () => {
 
 describe("with invalid inputs", () => {
   test("changes inputs style to red", () => {
-    const { signup } = renderSignupForm();
+    renderSignupForm();
 
     const emailInput = screen.getByLabelText("E-Mail") as HTMLInputElement;
     const usernameInput = screen.getByLabelText("Username") as HTMLInputElement;

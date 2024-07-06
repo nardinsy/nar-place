@@ -5,8 +5,8 @@ import { PlaceDto, UserDto } from "../helpers/dtos";
 import PlacesList from "../places/components/PlacesList";
 
 const userPlacesList = [
-  new PlaceDto("test", "test", "test", "test", "test", "nardin", "test"),
-  new PlaceDto("test", "test", "test", "test", "test", "nardin", "test"),
+  new PlaceDto("test1", "test1", "test1", "test1", "test1", "nardin1", "test1"),
+  new PlaceDto("test2", "test2", "test2", "test2", "test2", "nardin2", "test2"),
 ];
 
 const renderEditablePlaceList = (userPlaces: PlaceDto[], loading: boolean) => {
@@ -77,8 +77,8 @@ describe("editable place item", () => {
     const placeText = places.map((place) => place.textContent);
 
     expect(placeText).toEqual([
-      "testtestAddress: test",
-      "testtestAddress: test",
+      "test1test1Address: test1",
+      "test2test2Address: test2",
     ]);
   });
 });
@@ -91,8 +91,8 @@ describe("not editable place item", () => {
     const placeText = places.map((place) => place.textContent);
 
     expect(placeText).toEqual([
-      "testtestAddress: test",
-      "testtestAddress: test",
+      "test1test1Address: test1",
+      "test2test2Address: test2",
     ]);
   });
 });

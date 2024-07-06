@@ -1,11 +1,4 @@
-import {
-  render,
-  fireEvent,
-  screen,
-  waitFor,
-  findByTestId,
-  queryByTestId,
-} from "@testing-library/react";
+import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import PasswordChangeModal from "../Profile/components/PasswordChangeModal";
 import ReactDOM from "react-dom";

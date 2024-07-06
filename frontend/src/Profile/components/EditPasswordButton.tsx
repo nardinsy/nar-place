@@ -7,7 +7,7 @@ interface EditPasswordT {
   changePassword: (newPAssword: string) => void;
 }
 
-const EditPassword: FC<EditPasswordT> = ({ changePassword }) => {
+const EditPasswordButton: FC<EditPasswordT> = ({ changePassword }) => {
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   const changePasswordHandler = (newPassword: string) => {
@@ -44,4 +44,4 @@ const EditPassword: FC<EditPasswordT> = ({ changePassword }) => {
   );
 };
 
-export default EditPassword;
+export default EditPasswordButton;

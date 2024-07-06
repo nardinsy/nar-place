@@ -1,15 +1,11 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import LoginForm from "../Authentication/Login/LoginForm";
-import AuthContext, { AuthContextT } from "../contexts/auth-context";
+import AuthContext from "../contexts/auth-context";
+import { authProviderValueLoggedoutProps } from "../testHelpers/test-helper";
 
 const renderLoginForm = () => {
-  const authProviderValue = {
-    isLoggedin: false,
-    signup: jest.fn(),
-    login: jest.fn((userInfo) => Promise.resolve()),
-  } satisfies AuthContextT;
-
+  const authProviderValue = authProviderValueLoggedoutProps;
   render(
     <AuthContext.Provider value={authProviderValue}>
       <LoginForm />

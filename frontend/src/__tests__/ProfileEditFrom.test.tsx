@@ -3,7 +3,7 @@ import "@testing-library/jest-dom";
 import ProfileEditForm from "../Profile/components/ProfileEditForm";
 import { ProfileSettingsPageT } from "../Profile/pages/ProfileSettingsPage";
 import AuthContext from "../contexts/auth-context";
-import { authProviderValueLoggedin } from "../testHelpers/helper";
+import { authProviderValueLoggedinProps } from "../testHelpers/test-helper";
 
 const renderProfileEditForm = () => {
   const value: ProfileSettingsPageT = {
@@ -15,7 +15,7 @@ const renderProfileEditForm = () => {
   };
 
   render(
-    <AuthContext.Provider value={authProviderValueLoggedin}>
+    <AuthContext.Provider value={authProviderValueLoggedinProps}>
       <ProfileEditForm {...value} />
     </AuthContext.Provider>
   );

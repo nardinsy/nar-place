@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import classes from "./ProfileEditForm.module.css";
 
-interface ProfileEditFormUserPictureT {
+export interface ProfileEditFormUserPictureT {
   userPictureUrl: string | undefined;
   username: string;
   token: string;
@@ -28,12 +28,12 @@ const ProfileEditFormUserPicture: FC<ProfileEditFormUserPictureT> = ({
 
   const onImageClickHandler = (event: MouseEvent<HTMLDivElement>) => {
     // event.preventDefault();
-    const element = event.target as HTMLElement;
-    if (element.tagName === "IMG") {
-      // window.open(authContext.userPictureUrl, "_blank");
-      // history.push("/photo");
-      setShowPictureModal(true);
-    }
+    // const element = event.target as HTMLElement;
+    // if (element.tagName === "IMG") {
+    // window.open(authContext.userPictureUrl, "_blank");
+    // history.push("/photo");
+    // }
+    setShowPictureModal(true);
   };
 
   const changeImage = (fileFormatFile: File) => {
@@ -75,8 +75,11 @@ const ProfileEditFormUserPicture: FC<ProfileEditFormUserPictureT> = ({
 
   return (
     <>
-      <div className={classes["user-image"]} onClick={onImageClickHandler}>
-        <Avatar width={"9rem"} pictureUrl={avatarURL} alt={username} />
+      <div className={classes["user-image"]}>
+        <div onClick={onImageClickHandler} data-testid="picture-container">
+          <Avatar width={"9rem"} pictureUrl={avatarURL} alt={username} />
+        </div>
+
         <div>
           <ImageUpload
             id={token}
