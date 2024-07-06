@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import classes from "./ProfileEditForm.module.css";
 
-interface ProfilePictureActionT {
+interface ProfileEditFormUserPictureT {
   userPictureUrl: string | undefined;
   username: string;
   token: string;
@@ -14,7 +14,7 @@ interface ProfilePictureActionT {
   changeProfilePicture: (userNewImage: File | undefined) => Promise<void>;
 }
 
-const ProfilePictureAction: FC<ProfilePictureActionT> = ({
+const ProfileEditFormUserPicture: FC<ProfileEditFormUserPictureT> = ({
   userPictureUrl,
   username,
   token,
@@ -25,7 +25,6 @@ const ProfilePictureAction: FC<ProfilePictureActionT> = ({
   const [avatarURL, setAvatarURL] = useState<string | undefined>(
     userPictureUrl
   );
-  //userPictureUrl, username, token,
 
   const onImageClickHandler = (event: MouseEvent<HTMLDivElement>) => {
     // event.preventDefault();
@@ -100,4 +99,4 @@ const ProfilePictureAction: FC<ProfilePictureActionT> = ({
   );
 };
 
-export default ProfilePictureAction;
+export default ProfileEditFormUserPicture;

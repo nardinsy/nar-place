@@ -6,6 +6,7 @@ type ButtonProps = HasChildren & {
   className?: string;
   action: "submit" | "cancel" | "delete" | "edit";
   onClick: Function;
+  isDisabled?: boolean;
   type?: "button" | "submit" | "reset" | undefined;
 };
 
@@ -13,12 +14,13 @@ const Button: FC<ButtonProps> = ({
   className,
   action,
   onClick,
+  isDisabled = false,
   type,
   children,
 }) => {
-  const classNames = `${classes.button} ${className} ${
-    classes[`button-${action}`]
-  }`;
+  const classNames = isDisabled
+    ? `  ${classes["disabled-button"]} ${className} `
+    : `${classes.button} ${className} ${classes[`button-${action}`]}`;
 
   const clickButtonHandler = (event: React.MouseEvent<HTMLElement>) => {
     onClick(event);
@@ -29,6 +31,7 @@ const Button: FC<ButtonProps> = ({
       type={type}
       className={classNames}
       onClick={clickButtonHandler}
+      disabled={isDisabled}
       // onSubmit={clickButtonHandler}
     >
       {children}

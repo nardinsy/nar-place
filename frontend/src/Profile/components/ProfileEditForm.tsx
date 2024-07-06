@@ -2,9 +2,10 @@ import { useState, FC, MouseEvent } from "react";
 import Button from "../../shared-UI/Button";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import { ProfileSettingsPageT } from "../pages/ProfileSettingsPage";
-import ProfilePictureAction from "./ProfilePictureAction";
+import ProfileEditFormUserPicture from "./ProfileEditFormUserPicture";
 import EditPassword from "./EditPassword";
 import EditUserInfoForm from "./EditUserInfoForm";
+import { validateNewUsername } from "../../helpers/inputsValidation";
 import classes from "./ProfileEditForm.module.css";
 
 const ProfileEditForm: FC<ProfileSettingsPageT> = ({
@@ -13,36 +14,36 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
   changeUsername,
 }) => {
   const authContext = useRequiredAuthContext();
-  if (!authContext.isLoggedin)
+  if (!authContext.isLoggedin) {
     throw new Error("User in not logged in, Please login first");
-  //redirect to login form
+    //redirect to login form
+  }
 
-  const [file, setFile] = useState<File | "noChange">("noChange");
+  const [profilePicture, setProfilePicture] = useState<File | "noChange">(
+    "noChange"
+  );
   const [username, setUsername] = useState(authContext.username);
-
-  // const history = useHistory();
-
-  // useEffect(() => {
-  //   setAvatarURL(userPictureUrl);
-  // }, [userPictureUrl]);
+  const [isDirty, setIsDirty] = useState(false);
 
   const onChangeImage = (fileFormatFile: File) => {
-    setFile(fileFormatFile);
+    setProfilePicture(fileFormatFile);
+    setIsDirty(true);
   };
 
   const onChangeUsername = (username: string) => {
     setUsername(username);
+    setIsDirty(true);
   };
 
   const formSubmitHandler = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    if (username !== authContext.username) {
+    if (validateNewUsername(username, authContext.username)) {
       changeUsername(username);
     }
 
-    if (file !== "noChange") {
-      changeProfilePicture(file);
+    if (profilePicture !== "noChange") {
+      changeProfilePicture(profilePicture);
       //show message
     }
   };
@@ -53,7 +54,7 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
         <div className={classes["user-form-header"]}>
           <h2>Edit Profile</h2>
 
-          <ProfilePictureAction
+          <ProfileEditFormUserPicture
             onChangeImage={onChangeImage}
             userPictureUrl={authContext.userPictureUrl}
             username={authContext.username}
@@ -72,6 +73,7 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
           <Button
             type="submit"
             onClick={formSubmitHandler}
+            isDisabled={!isDirty}
             action={"submit"}
             className={classes.btn}
           >
@@ -86,3 +88,9 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
 };
 
 export default ProfileEditForm;
+
+// const history = useHistory();
+
+// useEffect(() => {
+//   setAvatarURL(userPictureUrl);
+// }, [userPictureUrl]);

@@ -1,5 +1,5 @@
 const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-// const isValidUsername = /.*/;
+const isValidUsername = /^[a-zA-Z0-9]+$/;
 // const isValidPassword = /.*/;
 const isValidPassword =
   /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
@@ -72,4 +72,16 @@ export const getValidationMessage = (
     case PasswordValidationResult.unknown:
       return "Invalid";
   }
+};
+
+export const validateNewUsername = (newUsername: string, username: string) => {
+  if (newUsername === username || username === "") {
+    return false;
+  }
+
+  if (isValidUsername.test(newUsername)) {
+    return true;
+  }
+
+  return false;
 };

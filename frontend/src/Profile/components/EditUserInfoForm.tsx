@@ -9,6 +9,7 @@ const EditUserInfoForm: FC<EditUserInfoFormT> = ({
   changeUsername,
 }) => {
   const [usernameInput, setUsernameInput] = useState(username);
+
   const changeUsernameHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setUsernameInput(event.target.value);
     changeUsername(event.target.value);

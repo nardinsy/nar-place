@@ -30,21 +30,22 @@ const PictureModal: FC<PictureModalT> = ({
   const [showEllipsisDropdown, setShowEllipsisDropdown] = useState(false);
   const ellipsisRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const checkIfClickedOutside = (event: Event) => {
-      const element = event.target as HTMLElement;
-      if (showEllipsisDropdown && !ellipsisRef.current!.contains(element)) {
-        event.preventDefault();
-        setShowEllipsisDropdown(false);
-      }
-    };
+  // useEffect(() => {
+  //   const checkIfClickedOutside = (event: Event) => {
+  //     const element = event.target as HTMLElement;
 
-    window.addEventListener("mousedown", checkIfClickedOutside, true);
+  //     if (showEllipsisDropdown && !ellipsisRef.current!.contains(element)) {
+  //       event.preventDefault();
+  //       setShowEllipsisDropdown(false);
+  //     }
+  //   };
 
-    return () => {
-      window.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [showEllipsisDropdown]);
+  //   window.addEventListener("mousedown", checkIfClickedOutside, true);
+
+  //   return () => {
+  //     window.removeEventListener("mousedown", checkIfClickedOutside);
+  //   };
+  // }, [showEllipsisDropdown]);
 
   const ellipsisClickHandler = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
