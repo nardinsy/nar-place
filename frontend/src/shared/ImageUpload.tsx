@@ -18,7 +18,7 @@ const ImageUpload: FC<ImageUploadT> = ({
   const pickImageHandler = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const files = (event.target as HTMLInputElement).files;
-    if (files) {
+    if (files && files.length !== 0) {
       const file: File = files[0];
       onChangeImage(file);
     }
