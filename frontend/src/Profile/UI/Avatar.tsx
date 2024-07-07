@@ -15,39 +15,22 @@ const Avatar = ({
 }) => {
   //if pictureUrl is not undefined but it is not valid url, then what?
 
-  let content;
-  const x = () => {
-    content = (
-      <FontAwesomeIcon
-        icon={faCircleUser}
-        className={classes.avatar}
-        style={{ width: width, height: width }}
-      />
-    );
-  };
-  // let content;
-
-  if (!pictureUrl) {
-    content = (
-      <FontAwesomeIcon
-        data-testid="no-image"
-        icon={faCircleUser}
-        className={classes.avatar}
-        style={{ width: width, height: width }}
-      />
-    );
-  } else {
-    content = (
-      <img
-        src={pictureUrl}
-        alt={alt}
-        style={{ width: width, height: width }}
-        className={`${classes["avatar-img"]} ${cssClassName}`}
-      />
-    );
-  }
-
-  // console.log("Avatar content: ", content);
+  const content = pictureUrl ? (
+    <img
+      data-testid="image"
+      src={pictureUrl}
+      alt={alt}
+      style={{ width, height: width }}
+      className={`${classes["avatar-img"]} ${cssClassName}`}
+    />
+  ) : (
+    <FontAwesomeIcon
+      data-testid="no-image"
+      icon={faCircleUser}
+      className={classes.avatar}
+      style={{ width, height: width }}
+    />
+  );
 
   return <div className={`${classes.avatar} ${cssClassName}`}>{content}</div>;
 };
