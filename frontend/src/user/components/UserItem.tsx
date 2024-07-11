@@ -11,7 +11,7 @@ const UserItem: FC<UserItemProps> = ({ userDto }) => {
   const { userId, username, pictureUrl, placeCount } = userDto;
 
   return (
-    <li className={classes["user-item"]} key={userId}>
+    <li className={classes["user-item"]} key={userId} data-testid={userId}>
       <Card className={classes["user-item__content"]}>
         <Link
           to={{

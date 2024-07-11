@@ -14,7 +14,7 @@ const UsersList = ({
 }) => {
   if (loading) {
     return (
-      <div className={classes.center}>
+      <div className={classes.center} data-testid="users-spinner">
         <Spinner />
       </div>
     );
@@ -36,7 +36,11 @@ const UsersList = ({
       : undefined;
     return <UserItem key={user.userId} userDto={{ ...user, pictureUrl }} />;
   });
-  return <ul className={classes["users-list"]}>{userItems}</ul>;
+  return (
+    <ul className={classes["users-list"]} data-testid="users-list">
+      {userItems}
+    </ul>
+  );
 };
 
 export default UsersList;
