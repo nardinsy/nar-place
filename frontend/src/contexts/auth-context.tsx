@@ -152,6 +152,10 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
 
   const changeUsernameMethod = (username: string) => {
     // setUsername(username);
+    localStorage.removeItem("username");
+
+    localStorage.setItem("username", username);
+
     setLoginInfo((pre) => {
       return { ...pre, username };
     });
