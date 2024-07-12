@@ -18,7 +18,7 @@ const EditUserInfoForm: FC<EditUserInfoFormT> = ({
   return (
     <>
       <div className={classes.control}>
-        <label>Username</label>
+        <label className={classes.label}>Username</label>
         <input
           type="text"
           value={usernameInput}

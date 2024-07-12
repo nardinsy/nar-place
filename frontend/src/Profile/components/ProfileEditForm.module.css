@@ -68,7 +68,8 @@
 
 .control label {
   width: 6rem;
-  color: gray;
+  color: #0b0c0c;
+  font-weight: bold;
   /* background-color: #5f9ea0; */
   padding-top: 5px;
 }
@@ -81,6 +82,7 @@
   text-indent: 10px;
   cursor: pointer;
   font-size: 15px;
+  border: 0.5px solid gray;
 }
 
 .control input:focus {
