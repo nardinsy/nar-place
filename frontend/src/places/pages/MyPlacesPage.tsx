@@ -37,7 +37,7 @@ const MyPlacePage: FC<MyPlacePageProps> = ({
 
   useEffect(() => {
     getLoggedUserPlaces();
-  }, [getLoggedUserPlaces]);
+  }, []);
 
   return (
     <div>

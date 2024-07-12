@@ -22,6 +22,7 @@ const Avatar = ({
       alt={alt}
       style={{ width, height: width }}
       className={`${classes["avatar-img"]} ${cssClassName}`}
+      loading="lazy"
     />
   ) : (
     <FontAwesomeIcon

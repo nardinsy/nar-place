@@ -1,4 +1,4 @@
-import { useState, FC } from "react";
+import { useState, FC, useEffect } from "react";
 import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
 import classes from "./NewPlacePage.module.css";
@@ -16,6 +16,10 @@ const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
 
   const [uploadedPicture, setUploadedPicture] = useState<string>();
   const [file, setFile] = useState<File | undefined>(undefined);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const changeNewPicture = (file: File) => {
     setFile(file);

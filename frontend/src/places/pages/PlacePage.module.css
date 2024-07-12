@@ -84,7 +84,13 @@
   padding: 1rem;
   color: rgb(95, 94, 94);
   overflow: scroll;
-  /* background-color: #5f9ea0; */
+  /* background-color: #e8f1f1; */
+  /* border-radius: 5px; */
+  /* margin-top: 1rem; */
+}
+
+.strong {
+  color: rgb(19, 19, 19);
 }
 
 .place-page-infos p {

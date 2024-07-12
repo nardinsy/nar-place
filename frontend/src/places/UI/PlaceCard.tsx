@@ -55,6 +55,7 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
           src={pictureUrl}
           alt={title}
           className={classes["place-image-full"]}
+          loading="lazy"
         />
         <div className={classes["card-content"]}>
           <h2 className={classes["place-title"]}>{oneLineTitle}</h2>
