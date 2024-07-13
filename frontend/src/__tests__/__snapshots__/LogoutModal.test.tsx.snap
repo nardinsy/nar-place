@@ -24,11 +24,13 @@ exports[`Logout modal cancels correctly 1`] = `
           <div>
             <button
               class="button undefined button-submit"
+              tabindex="0"
             >
               Logout
             </button>
             <button
               class="button undefined button-cancel"
+              tabindex="0"
             >
               Cancel
             </button>
@@ -64,11 +66,13 @@ exports[`Logout modal logs out correctly 1`] = `
           <div>
             <button
               class="button undefined button-submit"
+              tabindex="0"
             >
               Logout
             </button>
             <button
               class="button undefined button-cancel"
+              tabindex="0"
             >
               Cancel
             </button>

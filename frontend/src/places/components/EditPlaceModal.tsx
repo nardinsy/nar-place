@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Modal from "../../shared-UI/Modal";
 import { PlaceDto, placeInfoCard } from "../../helpers/dtos";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
@@ -16,6 +16,21 @@ const EditPlaceModal: FC<EditPlaceModalT> = ({
   closeEditModal,
   onDeletePlace,
 }) => {
+  const handleKeyPress = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case "Enter":
+        break;
+      case "Escape":
+        closeEditModal();
+        break;
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
+
   const editPlaceHandler = (updatedplaceInfos: placeInfoCard) => {
     const place = { ...updatedplaceInfos, id: placeDto.placeId };
     editPlace(place);
