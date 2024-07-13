@@ -9,6 +9,7 @@ type ButtonProps = HasChildren & {
   onClick: Function;
   isDisabled?: boolean;
   type?: "button" | "submit" | "reset" | undefined;
+  tabIndex?: number;
 };
 
 const Button: FC<ButtonProps> = ({
@@ -18,6 +19,7 @@ const Button: FC<ButtonProps> = ({
   onClick,
   isDisabled = false,
   type,
+  tabIndex = 0,
   children,
 }) => {
   const classNames = isDisabled
@@ -30,6 +32,7 @@ const Button: FC<ButtonProps> = ({
 
   return (
     <button
+      tabIndex={tabIndex}
       data-testid={id}
       type={type}
       className={classNames}
