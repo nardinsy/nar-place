@@ -8,7 +8,17 @@ import Place, { IPlace } from "../models/place";
 import PlacePicture, { IPlacePicture } from "../models/place-picture";
 import getCoordsForAddress from "../util/location";
 import contentTypeBufferSplit from "../helpers/data-url";
-import { NewPlace, PlaceDto } from "../shared/dtos";
+import {
+  CommentDto,
+  CommentWriter,
+  NewComment,
+  NewPlace,
+  PlaceDto,
+} from "../shared/dtos";
+import PostComment, { IPostComment } from "../models/comment";
+import { getProfilePictureUrl } from "./users-controller";
+import { writer } from "repl";
+import { get } from "http";
 
 export const getPlacePictureUrl = (id: string) => {
   return `places/place-picture/${id}`;
@@ -344,4 +354,127 @@ const checkPlaceBelongsToUser = (place: IPlace, user: IUser) => {
   const placeCreatorId = place.creator.toHexString();
 
   return placeCreatorId === userId ? true : false;
+};
+
+export const addComment: AuthRequestHandler = async (user, req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = createHttpError(
+      "Invalid input passed, please check your data.",
+      422
+    );
+    return next(error);
+  }
+
+  const { text, date, postID }: NewComment = req.body;
+  const newComment = new PostComment({ text, date, postID, writer: user._id });
+
+  try {
+    await newComment.save();
+  } catch (error) {
+    return next(
+      createHttpError(`Adding comment failed, please try again. ${error}`, 500)
+    );
+  }
+
+  let place: IPlace | null;
+
+  try {
+    place = await Place.findOne({
+      _id: new Types.ObjectId(postID),
+    });
+
+    if (!place) {
+      return next(
+        createHttpError("Something went wrong, could not find place.", 500)
+      );
+    }
+
+    if (checkPlaceBelongsToUser(place, user)) {
+      place.comments.push(newComment._id);
+    } else {
+      return res.status(401).json({
+        message: "unauthorize",
+      });
+    }
+  } catch (err) {
+    return next(
+      createHttpError("Something went wrong, could add comment.", 500)
+    );
+  }
+
+  try {
+    await place.save();
+  } catch (err) {
+    console.log(err);
+  }
+
+  res.status(201).json({
+    message: "Add comment successfully",
+  });
+};
+
+export const getPlaceCommetns: RequestHandler = async (req, res, next) => {
+  const postID = req.body.postID;
+  let post: IPlace | null;
+
+  try {
+    post = await Place.findOne({ postID });
+  } catch (error) {
+    return next(createHttpError("Could not find place or Wrong place id", 401));
+  }
+
+  if (!post) {
+    return next(createHttpError("Could not find place or Wrong place id", 401));
+  }
+
+  const comments = getCommentsById(post.comments);
+  const commentsDto = await getcommnetsDto(await comments);
+
+  res.status(200).json(commentsDto);
+};
+
+const getCommentsById = async (commentsID: Types.ObjectId[]) => {
+  // [new ObjectId('665463c07ffe177e8275f436'), ]
+  const comments: IPostComment[] = [];
+
+  for (const commentID of commentsID) {
+    const u = await PostComment.findById(commentID._id.toHexString());
+    if (u !== null) {
+      comments.push(u);
+    }
+  }
+  return comments;
+};
+
+const getCommentWriter = async (comment: IPostComment) => {
+  const userThatWroteComment = await User.findById(
+    comment.writer._id.toHexString()
+  );
+
+  if (userThatWroteComment) {
+    return {
+      userId: userThatWroteComment.id,
+      username: userThatWroteComment.username,
+      pictureUrl: userThatWroteComment.picture
+        ? getProfilePictureUrl(userThatWroteComment.id)
+        : undefined,
+    };
+  }
+  throw new Error("Can not found comment writer");
+};
+
+const getcommnetsDto = async (comments: IPostComment[]) => {
+  return await Promise.all(
+    comments.map(async (comment) => {
+      const writer = await getCommentWriter(comment);
+      const commentDto: CommentDto = {
+        text: comment.text,
+        date: comment.date,
+        postID: comment.postID,
+        writer,
+      };
+      return commentDto;
+    })
+  );
 };

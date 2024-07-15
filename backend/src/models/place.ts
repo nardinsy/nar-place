@@ -8,6 +8,7 @@ export interface IPlace extends mongoose.Document {
   picture: Types.ObjectId;
   location: { lat: number; lng: number };
   creator: Types.ObjectId;
+  comments: Types.ObjectId[];
   _id: Types.ObjectId;
 }
 
@@ -21,6 +22,13 @@ const placeSchema = new Schema<IPlace>({
     lng: { type: Number, required: true },
   },
   creator: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PostComment",
+    },
+  ],
+
   // creator: { type: String, required: true, ref: "User" },
 });
 

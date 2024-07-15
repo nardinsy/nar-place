@@ -8,6 +8,8 @@ import {
   deletePlaceById,
   getAnyUserPlacesByUserId,
   getPlacePictureByUrl,
+  addComment,
+  getPlaceCommetns,
 } from "../controllers/places-controller";
 
 const placeRouter = routerAuth();
@@ -58,5 +60,13 @@ placeRouter.deleteAuth("/delete-place/:pid", deletePlaceById);
 placeRouter.get("/any-user-places-by-userId/:uid", getAnyUserPlacesByUserId);
 
 placeRouter.get("/place-picture/:id", getPlacePictureByUrl);
+
+placeRouter.postAuth(
+  "/addComment",
+  [check("text").not().isEmpty(), check("text").isLength({ max: 30 })],
+  addComment
+);
+
+placeRouter.get("/getComments", getPlaceCommetns);
 
 export default placeRouter;

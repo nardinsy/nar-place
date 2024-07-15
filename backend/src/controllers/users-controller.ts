@@ -12,7 +12,7 @@ import contentTypeBufferSplit from "../helpers/data-url";
 import ProfilePicture, { IProfilePicture } from "../models/profile-picture";
 import { LoginResult } from "../shared/results";
 
-const getProfilePictureUrl = (id: string): string => {
+export const getProfilePictureUrl = (id: string): string => {
   return `users/profile-picture/${id}`;
 };
 

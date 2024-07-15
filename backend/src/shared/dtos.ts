@@ -64,3 +64,22 @@ export interface NewPlace {
 
 export type Base64<imageType extends string> =
   `data:image/${imageType};base64${string}`;
+
+export type NewComment = {
+  text: string;
+  date: Date;
+  postID: Types.ObjectId;
+};
+
+export type CommentDto = {
+  text: string;
+  date: Date;
+  postID: Types.ObjectId;
+  writer: CommentWriter;
+};
+
+export type CommentWriter = {
+  userId: string;
+  username: string;
+  pictureUrl: string | undefined;
+};
