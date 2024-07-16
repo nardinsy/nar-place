@@ -82,4 +82,5 @@ export type CommentWriter = {
   userId: string;
   username: string;
   pictureUrl: string | undefined;
+  placeCount: number;
 };

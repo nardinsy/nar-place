@@ -390,13 +390,7 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
       );
     }
 
-    if (checkPlaceBelongsToUser(place, user)) {
-      place.comments.push(newComment._id);
-    } else {
-      return res.status(401).json({
-        message: "unauthorize",
-      });
-    }
+    place.comments.push(newComment._id);
   } catch (err) {
     return next(
       createHttpError("Something went wrong, could add comment.", 500)
@@ -415,11 +409,11 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
 };
 
 export const getPlaceCommetns: RequestHandler = async (req, res, next) => {
-  const postID = req.body.postID;
+  const postID = req.body.placeID;
   let post: IPlace | null;
 
   try {
-    post = await Place.findOne({ postID });
+    post = await Place.findById(postID);
   } catch (error) {
     return next(createHttpError("Could not find place or Wrong place id", 401));
   }
@@ -457,8 +451,9 @@ const getCommentWriter = async (comment: IPostComment) => {
       userId: userThatWroteComment.id,
       username: userThatWroteComment.username,
       pictureUrl: userThatWroteComment.picture
-        ? getProfilePictureUrl(userThatWroteComment.id)
+        ? getProfilePictureUrl(userThatWroteComment.picture.toHexString())
         : undefined,
+      placeCount: userThatWroteComment.places.length,
     };
   }
   throw new Error("Can not found comment writer");

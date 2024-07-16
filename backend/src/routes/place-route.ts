@@ -67,6 +67,6 @@ placeRouter.postAuth(
   addComment
 );
 
-placeRouter.get("/getComments", getPlaceCommetns);
+placeRouter.post("/getComments", getPlaceCommetns);
 
 export default placeRouter;
