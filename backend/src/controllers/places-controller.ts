@@ -357,16 +357,17 @@ const checkPlaceBelongsToUser = (place: IPlace, user: IUser) => {
 };
 
 export const addComment: AuthRequestHandler = async (user, req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = createHttpError(
-      "Invalid input passed, please check your data.",
-      422
-    );
-    return next(error);
-  }
+  // const errors = validationResult(req);
+  // if (!errors.isEmpty()) {
+  //   const error = createHttpError(
+  //     "Invalid input passed, please check your data.",
+  //     422
+  //   );
+  //   return next(error);
+  // }
 
-  const { text, date, postID }: NewComment = req.body;
+  console.log(req.body.newComment);
+  const { text, date, postID }: NewComment = req.body.newComment;
   const newComment = new PostComment({ text, date, postID, writer: user._id });
 
   try {

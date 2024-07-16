@@ -63,7 +63,7 @@ placeRouter.get("/place-picture/:id", getPlacePictureByUrl);
 
 placeRouter.postAuth(
   "/addComment",
-  [check("text").not().isEmpty(), check("text").isLength({ max: 30 })],
+  // [check("text").not().isEmpty(), check("text").isLength({ max: 30 })],
   addComment
 );
 
