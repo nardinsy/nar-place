@@ -100,3 +100,9 @@ export type CommentWriter = {
   pictureUrl: string | undefined;
   placeCount: number;
 };
+
+export type NewComment = {
+  text: string;
+  date: Date;
+  postID: string;
+};

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Comment from "./Comment";
+import CommentItem from "./CommentItem";
 import { CommentDto } from "../../../../helpers/dtos";
 import classes from "./Comment.module.css";
 
@@ -8,10 +8,10 @@ type CommetnListT = {
 };
 
 const CommetnsList: FC<CommetnListT> = ({ comments }) => {
-  const x = comments.map((comment, index) => {
-    return <Comment commentDto={comment} key={index} />;
+  const commentsList = comments.map((comment, index) => {
+    return <CommentItem commentDto={comment} key={index} />;
   });
-  return <ul className={classes["comments"]}>{x}</ul>;
+  return <ul className={classes["comments-list"]}>{commentsList}</ul>;
 };
 
 export default CommetnsList;

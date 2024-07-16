@@ -1,18 +1,14 @@
 import { FC, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { UserDto, PlaceDto } from "../../helpers/dtos";
-import classes from "./PlacePage.module.css";
 import PlaceImage from "./components/PlaceImage";
 import PlaceInfo from "./components/PlaceInfo";
 import PlaceCreatorAccountInfo from "./components/PlaceCreatorAccountInfo";
 import FollowButton from "./components/FollowButton";
-import CommentInput from "./components/CommentInput";
-import CommentContainer from "./components/CommentContainer";
-import useRequiredAuthContext from "../../hooks/use-required-authContext";
+import CommentInputAndBox from "./components/comment/CommentInputAndBox";
+import classes from "./PlacePage.module.css";
 
 const PlacePage: FC = () => {
-  const authContext = useRequiredAuthContext();
-
   const {
     state,
   }: {
@@ -39,14 +35,10 @@ const PlacePage: FC = () => {
           <FollowButton />
         </div>
         <div className={classes["distance"]}></div>
+
         <div className={classes.middle}>
           <PlaceInfo placeDto={placeDto} />
-
-          <CommentContainer placeId={placeDto.placeId} />
-        </div>
-
-        <div className={classes["comment-scope"]}>
-          {authContext.isLoggedin && <CommentInput />}
+          <CommentInputAndBox placeId={placeDto.placeId} />
         </div>
       </div>
     </div>

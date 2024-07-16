@@ -7,6 +7,7 @@ import {
   UserSignupInformation,
   NewPlace,
   CommentDto,
+  NewComment,
 } from "../helpers/dtos";
 
 export interface BackendService {
@@ -51,5 +52,6 @@ export interface BackendService {
     places: PlaceDto[];
   }>;
 
+  addComment(NewComment: NewComment, token: string): Promise<void>;
   getComments(placeId: string): Promise<CommentDto[]>;
 }

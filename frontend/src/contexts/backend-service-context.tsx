@@ -4,6 +4,7 @@ import { HasChildren } from "../helpers/props";
 import {
   CommentDto,
   LoginResult,
+  NewComment,
   NewPlace,
   PlaceDto,
   PlaceInfoCardWithPictire,
@@ -159,6 +160,16 @@ class BackedServiceImpl implements BackendService {
       requestOptions,
       userId
     );
+  }
+
+  async addComment(newComment: NewComment, token: string): Promise<void> {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify({ newComment }),
+    };
+
+    return await sendHttpRequest(ENDPOINTS.addComment, requestOptions);
   }
 
   async getComments(placeId: string): Promise<CommentDto[]> {

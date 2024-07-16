@@ -37,6 +37,7 @@ export enum ENDPOINTS {
   getAnyUserPlacesByUserId = "places/any-user-places-by-userId/",
 
   getComments = "places/getComments",
+  addComment = "places/addComment",
 }
 
 const getApiAddress = (endPoint: string, param?: string) => {

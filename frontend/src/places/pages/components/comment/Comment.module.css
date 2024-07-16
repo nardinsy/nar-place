@@ -1,27 +1,16 @@
-.comment-container {
+.comment-scope {
+  position: absolute;
+  bottom: 0rem;
+  width: 100%;
+  height: 4rem;
+  border-radius: 0;
   display: flex;
-  flex-direction: row;
-  padding: 1rem 0;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
 }
 
-.writer-avatar {
-  padding: 0 0.5rem;
-}
-
-.writer-info {
-  font-size: 10px;
-  color: rgb(17, 8, 8);
-  font-weight: 300;
-  letter-spacing: 0.3px;
-  color: rgb(97, 97, 97);
-}
-
-.comment-text {
-  padding: 0.4rem 0;
-  font-size: 14px;
-  letter-spacing: 0.3px;
-}
-
-.comments {
+.comments-list {
   padding: 0;
+  padding-bottom: 10rem;
 }

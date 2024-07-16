@@ -1,0 +1,64 @@
+.comment-input-container {
+  border: 0.1rem solid #5f9ea0;
+  width: 85%;
+  height: 3rem;
+  border-radius: 3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.heart-button {
+  color: rgb(150, 140, 140);
+  width: 2rem;
+  height: 2rem;
+  margin: 1rem;
+  cursor: pointer;
+  /* border: 1px solid black; */
+}
+
+.heart-button:hover {
+  color: rgb(231, 32, 32);
+}
+
+.comment-input {
+  border: none;
+  font-size: 15px;
+  width: 70%;
+}
+
+.comment-input:focus {
+  outline: none;
+}
+
+.emoji-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: rgb(150, 140, 140);
+  cursor: pointer;
+}
+
+.emoji-button:hover {
+  color: rgb(204, 204, 149);
+}
+
+.send-button {
+  color: rgb(150, 140, 140);
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 1rem;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  color: #5f9ea0;
+}
+
+@media (max-width: 850px) {
+  .comment-input-container {
+    width: 90%;
+  }
+  .comment-input {
+    width: 70%;
+  }
+}

@@ -1,15 +1,15 @@
 import { FC } from "react";
 import Avatar from "../../../../Profile/UI/Avatar";
-import classes from "./Comment.module.css";
 import { CommentDto, UserDto } from "../../../../helpers/dtos";
 import { createAbsoluteApiAddress } from "../../../../helpers/api-url";
 import { Link } from "react-router-dom";
+import classes from "./CommentItem.module.css";
 
-type CommentT = {
+type CommentItemT = {
   commentDto: CommentDto;
 };
 
-const Comment: FC<CommentT> = ({ commentDto }) => {
+const CommentItem: FC<CommentItemT> = ({ commentDto }) => {
   const { date, postID, text, writer } = commentDto;
   const { pictureUrl, userId, username, placeCount } = writer;
   const userDto: UserDto = { pictureUrl, userId, username, placeCount };
@@ -17,7 +17,7 @@ const Comment: FC<CommentT> = ({ commentDto }) => {
 
   return (
     <li>
-      <div className={classes["comment-container"]}>
+      <div className={classes["comment-item"]}>
         <div className={classes["writer-avatar"]}>
           <Link
             to={{
@@ -42,4 +42,4 @@ const Comment: FC<CommentT> = ({ commentDto }) => {
   );
 };
 
-export default Comment;
+export default CommentItem;
