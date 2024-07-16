@@ -35,6 +35,8 @@ export enum ENDPOINTS {
   editPlace = "places/edit-place",
   deletePlaceById = `places/delete-place/`,
   getAnyUserPlacesByUserId = "places/any-user-places-by-userId/",
+
+  getComments = "places/getComments",
 }
 
 const getApiAddress = (endPoint: string, param?: string) => {

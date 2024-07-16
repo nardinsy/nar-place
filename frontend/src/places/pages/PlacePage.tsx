@@ -6,9 +6,13 @@ import PlaceImage from "./components/PlaceImage";
 import PlaceInfo from "./components/PlaceInfo";
 import PlaceCreatorAccountInfo from "./components/PlaceCreatorAccountInfo";
 import FollowButton from "./components/FollowButton";
-import Comment from "./components/Comment";
+import CommentInput from "./components/CommentInput";
+import CommentContainer from "./components/CommentContainer";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
 const PlacePage: FC = () => {
+  const authContext = useRequiredAuthContext();
+
   const {
     state,
   }: {
@@ -34,8 +38,16 @@ const PlacePage: FC = () => {
           <PlaceCreatorAccountInfo userDto={userDto} alt={title} />
           <FollowButton />
         </div>
-        <PlaceInfo placeDto={placeDto} />
-        <Comment />
+        <div className={classes["distance"]}></div>
+        <div className={classes.middle}>
+          <PlaceInfo placeDto={placeDto} />
+
+          <CommentContainer placeId={placeDto.placeId} />
+        </div>
+
+        <div className={classes["comment-scope"]}>
+          {authContext.isLoggedin && <CommentInput />}
+        </div>
       </div>
     </div>
   );

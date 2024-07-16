@@ -2,6 +2,7 @@ import { FC, createContext } from "react";
 import { BackendService } from "../api/backend-service";
 import { HasChildren } from "../helpers/props";
 import {
+  CommentDto,
   LoginResult,
   NewPlace,
   PlaceDto,
@@ -158,6 +159,16 @@ class BackedServiceImpl implements BackendService {
       requestOptions,
       userId
     );
+  }
+
+  async getComments(placeId: string): Promise<CommentDto[]> {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ placeID: placeId }),
+    };
+
+    return await sendHttpRequest(ENDPOINTS.getComments, requestOptions);
   }
 }
 

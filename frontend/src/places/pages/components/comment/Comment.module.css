@@ -1,0 +1,27 @@
+.comment-container {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 0;
+}
+
+.writer-avatar {
+  padding: 0 0.5rem;
+}
+
+.writer-info {
+  font-size: 10px;
+  color: rgb(17, 8, 8);
+  font-weight: 300;
+  letter-spacing: 0.3px;
+  color: rgb(97, 97, 97);
+}
+
+.comment-text {
+  padding: 0.4rem 0;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.comments {
+  padding: 0;
+}

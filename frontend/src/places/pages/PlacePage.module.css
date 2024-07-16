@@ -25,7 +25,7 @@
 }
 
 .place-page-info-container {
-  /* position: relative; */
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,15 +78,20 @@
   font-size: 13px;
 }
 
+.distance {
+  padding: 1rem;
+}
+
+.middle {
+  padding: 1rem;
+  /* background-color: chartreuse; */
+  width: 100%;
+  overflow-y: scroll;
+}
+
 .place-info {
   width: 100%;
-  height: 80%;
-  padding: 1rem;
   color: rgb(95, 94, 94);
-  overflow: scroll;
-  /* background-color: #e8f1f1; */
-  /* border-radius: 5px; */
-  /* margin-top: 1rem; */
 }
 
 .strong {
@@ -98,14 +103,21 @@
   color: rgb(131, 130, 130);
 }
 
-.comment-container {
-  /* background-color: rgb(170, 148, 118); */
-  /* border: 0.1rem solid rgb(202, 201, 201); */
-  border: 0.1rem solid #5f9ea0;
-  /* position: absolute; */
-  /* bottom: 1rem; */
+.comment-scope {
+  position: absolute;
+  bottom: 0rem;
   width: 100%;
-  /* height: 10%; */
+  height: 4rem;
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+.comment-container {
+  border: 0.1rem solid #5f9ea0;
+  width: 85%;
   height: 3rem;
   border-radius: 3rem;
   display: flex;
@@ -181,6 +193,10 @@
     border-radius: 3rem 3rem 0 0;
   }
 
+  .middle {
+    height: 30rem;
+  }
+
   .place-page-info-container {
     width: 100%;
   }
@@ -190,9 +206,9 @@
   }
 
   .comment-container {
-    width: 100%;
+    width: 90%;
   }
   .comment-input {
-    width: 80%;
+    width: 70%;
   }
 }

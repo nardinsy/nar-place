@@ -6,6 +6,7 @@ import {
   placeInfoCard,
   UserSignupInformation,
   NewPlace,
+  CommentDto,
 } from "../helpers/dtos";
 
 export interface BackendService {
@@ -49,4 +50,6 @@ export interface BackendService {
   getAnyUserPlacesByUserId(userId: string): Promise<{
     places: PlaceDto[];
   }>;
+
+  getComments(placeId: string): Promise<CommentDto[]>;
 }
