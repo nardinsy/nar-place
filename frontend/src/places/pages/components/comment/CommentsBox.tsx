@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import CommetnsList from "./CommentsList";
 import { CommentDto } from "../../../../helpers/dtos";
 import useRequiredBackend from "../../../../hooks/use-required-backend";
@@ -6,9 +6,11 @@ import useRequiredBackend from "../../../../hooks/use-required-backend";
 const CommentsBox = ({
   placeId,
   uploadedNewComment,
+  onUpload,
 }: {
   placeId: string;
   uploadedNewComment: boolean;
+  onUpload: () => void;
 }) => {
   const [comments, setCommetns] = useState<CommentDto[]>([]);
   const backend = useRequiredBackend();
@@ -21,6 +23,7 @@ const CommentsBox = ({
     };
 
     getCommetns();
+    onUpload();
     return () => {};
   }, [uploadedNewComment]);
 

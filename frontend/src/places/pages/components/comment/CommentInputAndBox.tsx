@@ -10,7 +10,11 @@ const CommentInputAndBox = ({ placeId }: { placeId: string }) => {
 
   return (
     <div>
-      <CommentsBox placeId={placeId} uploadedNewComment={uploadedNewComment} />
+      <CommentsBox
+        placeId={placeId}
+        uploadedNewComment={uploadedNewComment}
+        onUpload={() => setUploadedNewComment(false)}
+      />
 
       <div className={classes["comment-scope"]}>
         {authContext.isLoggedin && (

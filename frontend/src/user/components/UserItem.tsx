@@ -8,6 +8,7 @@ import classes from "./UserItem.module.css";
 type UserItemProps = { userDto: UserDto; key: string };
 
 const UserItem: FC<UserItemProps> = ({ userDto }) => {
+  //needs absolut picture url
   const { userId, username, pictureUrl, placeCount } = userDto;
 
   return (

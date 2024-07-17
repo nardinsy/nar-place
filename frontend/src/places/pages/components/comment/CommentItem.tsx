@@ -12,8 +12,15 @@ type CommentItemT = {
 const CommentItem: FC<CommentItemT> = ({ commentDto }) => {
   const { date, postID, text, writer } = commentDto;
   const { pictureUrl, userId, username, placeCount } = writer;
-  const userDto: UserDto = { pictureUrl, userId, username, placeCount };
-  const picUrl = pictureUrl ? createAbsoluteApiAddress(pictureUrl) : undefined;
+  const absolutePictureUrl = pictureUrl
+    ? createAbsoluteApiAddress(pictureUrl)
+    : undefined;
+  const userDto: UserDto = {
+    pictureUrl: absolutePictureUrl,
+    userId,
+    username,
+    placeCount,
+  };
 
   return (
     <li>
@@ -27,7 +34,7 @@ const CommentItem: FC<CommentItemT> = ({ commentDto }) => {
           >
             <Avatar
               alt="comment"
-              pictureUrl={picUrl}
+              pictureUrl={absolutePictureUrl}
               key={userId}
               width="2rem"
             />
