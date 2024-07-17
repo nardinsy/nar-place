@@ -83,11 +83,13 @@
 
 .distance {
   padding: 0.3rem;
+  border-top: 1px solid rgb(223, 217, 217);
+  width: 80%;
 }
 
 .middle {
   width: 100%;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
   overflow-y: scroll;
 }
 
