@@ -391,7 +391,7 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
       );
     }
 
-    place.comments.push(newComment._id);
+    place.comments.unshift(newComment._id);
   } catch (err) {
     return next(
       createHttpError("Something went wrong, could add comment.", 500)
