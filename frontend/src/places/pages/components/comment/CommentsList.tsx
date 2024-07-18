@@ -9,12 +9,7 @@ type CommetnListT = {
 
 const CommetnsList: FC<CommetnListT> = ({ comments }) => {
   if (comments.length === 0) {
-    return (
-      <>
-        <h3 style={{ paddingLeft: "0.5rem" }}>Comments</h3>
-        <div>No comments yet!</div>
-      </>
-    );
+    return <div style={{ paddingLeft: "0.8rem" }}>No comments yet!</div>;
   }
 
   const commentsList = comments.map((comment, index) => {
@@ -23,7 +18,6 @@ const CommetnsList: FC<CommetnListT> = ({ comments }) => {
 
   return (
     <div>
-      <h3 style={{ paddingLeft: "0.5rem" }}>Comments</h3>
       <ul className={classes["comments-list"]}>{commentsList}</ul>
     </div>
   );

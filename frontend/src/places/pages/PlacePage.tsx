@@ -38,7 +38,7 @@ const PlacePage: FC = () => {
 
         <div className={classes.middle}>
           <PlaceInfo placeDto={placeDto} />
-          <CommentBox placeId={placeDto.placeId} />
+          <CommentBox placeId={placeDto.placeId} userDto={userDto} />
         </div>
       </div>
     </div>

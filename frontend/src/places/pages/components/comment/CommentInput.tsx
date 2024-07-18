@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart,
@@ -9,7 +9,6 @@ import useRequiredBackend from "../../../../hooks/use-required-backend";
 import { NewComment } from "../../../../helpers/dtos";
 import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import classes from "./CommentInput.module.css";
-import { convertToObject } from "typescript";
 
 type CommentInputT = {
   placeId: string;

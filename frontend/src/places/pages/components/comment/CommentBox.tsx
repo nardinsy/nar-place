@@ -6,12 +6,19 @@ import {
   CommentDto,
   CommentWriter,
   NewComment,
+  UserDto,
 } from "../../../../helpers/dtos";
-import classes from "./Comment.module.css";
 import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import { createRelativePath } from "../../../../helpers/api-url";
+import classes from "./Comment.module.css";
 
-const CommentBox = ({ placeId }: { placeId: string }) => {
+const CommentBox = ({
+  placeId,
+  userDto,
+}: {
+  placeId: string;
+  userDto: UserDto;
+}) => {
   const authContext = useRequiredAuthContext();
   const [comments, setCommetns] = useState<CommentDto[]>([]);
   const backend = useRequiredBackend();
@@ -27,15 +34,13 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
   }, []);
 
   const uploadNewCommetn = (newCommetn: NewComment) => {
-    if (!localStorage.getItem("token")) {
-      throw new Error("Please login first");
-    }
-
     const writer: CommentWriter = {
-      userId: localStorage.getItem("userId")!,
-      username: localStorage.getItem("username")!,
-      pictureUrl: createRelativePath(localStorage.getItem("userPictureUrl")!),
-      placeCount: +localStorage.getItem("placeCount")!,
+      userId: userDto.userId,
+      username: userDto.username,
+      pictureUrl: userDto.pictureUrl
+        ? createRelativePath(userDto.pictureUrl)
+        : undefined,
+      placeCount: userDto.placeCount ? userDto.placeCount : 0,
     };
 
     const comment: CommentDto = {
@@ -44,11 +49,13 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
       postID: newCommetn.postID,
       writer,
     };
-    setCommetns((pre) => [...pre, comment]);
+
+    setCommetns((pre) => [comment, ...pre]);
   };
 
   return (
     <div>
+      <h3 style={{ paddingLeft: "0.5rem" }}>Comments</h3>
       <CommetnsList comments={comments} />
 
       <div className={classes["comment-scope"]}>
