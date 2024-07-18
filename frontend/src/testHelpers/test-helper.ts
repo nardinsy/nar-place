@@ -6,6 +6,7 @@ export const authProviderValueLoggedinProps = {
   username: "nardin",
   userPictureUrl: undefined,
   userId: "1234",
+  placeCount: 1,
   logout: jest.fn(() => Promise.resolve()),
   setPictureUrl: jest.fn(),
   setUsername: jest.fn(),

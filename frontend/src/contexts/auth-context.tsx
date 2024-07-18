@@ -21,6 +21,7 @@ interface LoggedInAuthContextT {
   username: string;
   userPictureUrl: string | undefined;
   userId: string;
+  placeCount: number;
   logout: () => Promise<void>;
   setPictureUrl: (picture: string | undefined) => void;
   setUsername: (username: string) => void;
@@ -33,6 +34,7 @@ type LoginInfo =
       username: string;
       userPictureUrl: string | undefined;
       userId: string;
+      placeCount: number;
     }
   | { isLoggedin: false };
 
@@ -44,7 +46,8 @@ const saveUserInfoToLocalStorage = (
   token: string,
   userId: string,
   username: string,
-  userPictureUrl: string | undefined
+  userPictureUrl: string | undefined,
+  placeCount: number
 ) => {
   localStorage.setItem("token", token);
   localStorage.setItem("userId", userId);
@@ -52,6 +55,8 @@ const saveUserInfoToLocalStorage = (
   if (userPictureUrl) {
     localStorage.setItem("userPictureUrl", userPictureUrl);
   }
+
+  localStorage.setItem("placeCount", String(placeCount));
 };
 
 export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
@@ -67,12 +72,14 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
       const storedUserId = localStorage.getItem("userId")!;
       const storedUsername = localStorage.getItem("username")!;
       const storedUserPictureUrl = localStorage.getItem("userPictureUrl")!;
+      const placeCount = localStorage.getItem("placeCount")!;
 
       localLogin(
         storedToken,
         storedUserId,
         storedUsername,
-        storedUserPictureUrl
+        storedUserPictureUrl,
+        +placeCount
       );
     }
   }, []);
@@ -81,7 +88,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     const data = await backend.signup(userInfo);
     const { token, user } = data;
 
-    localLogin(token, user.userId, user.username, user.pictureUrl);
+    localLogin(token, user.userId, user.username, user.pictureUrl, 0);
     showSuccessToast(`Hey ${user.username}, welcome to Narplace 🤗`);
 
     history.replace("/");
@@ -100,7 +107,9 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
       ? createAbsoluteApiAddress(user.pictureUrl)
       : undefined;
 
-    localLogin(token, user.userId, user.username, pictureUrl);
+    const placeCount = user.placeCount ? user.placeCount : 0;
+
+    localLogin(token, user.userId, user.username, pictureUrl, placeCount);
     showSuccessToast(`Hey ${user.username}, welcome to Narplace 🤗`);
 
     history.replace("/");
@@ -122,6 +131,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
     localStorage.removeItem("userPictureUrl");
+    localStorage.removeItem("placeCount");
 
     showSuccessToast("See you soon, have fun 🫡");
     history.replace("/");
@@ -131,7 +141,8 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     token: string,
     userId: string,
     username: string,
-    pictureUrl: string | undefined
+    pictureUrl: string | undefined,
+    placeCount: number
   ) => {
     setLoginInfo({
       isLoggedin: true,
@@ -139,8 +150,9 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
       userId,
       username,
       userPictureUrl: pictureUrl,
+      placeCount,
     });
-    saveUserInfoToLocalStorage(token, userId, username, pictureUrl);
+    saveUserInfoToLocalStorage(token, userId, username, pictureUrl, placeCount);
   };
 
   const setPictureUrlMethod = (picture: string | undefined) => {
@@ -168,6 +180,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
         username: loginInfo.username,
         userPictureUrl: loginInfo.userPictureUrl,
         userId: loginInfo.userId,
+        placeCount: loginInfo.placeCount,
         logout,
         setPictureUrl: setPictureUrlMethod,
         setUsername: changeUsernameMethod,

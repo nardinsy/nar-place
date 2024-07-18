@@ -89,12 +89,12 @@
 
 .middle {
   width: 100%;
-  padding: 0 1rem;
   overflow-y: scroll;
 }
 
 .place-info {
   width: 100%;
+  padding: 0 1rem;
   color: rgb(95, 94, 94);
 }
 

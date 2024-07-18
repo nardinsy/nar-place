@@ -5,7 +5,7 @@ import PlaceImage from "./components/PlaceImage";
 import PlaceInfo from "./components/PlaceInfo";
 import PlaceCreatorAccountInfo from "./components/PlaceCreatorAccountInfo";
 import FollowButton from "./components/FollowButton";
-import CommentInputAndBox from "./components/comment/CommentInputAndBox";
+import CommentBox from "./components/comment/CommentBox";
 import classes from "./PlacePage.module.css";
 
 const PlacePage: FC = () => {
@@ -38,7 +38,7 @@ const PlacePage: FC = () => {
 
         <div className={classes.middle}>
           <PlaceInfo placeDto={placeDto} />
-          <CommentInputAndBox placeId={placeDto.placeId} />
+          <CommentBox placeId={placeDto.placeId} />
         </div>
       </div>
     </div>

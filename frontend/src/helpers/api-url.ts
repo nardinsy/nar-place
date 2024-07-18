@@ -52,4 +52,10 @@ const createAbsoluteApiAddress = (relativePath: string) => {
   return `${BASE_URL}${relativePath}`;
 };
 
-export { getApiAddress, createAbsoluteApiAddress };
+const createRelativePath = (absolutePath: string) => {
+  // const semiPictureUrl = absolute.match(BASE_URL);
+
+  return absolutePath.replace(BASE_URL, "");
+};
+
+export { getApiAddress, createAbsoluteApiAddress, createRelativePath };

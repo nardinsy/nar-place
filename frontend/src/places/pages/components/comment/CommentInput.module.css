@@ -42,16 +42,21 @@
   color: rgb(204, 204, 149);
 }
 
+.notActive {
+  display: none;
+}
+
 .send-button {
   color: rgb(150, 140, 140);
   width: 1.5rem;
   height: 1.5rem;
   margin: 1rem;
+  color: #5f9ea0;
   cursor: pointer;
 }
 
 .send-button:hover {
-  color: #5f9ea0;
+  color: #278083;
 }
 
 @media (max-width: 850px) {
