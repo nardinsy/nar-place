@@ -16,8 +16,6 @@ const CommentItem: FC<CommentItemT> = ({ commentDto }) => {
     ? createAbsoluteApiAddress(pictureUrl)
     : undefined;
 
-  // const notAbsolutePictureUrl =
-
   const userDto: UserDto = {
     pictureUrl: absolutePictureUrl,
     userId,

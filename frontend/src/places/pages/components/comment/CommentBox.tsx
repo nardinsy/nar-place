@@ -12,13 +12,7 @@ import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import { createRelativePath } from "../../../../helpers/api-url";
 import classes from "./Comment.module.css";
 
-const CommentBox = ({
-  placeId,
-  userDto,
-}: {
-  placeId: string;
-  userDto: UserDto;
-}) => {
+const CommentBox = ({ placeId }: { placeId: string }) => {
   const authContext = useRequiredAuthContext();
   const [comments, setCommetns] = useState<CommentDto[]>([]);
   const backend = useRequiredBackend();
@@ -45,7 +39,7 @@ const CommentBox = ({
       username: localStorage.getItem("username")!,
       pictureUrl: pic ? createRelativePath(pic) : undefined,
       placeCount: localStorage.getItem("placeCount")
-        ? +localStorage.getItem("placeCount")!
+        ? +localStorage.getItem("placeCount")! + 1
         : 0,
     };
 

@@ -18,7 +18,6 @@ const PlacePage: FC = () => {
     };
   } = useLocation();
   const { placeDto, userDto } = state;
-
   const { title, pictureUrl } = placeDto;
 
   useEffect(() => {
@@ -38,7 +37,7 @@ const PlacePage: FC = () => {
 
         <div className={classes.middle}>
           <PlaceInfo placeDto={placeDto} />
-          <CommentBox placeId={placeDto.placeId} userDto={userDto} />
+          <CommentBox placeId={placeDto.placeId} />
         </div>
       </div>
     </div>
