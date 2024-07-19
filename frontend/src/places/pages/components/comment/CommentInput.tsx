@@ -1,13 +1,11 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, KeyboardEvent, FC, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart,
   faPaperPlane,
   faFaceSmile,
 } from "@fortawesome/free-solid-svg-icons";
-import useRequiredBackend from "../../../../hooks/use-required-backend";
 import { NewComment } from "../../../../helpers/dtos";
-import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import classes from "./CommentInput.module.css";
 
 type CommentInputT = {
@@ -16,14 +14,6 @@ type CommentInputT = {
 };
 
 const CommentInput: FC<CommentInputT> = ({ placeId, onUpload }) => {
-  const backend = useRequiredBackend();
-  const authContext = useRequiredAuthContext();
-
-  if (!authContext.isLoggedin) {
-    throw new Error("can not show commetn input");
-  }
-
-  const token = authContext.token;
   const [commentInput, setCommentInput] = useState("");
   const [submitButtonIsActive, setSubmitButtonIsActive] = useState(false);
 
@@ -33,22 +23,36 @@ const CommentInput: FC<CommentInputT> = ({ placeId, onUpload }) => {
 
     if (event.target.value === "") {
       setSubmitButtonIsActive(false);
-    } else {
+      return;
+    }
+    if (event.target.value !== "" && !submitButtonIsActive) {
       setSubmitButtonIsActive(true);
+      return;
     }
   };
 
-  const submitCommentHandler = async () => {
-    const newCommetn: NewComment = {
+  const keyDownHandler = async (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter" || commentInput === "") {
+      return;
+    }
+
+    await submit();
+  };
+
+  const submit = async () => {
+    const newComment: NewComment = {
       date: new Date(),
       postID: placeId,
       text: commentInput,
     };
 
-    await backend.addComment(newCommetn, token);
-    onUpload(newCommetn);
+    await onUpload(newComment);
     setCommentInput("");
     setSubmitButtonIsActive(false);
+  };
+
+  const submitCommentHandler = async () => {
+    await submit();
   };
 
   return (
@@ -60,6 +64,7 @@ const CommentInput: FC<CommentInputT> = ({ placeId, onUpload }) => {
         placeholder="Add a comment"
         className={classes["comment-input"]}
         value={commentInput}
+        onKeyDown={keyDownHandler}
         onChange={commentInputChangeHandler}
       />
       <FontAwesomeIcon icon={faFaceSmile} className={classes["emoji-button"]} />

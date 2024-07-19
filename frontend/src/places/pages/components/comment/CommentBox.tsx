@@ -31,16 +31,22 @@ const CommentBox = ({
 
     getCommetns();
     return () => {};
-  }, []);
+  }, [backend, placeId]);
 
-  const uploadNewCommetn = (newCommetn: NewComment) => {
+  const uploadNewCommetn = async (newCommetn: NewComment) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Please login first");
+    }
+    const pic = localStorage.getItem("userPictureUrl");
+
     const writer: CommentWriter = {
-      userId: userDto.userId,
-      username: userDto.username,
-      pictureUrl: userDto.pictureUrl
-        ? createRelativePath(userDto.pictureUrl)
-        : undefined,
-      placeCount: userDto.placeCount ? userDto.placeCount : 0,
+      userId: localStorage.getItem("userId")!,
+      username: localStorage.getItem("username")!,
+      pictureUrl: pic ? createRelativePath(pic) : undefined,
+      placeCount: localStorage.getItem("placeCount")
+        ? +localStorage.getItem("placeCount")!
+        : 0,
     };
 
     const comment: CommentDto = {
@@ -49,6 +55,8 @@ const CommentBox = ({
       postID: newCommetn.postID,
       writer,
     };
+
+    await backend.addComment(newCommetn, token);
 
     setCommetns((pre) => [comment, ...pre]);
   };
