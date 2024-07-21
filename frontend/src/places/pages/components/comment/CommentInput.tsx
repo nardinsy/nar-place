@@ -17,7 +17,9 @@ const CommentInput: FC<CommentInputT> = ({ placeId, onUpload }) => {
   const [commentInput, setCommentInput] = useState("");
   const [submitButtonIsActive, setSubmitButtonIsActive] = useState(false);
 
-  const commentInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const commentInputChangeHandler = (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     event.preventDefault();
     setCommentInput(event.target.value);
 
@@ -57,29 +59,47 @@ const CommentInput: FC<CommentInputT> = ({ placeId, onUpload }) => {
 
   return (
     <div className={classes["comment-input-container"]}>
-      <FontAwesomeIcon icon={faHeart} className={classes["heart-button"]} />
+      {/* <FontAwesomeIcon icon={faHeart} className={classes["heart-button"]} /> */}
 
-      <input
-        type="text"
-        placeholder="Add a comment"
-        className={classes["comment-input"]}
-        value={commentInput}
-        onKeyDown={keyDownHandler}
-        onChange={commentInputChangeHandler}
-      />
-      <FontAwesomeIcon icon={faFaceSmile} className={classes["emoji-button"]} />
-      {/* <div className={classes["place-page-emoji"]}>😀</div> */}
-
-      <div onClick={submitCommentHandler}>
-        <FontAwesomeIcon
-          icon={faPaperPlane}
-          className={
-            submitButtonIsActive ? classes["send-button"] : classes["notActive"]
-          }
+      <div className={classes["left"]}>
+        <textarea
+          placeholder="Add a comment"
+          className={classes["comment-input"]}
+          value={commentInput}
+          onChange={commentInputChangeHandler}
         />
+      </div>
+
+      <div className={classes.actions}>
+        <FontAwesomeIcon
+          icon={faFaceSmile}
+          className={classes["emoji-button"]}
+        />
+
+        <div onClick={submitCommentHandler}>
+          <FontAwesomeIcon
+            icon={faPaperPlane}
+            className={
+              submitButtonIsActive
+                ? classes["send-button"]
+                : classes["notActive"]
+            }
+          />
+        </div>
       </div>
     </div>
   );
 };
 
 export default CommentInput;
+
+{
+  /* <input
+        type="text"
+        placeholder="Add a comment"
+        className={classes["comment-input"]}
+        value={commentInput}
+        onKeyDown={keyDownHandler}
+        onChange={commentInputChangeHandler}
+      /> */
+}

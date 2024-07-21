@@ -23,6 +23,15 @@ const CommentItem: FC<CommentItemT> = ({ commentDto }) => {
     placeCount,
   };
 
+  const commentText = text.split("\n").map((item) => {
+    return (
+      <>
+        {item}
+        <br />
+      </>
+    );
+  });
+
   return (
     <li>
       <div className={classes["comment-item"]}>
@@ -43,7 +52,7 @@ const CommentItem: FC<CommentItemT> = ({ commentDto }) => {
         </div>
         <div className={classes["comment-details"]}>
           <div className={classes["writer-info"]}>@{username}</div>
-          <div className={classes["comment-text"]}>{text}</div>
+          <div className={classes["comment-text"]}>{commentText}</div>
         </div>
       </div>
     </li>

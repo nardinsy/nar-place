@@ -18,12 +18,20 @@ const PlaceInfo: FC<PlaceInfoT> = ({ placeDto }) => {
   const oneLineAddress = wordWrap(address, addressLineWidth);
   const wrappedDescription = wordWrap(description, descriptionLineWidth);
 
+  const text = description.split("\n").map((item) => {
+    return (
+      <>
+        {item}
+        <br />
+      </>
+    );
+  });
+
   return (
     <div className={classes["place-info"]}>
       <h3>{oneLineTitle}</h3>
       <p>
-        <strong className={classes.strong}>Description:</strong>{" "}
-        {wrappedDescription}
+        <strong className={classes.strong}>Description:</strong> {text}
       </p>
       <p>
         <strong className={classes.strong}>Address: </strong>

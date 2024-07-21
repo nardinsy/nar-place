@@ -1,11 +1,12 @@
 .comment-input-container {
   border: 0.1rem solid #5f9ea0;
   width: 85%;
-  height: 3rem;
-  border-radius: 3rem;
+  height: 3.2rem;
+  border-radius: 2rem;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 }
 
 .heart-button {
@@ -21,14 +22,31 @@
   color: rgb(231, 32, 32);
 }
 
+.left {
+  width: 79%;
+  padding-left: 1rem;
+  padding-top: 0.8rem;
+}
+
 .comment-input {
+  height: 2rem;
   border: none;
   font-size: 15px;
-  width: 70%;
+  resize: none;
+  min-width: 100%;
 }
 
 .comment-input:focus {
   outline: none;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-right: 0.3rem;
+  width: 20%;
 }
 
 .emoji-button {
@@ -50,7 +68,7 @@
   color: rgb(150, 140, 140);
   width: 1.5rem;
   height: 1.5rem;
-  margin: 1rem;
+  margin: 0 1rem;
   color: #5f9ea0;
   cursor: pointer;
 }
