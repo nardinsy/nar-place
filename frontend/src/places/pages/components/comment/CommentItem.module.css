@@ -1,23 +1,65 @@
 .comment-item {
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: 1rem 0;
+  width: 100%;
+  /* margin: 0.5rem 0; */
 }
 
 .writer-avatar {
   padding: 0 0.5rem;
+  /* width: 12%; */
 }
 
-.writer-info {
-  font-size: 10px;
-  color: rgb(17, 8, 8);
-  font-weight: 300;
-  letter-spacing: 0.3px;
+.commetn-details {
+  width: 90%;
+}
+
+.comment-info {
+  /* width: 97%; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   color: rgb(97, 97, 97);
+}
+
+.writer-username {
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  padding-right: 1rem;
 }
 
 .comment-text {
   padding: 0.4rem 0;
   font-size: 14px;
   letter-spacing: 0.3px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  resize: none;
+}
+
+.comment-edit-button {
+  padding-right: 0.3rem;
+  border: none;
+  width: 1rem;
+  height: 1rem;
+  background-color: inherit;
+  cursor: pointer;
+  color: rgb(97, 97, 97);
+}
+
+.textarea-button {
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.2rem;
+  cursor: pointer;
+  background-color: inherit;
+}
+
+.textarea-button:hover {
+  background-color: rgb(250, 244, 244);
 }

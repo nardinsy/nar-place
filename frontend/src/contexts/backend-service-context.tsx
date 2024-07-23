@@ -181,6 +181,16 @@ class BackedServiceImpl implements BackendService {
 
     return await sendHttpRequest(ENDPOINTS.getComments, requestOptions);
   }
+
+  async editComment(editedComment: CommentDto, token: string): Promise<void> {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify({ editedComment }),
+    };
+
+    return await sendHttpRequest(ENDPOINTS.editComment, requestOptions);
+  }
 }
 
 const BackendContext = createContext<BackendService | undefined>(undefined);

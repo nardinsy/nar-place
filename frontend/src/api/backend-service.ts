@@ -53,5 +53,8 @@ export interface BackendService {
   }>;
 
   addComment(NewComment: NewComment, token: string): Promise<void>;
+
   getComments(placeId: string): Promise<CommentDto[]>;
+
+  editComment(editComment: CommentDto, token: string): Promise<void>;
 }

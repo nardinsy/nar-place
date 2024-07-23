@@ -88,6 +88,7 @@ export class LoginResult {
 }
 
 export type CommentDto = {
+  id: string;
   text: string;
   date: string;
   postID: string;

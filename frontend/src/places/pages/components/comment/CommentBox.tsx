@@ -6,7 +6,6 @@ import {
   CommentDto,
   CommentWriter,
   NewComment,
-  UserDto,
 } from "../../../../helpers/dtos";
 import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import { createRelativePath } from "../../../../helpers/api-url";
@@ -44,6 +43,7 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
     };
 
     const comment: CommentDto = {
+      id: "",
       date: newCommetn.date.toString(),
       text: newCommetn.text,
       postID: newCommetn.postID,
@@ -55,10 +55,30 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
     setCommetns((pre) => [comment, ...pre]);
   };
 
+  const editComment = async (editedComment: CommentDto) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Please login first");
+    }
+
+    // await backend.editComment(editedComment, token);
+    findAndEditComment(editedComment);
+    setCommetns((pre) => pre);
+  };
+
+  const findAndEditComment = (editedComment: CommentDto) => {
+    const item = comments.find((comment) => comment.id === editedComment.id);
+
+    if (item) {
+      item.text = editedComment.text;
+      item.date = editedComment.date.toString();
+    }
+  };
+
   return (
     <div>
       <h3 style={{ paddingLeft: "0.5rem" }}>Comments</h3>
-      <CommetnsList comments={comments} />
+      <CommetnsList comments={comments} onEdit={editComment} />
 
       <div className={classes["comment-scope"]}>
         {authContext.isLoggedin && (

@@ -18,12 +18,12 @@ const PlaceInfo: FC<PlaceInfoT> = ({ placeDto }) => {
   const oneLineAddress = wordWrap(address, addressLineWidth);
   const wrappedDescription = wordWrap(description, descriptionLineWidth);
 
-  const text = description.split("\n").map((item) => {
+  const text = description.split("\n").map((item, index) => {
     return (
-      <>
+      <span key={index}>
         {item}
         <br />
-      </>
+      </span>
     );
   });
 

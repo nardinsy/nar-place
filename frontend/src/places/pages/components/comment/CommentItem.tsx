@@ -23,39 +23,39 @@ const CommentItem: FC<CommentItemT> = ({ commentDto }) => {
     placeCount,
   };
 
-  const commentText = text.split("\n").map((item) => {
+  const commentText = text.split("\n").map((item, index) => {
     return (
-      <>
+      <span key={index}>
         {item}
         <br />
-      </>
+      </span>
     );
   });
 
   return (
-    <li>
-      <div className={classes["comment-item"]}>
-        <div className={classes["writer-avatar"]}>
-          <Link
-            to={{
-              pathname: `/places/${userId}`,
-              state: { userDto },
-            }}
-          >
-            <Avatar
-              alt="comment"
-              pictureUrl={absolutePictureUrl}
-              key={userId}
-              width="2rem"
-            />
-          </Link>
-        </div>
-        <div className={classes["comment-details"]}>
-          <div className={classes["writer-info"]}>@{username}</div>
-          <div className={classes["comment-text"]}>{commentText}</div>
-        </div>
+    <div className={classes["comment-item"]}>
+      <div className={classes["writer-avatar"]}>
+        <Link
+          to={{
+            pathname: `/places/${userId}`,
+            state: { userDto },
+          }}
+        >
+          <Avatar
+            alt="comment"
+            pictureUrl={absolutePictureUrl}
+            key={userId}
+            width="2rem"
+          />
+        </Link>
       </div>
-    </li>
+      <div className={classes["commetn-details"]}>
+        <div className={classes["comment-info"]}>
+          <div className={classes["writer-username"]}>@{username}</div>
+        </div>
+        <div className={classes["comment-text"]}>{commentText}</div>
+      </div>
+    </div>
   );
 };
 
