@@ -9,10 +9,15 @@ import {
 } from "../../../../helpers/dtos";
 import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import { createRelativePath } from "../../../../helpers/api-url";
+
 import classes from "./Comment.module.css";
+import useRequiredToastContext from "../../../../hooks/use-required-toastContext";
 
 const CommentBox = ({ placeId }: { placeId: string }) => {
   const authContext = useRequiredAuthContext();
+  const showSuccessToast = useRequiredToastContext().showSuccess;
+  const showErrorToast = useRequiredToastContext().showError;
+
   const [comments, setCommetns] = useState<CommentDto[]>([]);
   const backend = useRequiredBackend();
 
@@ -53,6 +58,7 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
     await backend.addComment(newCommetn, token);
 
     setCommetns((pre) => [comment, ...pre]);
+    showSuccessToast("Comment added successfully");
   };
 
   const editComment = async (editedComment: CommentDto) => {
@@ -64,6 +70,7 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
     await backend.editComment(editedComment, token);
     findAndEditComment(editedComment);
     setCommetns((pre) => pre);
+    showSuccessToast("Comment edited successfully");
   };
 
   const findAndEditComment = (editedComment: CommentDto) => {
