@@ -7,10 +7,11 @@ import EditableCommentItem from "./EditableCommentItem";
 
 type CommetnListT = {
   comments: CommentDto[];
-  onEdit: (editedComment: CommentDto, id: string) => void;
+  onEdit: (editedComment: CommentDto, id: string) => Promise<void>;
+  onDelete: (commentId: string) => Promise<void>;
 };
 
-const CommetnsList: FC<CommetnListT> = ({ comments, onEdit }) => {
+const CommetnsList: FC<CommetnListT> = ({ comments, onEdit, onDelete }) => {
   const authContext = useRequiredAuthContext();
 
   if (comments.length === 0) {
@@ -28,6 +29,7 @@ const CommetnsList: FC<CommetnListT> = ({ comments, onEdit }) => {
             commentDto={comment}
             key={index}
             onEdit={onEdit}
+            onDelete={onDelete}
           />
         </li>
       );

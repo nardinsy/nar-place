@@ -57,4 +57,6 @@ export interface BackendService {
   getComments(placeId: string): Promise<CommentDto[]>;
 
   editComment(editComment: CommentDto, token: string): Promise<void>;
+
+  deleteComment(commentId: string, token: string): Promise<void>;
 }

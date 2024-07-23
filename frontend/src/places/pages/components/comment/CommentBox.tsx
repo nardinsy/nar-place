@@ -9,9 +9,8 @@ import {
 } from "../../../../helpers/dtos";
 import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import { createRelativePath } from "../../../../helpers/api-url";
-
-import classes from "./Comment.module.css";
 import useRequiredToastContext from "../../../../hooks/use-required-toastContext";
+import classes from "./Comment.module.css";
 
 const CommentBox = ({ placeId }: { placeId: string }) => {
   const authContext = useRequiredAuthContext();
@@ -48,7 +47,7 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
     };
 
     const comment: CommentDto = {
-      id: "",
+      id: Math.random().toString(),
       date: newCommetn.date.toString(),
       text: newCommetn.text,
       postID: newCommetn.postID,
@@ -82,10 +81,29 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
     }
   };
 
+  const deleteComment = async (commentId: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Please login first");
+    }
+
+    // await backend.deleteComment(commentId, token);
+
+    setCommetns((pre) => {
+      return pre.filter((comment) => comment.id !== commentId);
+    });
+
+    showSuccessToast("Comment deleted successfully");
+  };
+
   return (
     <div>
       <h3 style={{ paddingLeft: "0.5rem" }}>Comments</h3>
-      <CommetnsList comments={comments} onEdit={editComment} />
+      <CommetnsList
+        comments={comments}
+        onEdit={editComment}
+        onDelete={deleteComment}
+      />
 
       <div className={classes["comment-scope"]}>
         {authContext.isLoggedin && (

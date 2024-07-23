@@ -10,12 +10,14 @@ import classes from "./CommentItem.module.css";
 
 type EditableCommentItemT = {
   commentDto: CommentDto;
-  onEdit: (editedCommetn: CommentDto, id: string) => void;
+  onEdit: (editedCommetn: CommentDto, id: string) => Promise<void>;
+  onDelete: (commentId: string) => Promise<void>;
 };
 
 const EditableCommentItem: FC<EditableCommentItemT> = ({
   commentDto,
   onEdit,
+  onDelete,
 }) => {
   const { id, date, postID, text, writer } = commentDto;
   const { pictureUrl, userId, username, placeCount } = writer;
@@ -65,13 +67,17 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
     setSubmitEditButtonActive(true);
   };
 
-  const submitEditedCommetn = (event: MouseEvent<HTMLElement>) => {
+  const submitEditedCommetn = async (event: MouseEvent<HTMLElement>) => {
     setActiveEditingMode(false);
 
     commentDto.text = textareaText;
     commentDto.date = new Date().toDateString();
 
-    onEdit(commentDto, id);
+    await onEdit(commentDto, id);
+  };
+
+  const deleteButtinClickHandler = async (event: MouseEvent<HTMLElement>) => {
+    await onDelete(id);
   };
 
   const commentText = text.split("\n").map((item, index) => {
@@ -85,7 +91,10 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
 
   const items = [
     { title: "Edit", handler: editButtonClickHandler },
-    { title: "Delete", handler: () => {} },
+    {
+      title: "Delete",
+      handler: deleteButtinClickHandler,
+    },
   ];
 
   const commentDiv = (
