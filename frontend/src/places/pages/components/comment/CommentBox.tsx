@@ -61,7 +61,7 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
       throw new Error("Please login first");
     }
 
-    // await backend.editComment(editedComment, token);
+    await backend.editComment(editedComment, token);
     findAndEditComment(editedComment);
     setCommetns((pre) => pre);
   };
@@ -71,7 +71,7 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
 
     if (item) {
       item.text = editedComment.text;
-      item.date = editedComment.date.toString();
+      // item.date = editedComment.date.toString();
     }
   };
 
