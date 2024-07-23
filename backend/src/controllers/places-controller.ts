@@ -17,8 +17,6 @@ import {
 } from "../shared/dtos";
 import PostComment, { IPostComment } from "../models/comment";
 import { getProfilePictureUrl } from "./users-controller";
-import { writer } from "repl";
-import { get } from "http";
 
 export const getPlacePictureUrl = (id: string) => {
   return `places/place-picture/${id}`;
@@ -357,16 +355,15 @@ const checkPlaceBelongsToUser = (place: IPlace, user: IUser) => {
 };
 
 export const addComment: AuthRequestHandler = async (user, req, res, next) => {
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   const error = createHttpError(
-  //     "Invalid input passed, please check your data.",
-  //     422
-  //   );
-  //   return next(error);
-  // }
+  const errors = validationResult(req.body.newComment);
+  if (!errors.isEmpty()) {
+    const error = createHttpError(
+      "Invalid input passed, please check your data.",
+      422
+    );
+    return next(error);
+  }
 
-  console.log(req.body.newComment);
   const { text, date, postID }: NewComment = req.body.newComment;
   const newComment = new PostComment({ text, date, postID, writer: user._id });
 
@@ -429,6 +426,54 @@ export const getPlaceCommetns: RequestHandler = async (req, res, next) => {
   res.status(200).json(commentsDto);
 };
 
+export const editComment: AuthRequestHandler = async (user, req, res, next) => {
+  const errors = validationResult(req.body.editedComment);
+  if (!errors.isEmpty()) {
+    const error = createHttpError(
+      "Invalid input passed, please check your data.",
+      422
+    );
+    return next(error);
+  }
+
+  const editedComment: CommentDto = req.body.editedComment;
+  const commentId = editedComment.id;
+  let comment: IPostComment | null;
+
+  try {
+    comment = await PostComment.findOne({
+      _id: new Types.ObjectId(commentId),
+    });
+
+    console.log(comment);
+  } catch {
+    return next(
+      createHttpError("Something went wrong, could not find comment.", 500)
+    );
+  }
+
+  if (!comment) {
+    return next(
+      createHttpError("Something went wrong, could not find comment.", 500)
+    );
+  }
+
+  comment.text = editedComment.text;
+  // comment.date = editedComment.date;
+
+  try {
+    await comment.save();
+  } catch {
+    return next(
+      createHttpError("Something went wrong, could not update comment.", 500)
+    );
+  }
+
+  res.status(201).json({
+    message: "Edit comment successfully",
+  });
+};
+
 const getCommentsById = async (commentsID: Types.ObjectId[]) => {
   // [new ObjectId('665463c07ffe177e8275f436'), ]
   const comments: IPostComment[] = [];
@@ -465,6 +510,7 @@ const getcommnetsDto = async (comments: IPostComment[]) => {
     comments.map(async (comment) => {
       const writer = await getCommentWriter(comment);
       const commentDto: CommentDto = {
+        id: comment._id.toHexString(),
         text: comment.text,
         date: comment.date,
         postID: comment.postID,

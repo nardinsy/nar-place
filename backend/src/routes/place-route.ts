@@ -10,6 +10,7 @@ import {
   getPlacePictureByUrl,
   addComment,
   getPlaceCommetns,
+  editComment,
 } from "../controllers/places-controller";
 
 const placeRouter = routerAuth();
@@ -63,10 +64,16 @@ placeRouter.get("/place-picture/:id", getPlacePictureByUrl);
 
 placeRouter.postAuth(
   "/addComment",
-  // [check("text").not().isEmpty(), check("text").isLength({ max: 30 })],
+  [check("text").not().isEmpty()],
   addComment
 );
 
 placeRouter.post("/getComments", getPlaceCommetns);
+
+placeRouter.postAuth(
+  "/editComment",
+  [check("text").not().isEmpty()],
+  editComment
+);
 
 export default placeRouter;

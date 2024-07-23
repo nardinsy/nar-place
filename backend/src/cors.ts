@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 
-const loopbackUrl = "http://localhost:3000";
+// const loopbackUrl = "http://localhost:3000";
 const localUrl = "http://192.168.1.13:3000";
 
 export const configureCORS: RequestHandler = (req, res, next) => {

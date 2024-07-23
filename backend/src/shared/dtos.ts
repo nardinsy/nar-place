@@ -72,6 +72,7 @@ export type NewComment = {
 };
 
 export type CommentDto = {
+  id: string;
   text: string;
   date: Date;
   postID: Types.ObjectId;
