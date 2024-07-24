@@ -401,8 +401,21 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
     console.log(err);
   }
 
+  const commentDto = {
+    id: newComment._id.toHexString(),
+    text,
+    date,
+    postID,
+    writer: {
+      userId: user.id,
+      username: user.username,
+      pictureUrl: user.picture,
+      placeCount: user.places.length,
+    },
+  };
+
   res.status(201).json({
-    message: "Add comment successfully",
+    comment: commentDto,
   });
 };
 
@@ -474,6 +487,82 @@ export const editComment: AuthRequestHandler = async (user, req, res, next) => {
   });
 };
 
+export const deleteComment: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const id = req.body.commentId;
+
+  let comment: IPostComment | null;
+  let place: IPlace | null;
+
+  try {
+    comment = await PostComment.findById(id);
+  } catch {
+    return next(
+      createHttpError("Something went wrong, could not find comment1.", 500)
+    );
+  }
+
+  if (!comment) {
+    return next(
+      createHttpError("Something went wrong, could not find comment2.", 500)
+    );
+  }
+
+  if (!checkCommentBelongsToUser(comment, user)) {
+    return res.status(401).json({
+      message: "unauthorize",
+    });
+  }
+
+  try {
+    const postId = comment.postID;
+    place = await Place.findById(postId.toHexString());
+  } catch {
+    return next(
+      createHttpError(
+        "Something went wrong, could not find comment's post.",
+        500
+      )
+    );
+  }
+
+  if (!place) {
+    return next(
+      createHttpError("Something went wrong, could not find place.", 500)
+    );
+  }
+  const newCommentsList = place.comments.filter(
+    (comment) => comment._id.toHexString() !== id
+  );
+
+  place.comments = newCommentsList;
+
+  try {
+    await place.save();
+  } catch {
+    return next(
+      createHttpError(
+        "Something went wrong, could not save place comments.",
+        500
+      )
+    );
+  }
+
+  try {
+    await PostComment.findByIdAndDelete(comment.id);
+  } catch {
+    return next(
+      createHttpError("Something went wrong, could not delete comments.", 500)
+    );
+  }
+
+  res.status(200).json({ message: "Comment removed successfully." });
+};
+
 const getCommentsById = async (commentsID: Types.ObjectId[]) => {
   // [new ObjectId('665463c07ffe177e8275f436'), ]
   const comments: IPostComment[] = [];
@@ -519,4 +608,11 @@ const getcommnetsDto = async (comments: IPostComment[]) => {
       return commentDto;
     })
   );
+};
+
+const checkCommentBelongsToUser = (comment: IPostComment, user: IUser) => {
+  const userId = user.id;
+  const commentId = comment.writer._id.toHexString();
+
+  return commentId === userId ? true : false;
 };

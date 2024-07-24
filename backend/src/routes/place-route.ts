@@ -11,6 +11,7 @@ import {
   addComment,
   getPlaceCommetns,
   editComment,
+  deleteComment,
 } from "../controllers/places-controller";
 
 const placeRouter = routerAuth();
@@ -75,5 +76,7 @@ placeRouter.postAuth(
   [check("text").not().isEmpty()],
   editComment
 );
+
+placeRouter.postAuth("/deleteComment", deleteComment);
 
 export default placeRouter;
