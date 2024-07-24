@@ -19,6 +19,7 @@ const CommetnsList: FC<CommetnListT> = ({ comments, onEdit, onDelete }) => {
   }
 
   const commentsList = comments.map((comment, index) => {
+    // console.log(comment.writer.userId);
     if (
       authContext.isLoggedin &&
       authContext.userId === comment.writer.userId

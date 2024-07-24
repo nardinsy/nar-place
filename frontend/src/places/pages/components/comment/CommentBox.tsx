@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import CommentInput from "./CommentInput";
 import useRequiredBackend from "../../../../hooks/use-required-backend";
 import CommetnsList from "./CommentsList";
-import {
-  CommentDto,
-  CommentWriter,
-  NewComment,
-} from "../../../../helpers/dtos";
+import { CommentDto, NewComment } from "../../../../helpers/dtos";
 import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import { createRelativePath } from "../../../../helpers/api-url";
 import useRequiredToastContext from "../../../../hooks/use-required-toastContext";
@@ -37,24 +33,26 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
     }
     const pic = localStorage.getItem("userPictureUrl");
 
-    const writer: CommentWriter = {
-      userId: localStorage.getItem("userId")!,
-      username: localStorage.getItem("username")!,
-      pictureUrl: pic ? createRelativePath(pic) : undefined,
-      placeCount: localStorage.getItem("placeCount")
-        ? +localStorage.getItem("placeCount")! + 1
-        : 0,
-    };
+    // const writer: CommentWriter = {
+    //   userId: localStorage.getItem("userId")!,
+    //   username: localStorage.getItem("username")!,
+    //   pictureUrl: pic ? createRelativePath(pic) : undefined,
+    //   placeCount: localStorage.getItem("placeCount")
+    //     ? +localStorage.getItem("placeCount")! + 1
+    //     : 0,
+    // };
 
-    const comment: CommentDto = {
-      id: Math.random().toString(),
-      date: newCommetn.date.toString(),
-      text: newCommetn.text,
-      postID: newCommetn.postID,
-      writer,
-    };
+    // const comment: CommentDto = {
+    //   id: Math.random().toString(),
+    //   date: newCommetn.date.toString(),
+    //   text: newCommetn.text,
+    //   postID: newCommetn.postID,
+    //   writer,
+    // };
 
-    await backend.addComment(newCommetn, token);
+    const result = await backend.addComment(newCommetn, token);
+    const comment = result.comment;
+    comment.writer.pictureUrl = pic ? createRelativePath(pic) : undefined;
 
     setCommetns((pre) => [comment, ...pre]);
     showSuccessToast("Comment added successfully");
@@ -87,7 +85,7 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
       throw new Error("Please login first");
     }
 
-    // await backend.deleteComment(commentId, token);
+    await backend.deleteComment(commentId, token);
 
     setCommetns((pre) => {
       return pre.filter((comment) => comment.id !== commentId);

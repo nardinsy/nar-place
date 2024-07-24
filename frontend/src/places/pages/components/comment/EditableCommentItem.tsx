@@ -78,6 +78,7 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
 
   const deleteButtinClickHandler = async (event: MouseEvent<HTMLElement>) => {
     await onDelete(id);
+    setShowDropDown(false);
   };
 
   const commentText = text.split("\n").map((item, index) => {
