@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "../../../../Header/Dropdown/DropdownCard";
+import Button from "../../../../shared-UI/Button";
 import classes from "./CommentItem.module.css";
 
 type EditableCommentItemT = {
@@ -69,6 +70,7 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
 
   const submitEditedCommetn = async (event: MouseEvent<HTMLElement>) => {
     setActiveEditingMode(false);
+    setSubmitEditButtonActive(false);
 
     commentDto.text = textareaText;
     commentDto.date = new Date().toDateString();
@@ -76,7 +78,12 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
     await onEdit(commentDto, id);
   };
 
-  const deleteButtinClickHandler = async (event: MouseEvent<HTMLElement>) => {
+  const cancelEditingHandler = (event: MouseEvent<HTMLElement>) => {
+    setActiveEditingMode(false);
+    setSubmitEditButtonActive(false);
+  };
+
+  const deleteButtonClickHandler = async (event: MouseEvent<HTMLElement>) => {
     await onDelete(id);
     setShowDropDown(false);
   };
@@ -94,7 +101,7 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
     { title: "Edit", handler: editButtonClickHandler },
     {
       title: "Delete",
-      handler: deleteButtinClickHandler,
+      handler: deleteButtonClickHandler,
     },
   ];
 
@@ -105,24 +112,27 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
   const commentTextarea = (
     <>
       <textarea
-        className={classes["comment-text"]}
+        className={`${classes["comment-text"]} ${classes["comment-textarea"]}`}
         value={textareaText}
         onChange={changeTextareaText}
+        // autoFocus
       />
+      <Button
+        action="cancel"
+        className={classes["textarea-button"]}
+        onClick={cancelEditingHandler}
+      >
+        Cancel
+      </Button>
       {submitEditButtonActive && (
-        <button
+        <Button
+          action="submit"
           className={classes["textarea-button"]}
           onClick={submitEditedCommetn}
         >
-          ✅
-        </button>
+          Save
+        </Button>
       )}
-      <button
-        className={classes["textarea-button"]}
-        onClick={() => setActiveEditingMode(false)}
-      >
-        ❌
-      </button>
     </>
   );
 
