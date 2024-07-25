@@ -1,7 +1,14 @@
 import classes from "./DropdownCard.module.css";
 
 type item = { title: string; handler: (event: any) => any };
-const Dropdown = ({ items }: { items: item[] }) => {
+
+const Dropdown = ({
+  items,
+  propClassName,
+}: {
+  items: item[];
+  propClassName?: string;
+}) => {
   const rows = items.map((item) => {
     return (
       <li
@@ -14,8 +21,12 @@ const Dropdown = ({ items }: { items: item[] }) => {
     );
   });
 
+  const finalClassName = propClassName
+    ? propClassName
+    : classes["dropdown-container"];
+
   return (
-    <div className={classes["dropdown-container"]} data-testid="drop">
+    <div className={finalClassName} data-testid="drop">
       <ul className={classes["dropdown-items"]}>{rows}</ul>
     </div>
   );

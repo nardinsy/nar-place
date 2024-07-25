@@ -22,6 +22,7 @@
   flex-direction: row;
   align-items: center;
   color: rgb(97, 97, 97);
+  /* background-color: coral; */
 }
 
 .writer-username {
@@ -49,6 +50,7 @@
 }
 
 .comment-edit-button {
+  position: relative;
   padding-right: 0.3rem;
   border: none;
   width: 1rem;
@@ -56,6 +58,17 @@
   background-color: inherit;
   cursor: pointer;
   color: rgb(97, 97, 97);
+}
+
+.dropdown-more-button {
+  position: absolute;
+  border-radius: 10px;
+  width: 4rem;
+  top: -2rem;
+  left: 1.8rem;
+  background-color: rgb(255, 254, 254);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  z-index: 3;
 }
 
 .textarea-button {

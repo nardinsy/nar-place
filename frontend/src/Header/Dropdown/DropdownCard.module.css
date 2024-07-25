@@ -1,5 +1,4 @@
 .dropdown-container {
-  /* position: relative; */
   position: absolute;
   border-radius: 10px;
   width: 15rem;
@@ -8,7 +7,6 @@
   background-color: rgb(255, 254, 254);
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   z-index: 100;
-  /* animation: slide-down 300ms ease-out forwards; */
 }
 
 .dropdown-items {

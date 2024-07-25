@@ -5,8 +5,8 @@ import { createAbsoluteApiAddress } from "../../../../helpers/api-url";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import Dropdown from "../../../../Header/Dropdown/DropdownCard";
 import Button from "../../../../shared-UI/Button";
+import Dropdown from "../../../../Header/Dropdown/DropdownCard";
 import classes from "./CommentItem.module.css";
 
 type EditableCommentItemT = {
@@ -45,6 +45,8 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
   };
 
   const editButtonClickHandler = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
     setShowDropDown(false);
     setActiveEditingMode(true);
   };
@@ -162,8 +164,14 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
             onClick={moreButtonClickHandler}
           >
             <FontAwesomeIcon icon={faEllipsis} />
+            {showDropDown && (
+              <Dropdown
+                items={items}
+                key={Math.random()}
+                propClassName={classes["dropdown-more-button"]}
+              />
+            )}
           </button>
-          {showDropDown && <Dropdown items={items} key={Math.random()} />}
         </div>
         {activeEditingMode ? commentTextarea : commentDiv}
       </div>
