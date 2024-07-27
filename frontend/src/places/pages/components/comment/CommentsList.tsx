@@ -1,9 +1,9 @@
 import { FC } from "react";
-import CommentItem from "./CommentItem";
 import { CommentDto } from "../../../../helpers/dtos";
-import classes from "./Comment.module.css";
 import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
 import EditableCommentItem from "./EditableCommentItem";
+import NotEditableCommentItem from "./NotEditableCommentItem";
+import classes from "./Comment.module.css";
 
 type CommetnListT = {
   comments: CommentDto[];
@@ -17,7 +17,6 @@ const CommetnsList: FC<CommetnListT> = ({ comments }) => {
   }
 
   const commentsList = comments.map((comment, index) => {
-    // console.log(comment.writer.userId);
     if (
       authContext.isLoggedin &&
       authContext.userId === comment.writer.userId
@@ -30,7 +29,7 @@ const CommetnsList: FC<CommetnListT> = ({ comments }) => {
     }
     return (
       <li key={index}>
-        <CommentItem commentDto={comment} key={index} />
+        <NotEditableCommentItem commentDto={comment} key={index} />
       </li>
     );
   });

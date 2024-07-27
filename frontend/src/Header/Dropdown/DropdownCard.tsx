@@ -1,12 +1,12 @@
 import classes from "./DropdownCard.module.css";
 
-type item = { title: string; handler: (event: any) => any };
+export type DropDownItem = { title: string; handler: (event: any) => any };
 
 const Dropdown = ({
   items,
   propClassName,
 }: {
-  items: item[];
+  items: DropDownItem[];
   propClassName?: string;
 }) => {
   const rows = items.map((item) => {
