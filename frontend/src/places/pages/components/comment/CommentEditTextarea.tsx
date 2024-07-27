@@ -62,6 +62,12 @@ const CommentEditTextare: FC<CommentEditTextareaT> = ({
         className={`${classes["comment-text"]} ${classes["comment-textarea"]}`}
         value={textareaText}
         onChange={changeTextareaText}
+        onFocus={(e) =>
+          e.currentTarget.setSelectionRange(
+            e.currentTarget.value.length,
+            e.currentTarget.value.length
+          )
+        }
         autoFocus
       />
       <Button
