@@ -1,37 +1,51 @@
-import { ChangeEvent, FC, MouseEvent, useState } from "react";
+import { FC, MouseEvent, useEffect, useRef, useState } from "react";
 import Avatar from "../../../../Profile/UI/Avatar";
 import { CommentDto, UserDto } from "../../../../helpers/dtos";
 import { createAbsoluteApiAddress } from "../../../../helpers/api-url";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../../../shared-UI/Button";
 import Dropdown from "../../../../Header/Dropdown/DropdownCard";
 import classes from "./CommentItem.module.css";
+import useRequiredCommentContext from "../../../../hooks/use-required-commentContext";
+import CommentEditTextare from "./CommentEditTextarea";
 
 type EditableCommentItemT = {
   commentDto: CommentDto;
-  onEdit: (editedCommetn: CommentDto, id: string) => Promise<void>;
-  onDelete: (commentId: string) => Promise<void>;
 };
 
-const EditableCommentItem: FC<EditableCommentItemT> = ({
-  commentDto,
-  onEdit,
-  onDelete,
-}) => {
-  const { id, date, postID, text, writer } = commentDto;
-  const { pictureUrl, userId, username, placeCount } = writer;
+const EditableCommentItem: FC<EditableCommentItemT> = ({ commentDto }) => {
+  const commentContext = useRequiredCommentContext();
 
   const [showDropDown, setShowDropDown] = useState(false);
   const [activeEditingMode, setActiveEditingMode] = useState(false);
-  const [textareaText, setTextareaText] = useState(text);
-  const [submitEditButtonActive, setSubmitEditButtonActive] = useState(false);
 
+  const moreButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e: any) => {
+      if (!moreButtonRef.current) return;
+
+      if (showDropDown && !moreButtonRef.current.contains(e.target)) {
+        setShowDropDown(false);
+        // closeDropdown(e);
+      }
+    };
+
+    window.addEventListener("mousedown", checkIfClickedOutside);
+    window.addEventListener("scroll", (event) => setShowDropDown(false));
+
+    return () => {
+      window.removeEventListener("mousedown", checkIfClickedOutside);
+      window.addEventListener("scroll", (event) => setShowDropDown(false));
+    };
+  }, [showDropDown]);
+
+  const { id, date, postID, text, writer } = commentDto;
+  const { pictureUrl, userId, username, placeCount } = writer;
   const absolutePictureUrl = pictureUrl
     ? createAbsoluteApiAddress(pictureUrl)
     : undefined;
-
   const userDto: UserDto = {
     pictureUrl: absolutePictureUrl,
     userId,
@@ -51,43 +65,10 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
     setActiveEditingMode(true);
   };
 
-  const validateTextareaText = (teaxtareaText: string) => {
-    if (teaxtareaText === text || teaxtareaText.match("^\\s*$")) {
-      return false;
-    }
-
-    return true;
-  };
-
-  const changeTextareaText = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setTextareaText(event.target.value);
-
-    if (!validateTextareaText(event.target.value)) {
-      setSubmitEditButtonActive(false);
-      return;
-    }
-
-    setSubmitEditButtonActive(true);
-  };
-
-  const submitEditedCommetn = async (event: MouseEvent<HTMLElement>) => {
-    setActiveEditingMode(false);
-    setSubmitEditButtonActive(false);
-
-    commentDto.text = textareaText;
-    commentDto.date = new Date().toDateString();
-
-    await onEdit(commentDto, id);
-  };
-
-  const cancelEditingHandler = (event: MouseEvent<HTMLElement>) => {
-    setActiveEditingMode(false);
-    setSubmitEditButtonActive(false);
-  };
-
   const deleteButtonClickHandler = async (event: MouseEvent<HTMLElement>) => {
-    await onDelete(id);
+    await commentContext.deleteComment(id);
     setShowDropDown(false);
+    // setTextareaText("");
   };
 
   const commentText = text.split("\n").map((item, index) => {
@@ -109,33 +90,6 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
 
   const commentDiv = (
     <div className={classes["comment-text"]}>{commentText}</div>
-  );
-
-  const commentTextarea = (
-    <>
-      <textarea
-        className={`${classes["comment-text"]} ${classes["comment-textarea"]}`}
-        value={textareaText}
-        onChange={changeTextareaText}
-        // autoFocus
-      />
-      <Button
-        action="cancel"
-        className={classes["textarea-button"]}
-        onClick={cancelEditingHandler}
-      >
-        Cancel
-      </Button>
-      {submitEditButtonActive && (
-        <Button
-          action="submit"
-          className={classes["textarea-button"]}
-          onClick={submitEditedCommetn}
-        >
-          Save
-        </Button>
-      )}
-    </>
   );
 
   return (
@@ -160,6 +114,7 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
           <div className={classes["writer-username"]}>@{username}</div>
           <button
             data-testid="more-button"
+            ref={moreButtonRef}
             className={classes["comment-edit-button"]}
             onClick={moreButtonClickHandler}
           >
@@ -173,7 +128,15 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({
             )}
           </button>
         </div>
-        {activeEditingMode ? commentTextarea : commentDiv}
+        {activeEditingMode ? (
+          <CommentEditTextare
+            text={text}
+            disableEditMode={async () => setActiveEditingMode(false)}
+            commentDto={commentDto}
+          />
+        ) : (
+          commentDiv
+        )}
       </div>
     </div>
   );

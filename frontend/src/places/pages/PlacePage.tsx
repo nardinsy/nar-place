@@ -6,6 +6,7 @@ import PlaceInfo from "./components/PlaceInfo";
 import PlaceCreatorAccountInfo from "./components/PlaceCreatorAccountInfo";
 import FollowButton from "./components/FollowButton";
 import CommentBox from "./components/comment/CommentBox";
+import { CommentContextProvider } from "../../contexts/comment-contex";
 import classes from "./PlacePage.module.css";
 
 const PlacePage: FC = () => {
@@ -24,6 +25,8 @@ const PlacePage: FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const scrollCommentAreaHandler = (event: any) => {};
+
   return (
     <div className={classes["place-page-container"]}>
       <PlaceImage src={pictureUrl} alt={title} />
@@ -35,9 +38,11 @@ const PlacePage: FC = () => {
         </div>
         <div className={classes["distance"]}></div>
 
-        <div className={classes.middle}>
+        <div className={classes.middle} onScroll={scrollCommentAreaHandler}>
           <PlaceInfo placeDto={placeDto} />
-          <CommentBox placeId={placeDto.placeId} />
+          <CommentContextProvider>
+            <CommentBox placeId={placeDto.placeId} />
+          </CommentContextProvider>
         </div>
       </div>
     </div>

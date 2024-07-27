@@ -6,14 +6,16 @@ import {
   faFaceSmile,
 } from "@fortawesome/free-solid-svg-icons";
 import { NewComment } from "../../../../helpers/dtos";
+import useRequiredCommentContext from "../../../../hooks/use-required-commentContext";
 import classes from "./CommentInput.module.css";
 
 type CommentInputT = {
   placeId: string;
-  onUpload: (newCommetn: NewComment) => Promise<void>;
 };
 
-const CommentInput: FC<CommentInputT> = ({ placeId, onUpload }) => {
+const CommentInput: FC<CommentInputT> = ({ placeId }) => {
+  const commentContext = useRequiredCommentContext();
+
   const [commentInput, setCommentInput] = useState("");
   const [submitButtonIsActive, setSubmitButtonIsActive] = useState(false);
 
@@ -48,7 +50,7 @@ const CommentInput: FC<CommentInputT> = ({ placeId, onUpload }) => {
       text: commentInput,
     };
 
-    await onUpload(newComment);
+    await commentContext.uploadNewCommetn(newComment);
     setCommentInput("");
     setSubmitButtonIsActive(false);
   };
