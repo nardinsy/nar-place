@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { CommentDto } from "../../../../helpers/dtos";
-import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
+import { CommentDto } from "../../helpers/dtos";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import EditableCommentItem from "./EditableCommentItem";
 import NotEditableCommentItem from "./NotEditableCommentItem";
 import classes from "./Comment.module.css";

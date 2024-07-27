@@ -5,8 +5,8 @@ import {
   faPaperPlane,
   faFaceSmile,
 } from "@fortawesome/free-solid-svg-icons";
-import { NewComment } from "../../../../helpers/dtos";
-import useRequiredCommentContext from "../../../../hooks/use-required-commentContext";
+import { NewComment } from "../../helpers/dtos";
+import useRequiredCommentContext from "../../hooks/use-required-commentContext";
 import classes from "./CommentInput.module.css";
 
 type CommentInputT = {

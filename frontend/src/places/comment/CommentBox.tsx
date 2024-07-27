@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import CommentInput from "./CommentInput";
 import CommetnsList from "./CommentsList";
-import useRequiredAuthContext from "../../../../hooks/use-required-authContext";
-import useRequiredCommentContext from "../../../../hooks/use-required-commentContext";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
+import useRequiredCommentContext from "../../hooks/use-required-commentContext";
 import classes from "./Comment.module.css";
 
 const CommentBox = ({ placeId }: { placeId: string }) => {

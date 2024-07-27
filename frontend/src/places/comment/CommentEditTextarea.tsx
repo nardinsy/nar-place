@@ -1,7 +1,7 @@
 import { useState, FC, ChangeEvent, MouseEvent } from "react";
-import Button from "../../../../shared-UI/Button";
-import { CommentDto } from "../../../../helpers/dtos";
-import useRequiredCommentContext from "../../../../hooks/use-required-commentContext";
+import Button from "../../shared-UI/Button";
+import { CommentDto } from "../../helpers/dtos";
+import useRequiredCommentContext from "../../hooks/use-required-commentContext";
 import classes from "./CommentItem.module.css";
 
 type CommentEditTextareaT = {

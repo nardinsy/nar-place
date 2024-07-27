@@ -1,13 +1,11 @@
 import { FC, ReactNode, useRef, MouseEvent, useState, useEffect } from "react";
-import Avatar from "../../../../Profile/UI/Avatar";
-import { CommentDto, UserDto } from "../../../../helpers/dtos";
-import { createAbsoluteApiAddress } from "../../../../helpers/api-url";
+import Avatar from "../../Profile/UI/Avatar";
+import { CommentDto, UserDto } from "../../helpers/dtos";
+import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import Dropdown, {
-  DropDownItem,
-} from "../../../../Header/Dropdown/DropdownCard";
+import Dropdown, { DropDownItem } from "../../Header/Dropdown/DropdownCard";
 import classes from "./CommentItem.module.css";
 
 type CommentItemT = {

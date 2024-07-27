@@ -1,11 +1,11 @@
 import { FC, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { UserDto, PlaceDto } from "../../helpers/dtos";
-import PlaceImage from "./components/PlaceImage";
-import PlaceInfo from "./components/PlaceInfo";
-import PlaceCreatorAccountInfo from "./components/PlaceCreatorAccountInfo";
-import FollowButton from "./components/FollowButton";
-import CommentBox from "./components/comment/CommentBox";
+import PlaceImage from "./placePageSubComponents/PlaceImage";
+import PlaceInfo from "./placePageSubComponents/PlaceInfo";
+import PlaceCreatorAccountInfo from "./placePageSubComponents/PlaceCreatorAccountInfo";
+import FollowButton from "./placePageSubComponents/FollowButton";
+import CommentBox from "../comment/CommentBox";
 import { CommentContextProvider } from "../../contexts/comment-contex";
 import classes from "./PlacePage.module.css";
 

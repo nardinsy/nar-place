@@ -1,6 +1,6 @@
 import { FC, MouseEvent, useState } from "react";
-import { CommentDto } from "../../../../helpers/dtos";
-import useRequiredCommentContext from "../../../../hooks/use-required-commentContext";
+import { CommentDto } from "../../helpers/dtos";
+import useRequiredCommentContext from "../../hooks/use-required-commentContext";
 import CommentEditTextare from "./CommentEditTextarea";
 import CommentItem from "./CommentItem";
 import classes from "./CommentItem.module.css";
