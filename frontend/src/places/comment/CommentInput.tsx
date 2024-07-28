@@ -1,10 +1,6 @@
 import { ChangeEvent, KeyboardEvent, FC, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHeart,
-  faPaperPlane,
-  faFaceSmile,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { NewComment } from "../../helpers/dtos";
 import useRequiredCommentContext from "../../hooks/use-required-commentContext";
 import classes from "./CommentInput.module.css";
@@ -61,8 +57,6 @@ const CommentInput: FC<CommentInputT> = ({ placeId }) => {
 
   return (
     <div className={classes["comment-input-container"]}>
-      {/* <FontAwesomeIcon icon={faHeart} className={classes["heart-button"]} /> */}
-
       <div className={classes["left"]}>
         <textarea
           placeholder="Add a comment"

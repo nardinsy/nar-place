@@ -1,5 +1,6 @@
 // const BASE_URL = "http://localhost:5000/api/";
-const BASE_URL = "http://192.168.1.13:5000/api/";
+// const BASE_URL = "http://192.168.1.13:5000/api/";
+const BASE_URL = "http://172.20.10.4:5000/api/";
 
 // const END_POINTS = {
 //   getAllUsers: "users",

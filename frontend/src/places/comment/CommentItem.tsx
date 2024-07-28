@@ -3,9 +3,11 @@ import Avatar from "../../Profile/UI/Avatar";
 import { CommentDto, UserDto } from "../../helpers/dtos";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import { Link } from "react-router-dom";
+import Dropdown, { DropDownItem } from "../../Header/Dropdown/DropdownCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import Dropdown, { DropDownItem } from "../../Header/Dropdown/DropdownCard";
+import CommentLike from "../like/CommentLike";
+import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import classes from "./CommentItem.module.css";
 
 type CommentItemT = {
@@ -15,8 +17,8 @@ type CommentItemT = {
 };
 
 const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
+  const authCtx = useRequiredAuthContext();
   const [showDropDown, setShowDropDown] = useState(false);
-
   const moreButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -86,6 +88,11 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
       <div className={classes["commetn-details"]}>
         <div className={classes["comment-info"]}>
           <div className={classes["writer-username"]}>@{username}</div>
+          {authCtx.isLoggedin && (
+            <div className={classes["comment-actions"]}>
+              <CommentLike commentDto={commentDto} />
+            </div>
+          )}
           <button
             data-testid="more-button"
             ref={moreButtonRef}
