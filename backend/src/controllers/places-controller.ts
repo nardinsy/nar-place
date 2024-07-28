@@ -6,16 +6,18 @@ import createHttpError from "../models/createHttpError";
 import User, { IUser } from "../models/user";
 import Place, { IPlace } from "../models/place";
 import PlacePicture, { IPlacePicture } from "../models/place-picture";
+import PostComment, { IPostComment } from "../models/comment";
+import CommentLike from "../models/comment-like";
 import getCoordsForAddress from "../util/location";
 import contentTypeBufferSplit from "../helpers/data-url";
 import {
   CommentDto,
+  CommentLikeDto,
   CommentWriter,
   NewComment,
   NewPlace,
   PlaceDto,
 } from "../shared/dtos";
-import PostComment, { IPostComment } from "../models/comment";
 import { getProfilePictureUrl } from "./users-controller";
 
 export const getPlacePictureUrl = (id: string) => {
@@ -412,6 +414,7 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
       pictureUrl: user.picture,
       placeCount: user.places.length,
     },
+    likes: [],
   };
 
   res.status(201).json({
@@ -457,8 +460,6 @@ export const editComment: AuthRequestHandler = async (user, req, res, next) => {
     comment = await PostComment.findOne({
       _id: new Types.ObjectId(commentId),
     });
-
-    console.log(comment);
   } catch {
     return next(
       createHttpError("Something went wrong, could not find comment.", 500)
@@ -598,12 +599,14 @@ const getcommnetsDto = async (comments: IPostComment[]) => {
   return await Promise.all(
     comments.map(async (comment) => {
       const writer = await getCommentWriter(comment);
+
       const commentDto: CommentDto = {
         id: comment._id.toHexString(),
         text: comment.text,
         date: comment.date,
         postID: comment.postID,
         writer,
+        likes: comment.likes,
       };
       return commentDto;
     })
@@ -615,4 +618,72 @@ const checkCommentBelongsToUser = (comment: IPostComment, user: IUser) => {
   const commentId = comment.writer._id.toHexString();
 
   return commentId === userId ? true : false;
+};
+
+export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
+  const commentLike = req.body;
+  const { liker, postId, commentId, date } = commentLike;
+
+  const newCommentLike = new CommentLike({ liker, postId, commentId, date });
+  try {
+    newCommentLike.save();
+  } catch (error) {
+    return next(
+      createHttpError(`Liking comment failed, please try again. ${error}`, 500)
+    );
+  }
+
+  // new like{
+  //   liker: new ObjectId('66923931226ca70e0528d3c0'),
+  //   postId: new ObjectId('65f700dae771ff3a4ddababd'),
+  //   commentId: new ObjectId('66a1057c7bd9d0f21972fc12'),
+  //   date: 2024-07-28T08:33:33.000Z,
+  //   _id: new ObjectId('66a60312eaf92218eec861d7')
+  // }
+
+  let comment: IPostComment | null;
+
+  try {
+    comment = await PostComment.findOne({
+      _id: new Types.ObjectId(commentId),
+    });
+
+    if (!comment) {
+      return next(
+        createHttpError("Something went wrong, could not find place.", 500)
+      );
+    }
+    comment.likes.unshift(newCommentLike._id);
+  } catch (err) {
+    return next(
+      createHttpError("Something went wrong, could add comment.", 500)
+    );
+  }
+
+  try {
+    comment.save();
+    // comment => {
+    //   _id: new ObjectId('66a1057c7bd9d0f21972fc12'),
+    //   text: "It's gorgeousssses?",
+    //   date: 2024-07-24T13:45:30.029Z,
+    //   postID: new ObjectId('65f700dae771ff3a4ddababd'),
+    //   writer: new ObjectId('65f70343ec6d2699d66e5bb7'),
+    //   __v: 1,
+    //   likes: [
+    //     new ObjectId('66a62771b610b3006e767452'),
+    //     new ObjectId('66a627bd29e6ccaf646a30fb')
+    //   ]
+    // }
+  } catch (error) {
+    return next(
+      createHttpError(
+        `Saving comment's like failed, please try again. ${error}`,
+        500
+      )
+    );
+  }
+
+  res.status(201).json({
+    newCommentLike,
+  });
 };
