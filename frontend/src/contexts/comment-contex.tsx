@@ -3,7 +3,12 @@ import { createRelativePath } from "../helpers/api-url";
 import { HasChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
-import { CommentDto, NewComment } from "../helpers/dtos";
+import {
+  CommentDto,
+  CommentLikeDto,
+  NewComment,
+  NewLikeComment,
+} from "../helpers/dtos";
 import useRequiredAuthContext from "../hooks/use-required-authContext";
 
 // interface CommentContextT {
@@ -18,6 +23,7 @@ interface CommentT {
   uploadNewCommetn: (newCommetn: NewComment) => Promise<void>;
   editComment: (editedComment: CommentDto) => Promise<void>;
   deleteComment: (commentId: string) => Promise<void>;
+  likeComment: (newLikeComment: NewLikeComment) => Promise<CommentLikeDto>;
 }
 
 // type CommentT = CommentContextT | AuthCommentContextT;
@@ -105,12 +111,23 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     showSuccessToast("Comment deleted successfully");
   };
 
+  const likeComment = async (newLikeComment: NewLikeComment) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Please login first");
+    }
+    const result = await backend.likeComment(newLikeComment, token);
+    const commentLike = result.commentLikeDto;
+    return commentLike;
+  };
+
   const value: CommentT = {
     comments,
     getCommetns,
     uploadNewCommetn,
     editComment,
     deleteComment,
+    likeComment,
   };
 
   return (

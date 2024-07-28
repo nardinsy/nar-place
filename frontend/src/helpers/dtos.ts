@@ -92,6 +92,7 @@ export type CommentDto = {
   text: string;
   date: string;
   postID: string;
+  likes: string[];
   writer: CommentWriter;
 };
 
@@ -106,4 +107,19 @@ export type NewComment = {
   text: string;
   date: Date;
   postID: string;
+};
+
+export type NewLikeComment = {
+  liker: string;
+  postId: string;
+  commentId: string;
+  date: Date;
+};
+
+export type CommentLikeDto = {
+  likeId: string;
+  liker: string;
+  postId: string;
+  commentId: string;
+  date: Date;
 };

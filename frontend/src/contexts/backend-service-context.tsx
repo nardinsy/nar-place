@@ -3,8 +3,10 @@ import { BackendService } from "../api/backend-service";
 import { HasChildren } from "../helpers/props";
 import {
   CommentDto,
+  CommentLikeDto,
   LoginResult,
   NewComment,
+  NewLikeComment,
   NewPlace,
   PlaceDto,
   PlaceInfoCardWithPictire,
@@ -203,6 +205,19 @@ class BackedServiceImpl implements BackendService {
     };
 
     return await sendHttpRequest(ENDPOINTS.deleteComment, requestOptions);
+  }
+
+  async likeComment(
+    newLikeComment: NewLikeComment,
+    token: string
+  ): Promise<{ commentLikeDto: CommentLikeDto }> {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify({ newLikeComment }),
+    };
+
+    return await sendHttpRequest(ENDPOINTS.likeComment, requestOptions);
   }
 }
 

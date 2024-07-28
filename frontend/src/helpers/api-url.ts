@@ -1,6 +1,6 @@
 // const BASE_URL = "http://localhost:5000/api/";
-// const BASE_URL = "http://192.168.1.13:5000/api/";
-const BASE_URL = "http://172.20.10.4:5000/api/";
+const BASE_URL = "http://192.168.1.13:5000/api/";
+// const BASE_URL = "http://172.20.10.4:5000/api/";
 
 // const END_POINTS = {
 //   getAllUsers: "users",
@@ -41,6 +41,7 @@ export enum ENDPOINTS {
   addComment = "places/addComment",
   editComment = "places/editComment",
   deleteComment = "places/deleteComment",
+  likeComment = "places/like-comment",
 }
 
 const getApiAddress = (endPoint: string, param?: string) => {
