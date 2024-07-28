@@ -87,10 +87,17 @@ export type CommentWriter = {
   placeCount: number;
 };
 
+export type NewLikeComment = {
+  liker: string;
+  postId: string;
+  commentId: string;
+  date: Date;
+};
+
 export type CommentLikeDto = {
-  likeId: Types.ObjectId;
-  liker: Types.ObjectId;
-  postId: Types.ObjectId;
-  commentId: Types.ObjectId;
+  likeId: string;
+  liker: string;
+  postId: string;
+  commentId: string;
   date: Date;
 };

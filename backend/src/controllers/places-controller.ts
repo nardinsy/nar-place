@@ -15,6 +15,7 @@ import {
   CommentLikeDto,
   CommentWriter,
   NewComment,
+  NewLikeComment,
   NewPlace,
   PlaceDto,
 } from "../shared/dtos";
@@ -621,7 +622,7 @@ const checkCommentBelongsToUser = (comment: IPostComment, user: IUser) => {
 };
 
 export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
-  const commentLike = req.body;
+  const commentLike: NewLikeComment = req.body.newLikeComment;
   const { liker, postId, commentId, date } = commentLike;
 
   const newCommentLike = new CommentLike({ liker, postId, commentId, date });
@@ -683,7 +684,15 @@ export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
     );
   }
 
+  const commentLikeDto: CommentLikeDto = {
+    likeId: newCommentLike._id.toHexString(),
+    liker: newCommentLike.liker.toHexString(),
+    postId: newCommentLike.postId.toHexString(),
+    commentId: newCommentLike.commentId.toHexString(),
+    date: commentLike.date,
+  };
+
   res.status(201).json({
-    newCommentLike,
+    commentLikeDto,
   });
 };
