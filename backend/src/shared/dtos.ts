@@ -77,7 +77,7 @@ export type CommentDto = {
   date: Date;
   postID: Types.ObjectId;
   writer: CommentWriter;
-  likes: Types.ObjectId[];
+  likes: { userId: string; commentId: string }[];
 };
 
 export type CommentWriter = {
@@ -88,7 +88,7 @@ export type CommentWriter = {
 };
 
 export type NewLikeComment = {
-  liker: string;
+  userId: string;
   postId: string;
   commentId: string;
   date: Date;
@@ -96,7 +96,7 @@ export type NewLikeComment = {
 
 export type CommentLikeDto = {
   likeId: string;
-  liker: string;
+  userId: string;
   postId: string;
   commentId: string;
   date: Date;

@@ -623,9 +623,9 @@ const checkCommentBelongsToUser = (comment: IPostComment, user: IUser) => {
 
 export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
   const commentLike: NewLikeComment = req.body.newLikeComment;
-  const { liker, postId, commentId, date } = commentLike;
+  const { userId, postId, commentId, date } = commentLike;
 
-  const newCommentLike = new CommentLike({ liker, postId, commentId, date });
+  const newCommentLike = new CommentLike({ userId, postId, commentId, date });
   try {
     newCommentLike.save();
   } catch (error) {
@@ -654,7 +654,7 @@ export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
         createHttpError("Something went wrong, could not find place.", 500)
       );
     }
-    comment.likes.unshift(newCommentLike._id);
+    comment.likes.unshift({ userId, commentId });
   } catch (err) {
     return next(
       createHttpError("Something went wrong, could add comment.", 500)
@@ -686,7 +686,7 @@ export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
 
   const commentLikeDto: CommentLikeDto = {
     likeId: newCommentLike._id.toHexString(),
-    liker: newCommentLike.liker.toHexString(),
+    userId: newCommentLike.userId.toHexString(),
     postId: newCommentLike.postId.toHexString(),
     commentId: newCommentLike.commentId.toHexString(),
     date: commentLike.date,

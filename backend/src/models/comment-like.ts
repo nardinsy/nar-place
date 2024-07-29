@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { model, Schema, Types } from "mongoose";
 
 export interface ICommentLike extends mongoose.Document {
-  liker: Types.ObjectId;
+  userId: Types.ObjectId;
   postId: Types.ObjectId;
   commentId: Types.ObjectId;
   date: Date;
@@ -10,7 +10,7 @@ export interface ICommentLike extends mongoose.Document {
 }
 
 const commentLikeSchema = new Schema<ICommentLike>({
-  liker: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+  userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   postId: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -28,6 +28,7 @@ const commentLikeSchema = new Schema<ICommentLike>({
     required: true,
   },
 });
+commentLikeSchema.index({ userId: 1, commnetId: 1 }, { unique: true });
 
 const CommentLike = model<ICommentLike>("CommentLike", commentLikeSchema);
 export default CommentLike;
