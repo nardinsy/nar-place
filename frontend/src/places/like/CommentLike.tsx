@@ -21,7 +21,7 @@ const CommentLike: FC<CommentLikeT> = ({ commentDto }) => {
   const likeCommentHandler = async (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     const newLikeComment: NewLikeComment = {
-      liker: commentDto.writer.userId,
+      userId: commentDto.writer.userId,
       postId: commentDto.postID,
       commentId: commentDto.id,
       date: new Date(),

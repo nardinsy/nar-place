@@ -40,7 +40,7 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
     };
   }, [showDropDown]);
 
-  const { date, postID, text, writer } = commentDto;
+  const { date, postID, text, writer, likes } = commentDto;
   const { pictureUrl, userId, username, placeCount } = writer;
   const absolutePictureUrl = pictureUrl
     ? createAbsoluteApiAddress(pictureUrl)
