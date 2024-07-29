@@ -24,6 +24,7 @@ interface CommentT {
   editComment: (editedComment: CommentDto) => Promise<void>;
   deleteComment: (commentId: string) => Promise<void>;
   likeComment: (newLikeComment: NewLikeComment) => Promise<CommentLikeDto>;
+  unlikeComment: (commentId: string, userId: string) => Promise<void>;
 }
 
 // type CommentT = CommentContextT | AuthCommentContextT;
@@ -82,18 +83,18 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     }
 
     await backend.editComment(editedComment, token);
-    findAndEditComment(editedComment);
-    setCommetns((pre) => pre);
+    findAndEditCommentText(editedComment);
     showSuccessToast("Comment edited successfully");
   };
 
-  const findAndEditComment = (editedComment: CommentDto) => {
+  const findAndEditCommentText = (editedComment: CommentDto) => {
     const item = comments.find((comment) => comment.id === editedComment.id);
 
     if (item) {
       item.text = editedComment.text;
       // item.date = editedComment.date.toString();
     }
+    setCommetns((pre) => pre);
   };
 
   const deleteComment = async (commentId: string) => {
@@ -118,7 +119,41 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     }
     const result = await backend.likeComment(newLikeComment, token);
     const commentLike = result.commentLikeDto;
+
+    findAndEditCommentLikes(newLikeComment.commentId, newLikeComment.userId);
+    showSuccessToast("Comment liked successfully");
+
     return commentLike;
+  };
+
+  const findAndEditCommentLikes = (commentId: string, userId: string) => {
+    const comment = comments.find((comment) => comment.id === commentId);
+    if (comment) {
+      comment.likes.unshift({
+        userId,
+        commentId,
+      });
+    }
+    setCommetns((pre) => pre);
+  };
+
+  const unlikeComment = async (commentId: string, userId: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Please login first");
+    }
+    // const result = await backend.unlikeComment(commentId, userId, token);
+    // const commentLike = result.commentLikeDto;
+
+    const unlikedCm = comments.find((comment) => comment.id === commentId);
+    if (unlikedCm) {
+      unlikedCm.likes = unlikedCm.likes.filter(
+        (like) => like.userId !== userId
+      );
+    }
+
+    setCommetns((pre) => pre);
+    showSuccessToast("Comment unliked successfully");
   };
 
   const value: CommentT = {
@@ -128,6 +163,7 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     editComment,
     deleteComment,
     likeComment,
+    unlikeComment,
   };
 
   return (

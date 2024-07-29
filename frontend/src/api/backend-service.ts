@@ -69,4 +69,10 @@ export interface BackendService {
     NewLikeComment: NewLikeComment,
     token: string
   ): Promise<{ commentLikeDto: CommentLikeDto }>;
+
+  unlikeComment(
+    commentId: string,
+    userId: string,
+    token: string
+  ): Promise<{ commentLikeDto: CommentLikeDto }>;
 }

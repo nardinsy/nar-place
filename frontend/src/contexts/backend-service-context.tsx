@@ -219,6 +219,20 @@ class BackedServiceImpl implements BackendService {
 
     return await sendHttpRequest(ENDPOINTS.likeComment, requestOptions);
   }
+
+  async unlikeComment(
+    commentId: string,
+    userId: string,
+    token: string
+  ): Promise<{ commentLikeDto: CommentLikeDto }> {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify({ commentId, userId }),
+    };
+
+    return await sendHttpRequest(ENDPOINTS.unlikeComment, requestOptions);
+  }
 }
 
 const BackendContext = createContext<BackendService | undefined>(undefined);
