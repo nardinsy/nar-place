@@ -10,7 +10,10 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
   const commentContext = useRequiredCommentContext();
 
   useEffect(() => {
-    commentContext.getCommetns(placeId);
+    const getComments = async () => {
+      await commentContext.getCommetns(placeId);
+    };
+    getComments();
     return () => {};
   }, [placeId]);
 

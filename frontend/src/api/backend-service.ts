@@ -8,7 +8,6 @@ import {
   NewPlace,
   CommentDto,
   NewComment,
-  NewLikeComment,
   CommentLikeDto,
 } from "../helpers/dtos";
 
@@ -66,13 +65,13 @@ export interface BackendService {
   deleteComment(commentId: string, token: string): Promise<void>;
 
   likeComment(
-    NewLikeComment: NewLikeComment,
+    NewCommentLike: CommentLikeDto,
     token: string
   ): Promise<{ commentLikeDto: CommentLikeDto }>;
 
   unlikeComment(
-    commentId: string,
     userId: string,
+    commentId: string,
     token: string
-  ): Promise<{ commentLikeDto: CommentLikeDto }>;
+  ): Promise<{ commentLikes: { userId: string; commentId: string }[] }>;
 }

@@ -1,6 +1,12 @@
+.container {
+  border: none;
+  background-color: transparent;
+}
+
 .heart-icon {
   color: rgb(187, 185, 185);
   font-size: small;
+  cursor: pointer;
 }
 
 .heart-icon:hover {

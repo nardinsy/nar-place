@@ -90,7 +90,10 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
           <div className={classes["writer-username"]}>@{username}</div>
           {authCtx.isLoggedin && (
             <div className={classes["comment-actions"]}>
-              <CommentLike commentDto={commentDto} />
+              <CommentLike
+                commentDto={commentDto}
+                loggedUserUserId={authCtx.userId}
+              />
             </div>
           )}
           <button

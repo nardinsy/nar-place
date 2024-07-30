@@ -20,7 +20,6 @@ const PlacePage: FC = () => {
   } = useLocation();
   const { placeDto, userDto } = state;
   const { title, pictureUrl } = placeDto;
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

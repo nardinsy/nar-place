@@ -2,16 +2,15 @@ import { MouseEvent, FC, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import useRequiredCommentContext from "../../hooks/use-required-commentContext";
-import useRequiredAuthContext from "../../hooks/use-required-authContext";
-import { CommentDto, CommentLikeDto, NewLikeComment } from "../../helpers/dtos";
+import { CommentDto, CommentLikeDto } from "../../helpers/dtos";
 import classes from "./Commentlike.module.css";
 
 type CommentLikeT = {
   commentDto: CommentDto;
+  loggedUserUserId: string;
 };
 
-const CommentLike: FC<CommentLikeT> = ({ commentDto }) => {
-  const authCtx = useRequiredAuthContext();
+const CommentLike: FC<CommentLikeT> = ({ commentDto, loggedUserUserId }) => {
   const commentCtx = useRequiredCommentContext();
 
   const [commentLikeNumber, setCommentLikeNumber] = useState(
@@ -21,7 +20,7 @@ const CommentLike: FC<CommentLikeT> = ({ commentDto }) => {
 
   useEffect(() => {
     const setInitialHeartIconColor = () => {
-      if (checkIfUserLikesComment()) {
+      if (checkIfUserLikedComment()) {
         setUserLikedComment(true);
       } else {
         setUserLikedComment(false);
@@ -29,82 +28,64 @@ const CommentLike: FC<CommentLikeT> = ({ commentDto }) => {
     };
 
     setInitialHeartIconColor();
-  }, [commentDto]);
+  }, []);
 
-  const likeCommentHandler = async (event: MouseEvent<HTMLElement>) => {
+  const likeCommentClickHandler = async (event: MouseEvent<SVGSVGElement>) => {
     event.preventDefault();
-    if (!authCtx.isLoggedin) {
-      throw new Error("Please login first, then you can like comments");
+
+    if (checkIfUserLikedComment()) {
+      await unlikeCommetn();
+    } else {
+      await likeCommetn();
     }
-    const userCanLikeComment = checkIfUserLikesComment();
-    userCanLikeComment ? unlikeCommetn() : likeCommetn();
   };
 
   const likeCommetn = async () => {
-    if (!authCtx.isLoggedin) {
-      throw new Error("Please login first, then you can like comments");
-    }
-
-    const newLikeComment: NewLikeComment = {
-      userId: commentDto.writer.userId,
-      postId: commentDto.postID,
+    const newCommentLike: CommentLikeDto = {
+      userId: loggedUserUserId,
       commentId: commentDto.id,
       date: new Date(),
     };
 
-    const commentLike = await commentCtx.likeComment(newLikeComment);
+    await commentCtx.likeComment(newCommentLike);
 
-    commentDto.likes.unshift({
-      userId: authCtx.userId,
-      commentId: commentDto.id,
-    });
+    // commentDto.likes.unshift({
+    //   userId: loggedUserUserId,
+    //   commentId: commentDto.id,
+    // });
 
     setUserLikedComment(true);
     setCommentLikeNumber((pre) => pre + 1);
   };
 
   const unlikeCommetn = async () => {
-    const unlikeComment: CommentLikeDto = {
-      likeId: "",
-      userId: commentDto.writer.userId,
-      postId: commentDto.postID,
-      commentId: commentDto.id,
-      date: new Date(),
-    };
+    await commentCtx.unlikeComment(loggedUserUserId, commentDto.id);
 
-    const commentLike = await commentCtx.unlikeComment(
-      commentDto.id,
-      commentDto.writer.userId
-    );
-
-    commentDto.likes = commentDto.likes.filter(
-      (like) => like.userId !== commentDto.writer.userId
-    );
+    // commentDto.likes = commentDto.likes.filter(
+    //   (like) => like.userId !== loggedUserUserId
+    // );
 
     setUserLikedComment(false);
     setCommentLikeNumber((pre) => pre - 1);
   };
 
-  const checkIfUserLikesComment = () => {
-    if (!authCtx.isLoggedin) {
-      throw new Error("Please login first, then you can like comments");
-    }
-
-    return commentDto.likes.find((like) => like.userId === authCtx.userId);
+  const checkIfUserLikedComment = () => {
+    return commentDto.likes.find((like) => like.userId === loggedUserUserId);
   };
 
   const heartIconClassName = userLikedComment ? `${classes["red-heart"]}` : "";
 
   return (
-    <div onClick={likeCommentHandler}>
+    <button className={classes["container"]}>
       <FontAwesomeIcon
+        onClick={likeCommentClickHandler}
         icon={faHeart}
         className={`${classes["heart-icon"]} ${heartIconClassName}`}
       />
       <span className={classes["likes-number"]}>
         {commentLikeNumber ? commentLikeNumber : ""}
       </span>
-    </div>
+    </button>
   );
 };
 

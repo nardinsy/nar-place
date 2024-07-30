@@ -6,16 +6,14 @@ import {
   CommentLikeDto,
   LoginResult,
   NewComment,
-  NewLikeComment,
   NewPlace,
   PlaceDto,
-  PlaceInfoCardWithPictire,
   UserDto,
   UserLoginInformation,
   UserSignupInformation,
   placeInfoCard,
 } from "../helpers/dtos";
-import { ENDPOINTS, getApiAddress } from "../helpers/api-url";
+import { ENDPOINTS } from "../helpers/api-url";
 import sendHttpRequest, { MyRequestOptions } from "../helpers/http-request";
 
 class BackedServiceImpl implements BackendService {
@@ -208,27 +206,27 @@ class BackedServiceImpl implements BackendService {
   }
 
   async likeComment(
-    newLikeComment: NewLikeComment,
+    newCommentLike: CommentLikeDto,
     token: string
   ): Promise<{ commentLikeDto: CommentLikeDto }> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ newLikeComment }),
+      body: JSON.stringify({ newCommentLike }),
     };
 
     return await sendHttpRequest(ENDPOINTS.likeComment, requestOptions);
   }
 
   async unlikeComment(
-    commentId: string,
     userId: string,
+    commentId: string,
     token: string
-  ): Promise<{ commentLikeDto: CommentLikeDto }> {
+  ): Promise<{ commentLikes: { userId: string; commentId: string }[] }> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ commentId, userId }),
+      body: JSON.stringify({ userId, commentId }),
     };
 
     return await sendHttpRequest(ENDPOINTS.unlikeComment, requestOptions);

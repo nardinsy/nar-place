@@ -109,17 +109,8 @@ export type NewComment = {
   postID: string;
 };
 
-export type NewLikeComment = {
-  userId: string;
-  postId: string;
-  commentId: string;
-  date: Date;
-};
-
 export type CommentLikeDto = {
-  likeId: string;
   userId: string;
-  postId: string;
   commentId: string;
   date: Date;
 };
