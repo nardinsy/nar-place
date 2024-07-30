@@ -13,9 +13,7 @@ import contentTypeBufferSplit from "../helpers/data-url";
 import {
   CommentDto,
   CommentLikeDto,
-  CommentWriter,
   NewComment,
-  NewLikeComment,
   NewPlace,
   PlaceDto,
 } from "../shared/dtos";
@@ -622,10 +620,10 @@ const checkCommentBelongsToUser = (comment: IPostComment, user: IUser) => {
 };
 
 export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
-  const commentLike: NewLikeComment = req.body.newLikeComment;
-  const { userId, postId, commentId, date } = commentLike;
+  const commentLike: CommentLikeDto = req.body.newCommentLike;
+  const { userId, commentId, date } = commentLike;
 
-  const newCommentLike = new CommentLike({ userId, postId, commentId, date });
+  const newCommentLike = new CommentLike({ userId, commentId, date });
   try {
     newCommentLike.save();
   } catch (error) {
@@ -685,14 +683,55 @@ export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
   }
 
   const commentLikeDto: CommentLikeDto = {
-    likeId: newCommentLike._id.toHexString(),
     userId: newCommentLike.userId.toHexString(),
-    postId: newCommentLike.postId.toHexString(),
     commentId: newCommentLike.commentId.toHexString(),
     date: commentLike.date,
   };
 
   res.status(201).json({
     commentLikeDto,
+  });
+};
+
+export const unlikeComment: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const { commentId, userId } = req.body;
+
+  let comment: IPostComment | null;
+
+  try {
+    comment = await PostComment.findOne({
+      _id: new Types.ObjectId(commentId),
+    });
+
+    if (!comment) {
+      return next(
+        createHttpError("Something went wrong, could not find comment.", 500)
+      );
+    }
+    comment.likes = comment.likes.filter((like) => like.userId !== userId);
+  } catch (err) {
+    return next(
+      createHttpError("Something went wrong, could add comment.", 500)
+    );
+  }
+
+  try {
+    comment.save();
+  } catch (error) {
+    return next(
+      createHttpError(
+        `Saving comment's like failed, please try again. ${error}`,
+        500
+      )
+    );
+  }
+
+  res.status(201).json({
+    commentLikes: comment.likes,
   });
 };

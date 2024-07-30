@@ -158,3 +158,5 @@ export function createAuthEndpoints(entry: EndpointMethods): AuthEndpoints {
     },
   } as AuthEndpoints;
 }
+
+export { NextFunction };

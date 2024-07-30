@@ -13,6 +13,7 @@ import {
   editComment,
   deleteComment,
   likeComment,
+  unlikeComment,
 } from "../controllers/places-controller";
 
 const placeRouter = routerAuth();
@@ -81,5 +82,7 @@ placeRouter.postAuth(
 placeRouter.postAuth("/deleteComment", deleteComment);
 
 placeRouter.postAuth("/like-comment", likeComment);
+
+placeRouter.postAuth("/unlike-comment", unlikeComment);
 
 export default placeRouter;
