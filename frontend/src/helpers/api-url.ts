@@ -43,6 +43,7 @@ export enum ENDPOINTS {
   deleteComment = "places/deleteComment",
   likeComment = "places/like-comment",
   unlikeComment = "places/unlike-comment",
+  replyComment = "places/reply-comment",
 }
 
 const getApiAddress = (endPoint: string, param?: string) => {

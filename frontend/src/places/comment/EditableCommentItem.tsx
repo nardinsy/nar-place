@@ -1,7 +1,7 @@
 import { FC, MouseEvent, useState } from "react";
 import { CommentDto } from "../../helpers/dtos";
 import useRequiredCommentContext from "../../hooks/use-required-commentContext";
-import CommentEditTextare from "./CommentEditTextarea";
+import Textare from "./textarea/Textarea";
 import CommentItem from "./CommentItem";
 import classes from "./CommentItem.module.css";
 
@@ -28,6 +28,13 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({ commentDto }) => {
     // setTextareaText("");
   };
 
+  const editComment = async (text: string) => {
+    commentDto.text = text;
+    commentDto.date = new Date().toDateString();
+
+    await commentContext.editComment(commentDto);
+  };
+
   const commentText = text.split("\n").map((item, index) => {
     return (
       <span key={index}>
@@ -48,10 +55,10 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({ commentDto }) => {
   return (
     <CommentItem commentDto={commentDto} items={items}>
       {activeEditingMode ? (
-        <CommentEditTextare
+        <Textare
           text={text}
-          disableEditMode={async () => setActiveEditingMode(false)}
-          commentDto={commentDto}
+          onSubmit={editComment}
+          onCancel={async () => setActiveEditingMode(false)}
         />
       ) : (
         <div className={classes["comment-text"]}>{commentText}</div>

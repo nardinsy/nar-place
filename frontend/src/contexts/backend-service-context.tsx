@@ -4,6 +4,7 @@ import { HasChildren } from "../helpers/props";
 import {
   CommentDto,
   CommentLikeDto,
+  CommentReplyDto,
   LoginResult,
   NewComment,
   NewPlace,
@@ -230,6 +231,19 @@ class BackedServiceImpl implements BackendService {
     };
 
     return await sendHttpRequest(ENDPOINTS.unlikeComment, requestOptions);
+  }
+
+  async replyComment(
+    commentReply: CommentReplyDto,
+    token: string
+  ): Promise<{ comment: CommentDto }> {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify({ commentReply }),
+    };
+
+    return await sendHttpRequest(ENDPOINTS.replyComment, requestOptions);
   }
 }
 

@@ -31,25 +31,28 @@
   padding-right: 1rem;
 }
 
-.comment-text {
-  padding: 0.4rem 0;
-  font-size: 14px;
-  letter-spacing: 0.3px;
+.comment-actions {
   display: flex;
-  flex-direction: column;
-  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
-.comment-textarea {
-  border-color: rgb(231, 214, 214);
-  border-radius: 1rem;
-  resize: none;
-  outline: none;
-  height: 3rem;
-  padding-left: 0.5rem;
+.reply-button {
+  border: none;
+  background-color: transparent;
+  color: rgb(116, 114, 114);
+  font-size: xx-small;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
 }
 
-.comment-edit-button {
+.reply-button:hover {
+  color: rgb(10, 10, 10);
+}
+
+.comment-more-button {
   position: relative;
   padding-right: 0.3rem;
   border: none;
@@ -71,10 +74,15 @@
   z-index: 3;
 }
 
-.textarea-button {
-  width: 4rem;
-  height: 2rem;
-  padding: 0;
-  margin-top: 0.5rem;
-  border-radius: 3rem;
+.reply-textarea {
+  margin-left: 2rem;
+}
+
+.comment-text {
+  padding: 0.4rem 0;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }

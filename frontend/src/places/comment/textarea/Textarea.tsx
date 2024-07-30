@@ -1,21 +1,14 @@
 import { useState, FC, ChangeEvent, MouseEvent } from "react";
-import Button from "../../shared-UI/Button";
-import { CommentDto } from "../../helpers/dtos";
-import useRequiredCommentContext from "../../hooks/use-required-commentContext";
-import classes from "./CommentItem.module.css";
+import Button from "../../../shared-UI/Button";
+import classes from "./Textarea.module.css";
 
-type CommentEditTextareaT = {
+type TextareaT = {
   text: string;
-  disableEditMode: () => {};
-  commentDto: CommentDto;
+  onSubmit: (text: string) => {};
+  onCancel: () => {};
 };
 
-const CommentEditTextare: FC<CommentEditTextareaT> = ({
-  text,
-  disableEditMode,
-  commentDto,
-}) => {
-  const commentContext = useRequiredCommentContext();
+const Textare: FC<TextareaT> = ({ text, onSubmit, onCancel }) => {
   const [textareaText, setTextareaText] = useState(text);
   const [submitEditButtonActive, setSubmitEditButtonActive] = useState(false);
 
@@ -30,21 +23,17 @@ const CommentEditTextare: FC<CommentEditTextareaT> = ({
     setSubmitEditButtonActive(true);
   };
 
-  const submitEditedCommetn = async (event: MouseEvent<HTMLElement>) => {
+  const submitButtonClickHandler = async (event: MouseEvent<HTMLElement>) => {
     // setActiveEditingMode(false);
-    disableEditMode();
+    onCancel();
     setSubmitEditButtonActive(false);
-
-    commentDto.text = textareaText;
-    commentDto.date = new Date().toDateString();
-
-    await commentContext.editComment(commentDto);
+    await onSubmit(textareaText);
   };
 
-  const cancelEditingHandler = (event: MouseEvent<HTMLElement>) => {
+  const cancelButtonClickHandler = (event: MouseEvent<HTMLElement>) => {
     // setActiveEditingMode(false);
     event.preventDefault();
-    disableEditMode();
+    onCancel();
     setSubmitEditButtonActive(false);
   };
 
@@ -59,7 +48,7 @@ const CommentEditTextare: FC<CommentEditTextareaT> = ({
   return (
     <>
       <textarea
-        className={`${classes["comment-text"]} ${classes["comment-textarea"]}`}
+        className={classes["comment-textarea"]}
         value={textareaText}
         onChange={changeTextareaText}
         onFocus={(e) =>
@@ -73,7 +62,7 @@ const CommentEditTextare: FC<CommentEditTextareaT> = ({
       <Button
         action="cancel"
         className={classes["textarea-button"]}
-        onClick={cancelEditingHandler}
+        onClick={cancelButtonClickHandler}
       >
         Cancel
       </Button>
@@ -81,7 +70,7 @@ const CommentEditTextare: FC<CommentEditTextareaT> = ({
         <Button
           action="submit"
           className={classes["textarea-button"]}
-          onClick={submitEditedCommetn}
+          onClick={submitButtonClickHandler}
         >
           Save
         </Button>
@@ -90,4 +79,4 @@ const CommentEditTextare: FC<CommentEditTextareaT> = ({
   );
 };
 
-export default CommentEditTextare;
+export default Textare;

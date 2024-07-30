@@ -1,8 +1,8 @@
 import { MouseEvent, FC, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import useRequiredCommentContext from "../../hooks/use-required-commentContext";
-import { CommentDto, CommentLikeDto } from "../../helpers/dtos";
+import useRequiredCommentContext from "../../../hooks/use-required-commentContext";
+import { CommentDto, CommentLikeDto } from "../../../helpers/dtos";
 import classes from "./Commentlike.module.css";
 
 type CommentLikeT = {

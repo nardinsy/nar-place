@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 import Dropdown, { DropDownItem } from "../../Header/Dropdown/DropdownCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import CommentLike from "../like/CommentLike";
+import CommentLike from "./like/CommentLike";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
+import CommentReply from "./reply/CommentReply";
 import classes from "./CommentItem.module.css";
 
 type CommentItemT = {
@@ -19,6 +20,8 @@ type CommentItemT = {
 const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
   const authCtx = useRequiredAuthContext();
   const [showDropDown, setShowDropDown] = useState(false);
+  const [showReplyTextarea, setShowReplyTextarea] = useState(false);
+
   const moreButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -58,6 +61,11 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
     setShowDropDown((pre) => !pre);
   };
 
+  const replyButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setShowReplyTextarea((pre) => !pre);
+  };
+
   const defaultItems = [
     { title: "Help", handler: () => {} },
     // {
@@ -69,52 +77,70 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
   const dropdownItems = items ? [...defaultItems, ...items] : defaultItems;
 
   return (
-    <div className={classes["comment-item"]}>
-      <div className={classes["writer-avatar"]}>
-        <Link
-          to={{
-            pathname: `/places/${userId}`,
-            state: { userDto },
-          }}
-        >
-          <Avatar
-            alt="comment"
-            pictureUrl={absolutePictureUrl}
-            key={userId}
-            width="2rem"
-          />
-        </Link>
-      </div>
-      <div className={classes["commetn-details"]}>
-        <div className={classes["comment-info"]}>
-          <div className={classes["writer-username"]}>@{username}</div>
-          {authCtx.isLoggedin && (
-            <div className={classes["comment-actions"]}>
-              <CommentLike
-                commentDto={commentDto}
-                loggedUserUserId={authCtx.userId}
-              />
-            </div>
-          )}
-          <button
-            data-testid="more-button"
-            ref={moreButtonRef}
-            className={classes["comment-edit-button"]}
-            onClick={moreButtonClickHandler}
+    <>
+      <div className={classes["comment-item"]}>
+        <div className={classes["writer-avatar"]}>
+          <Link
+            to={{
+              pathname: `/places/${userId}`,
+              state: { userDto },
+            }}
           >
-            <FontAwesomeIcon icon={faEllipsis} />
-            {showDropDown && (
-              <Dropdown
-                items={dropdownItems}
-                key={Math.random()}
-                propClassName={classes["dropdown-more-button"]}
-              />
-            )}
-          </button>
+            <Avatar
+              alt="comment"
+              pictureUrl={absolutePictureUrl}
+              key={userId}
+              width="2rem"
+            />
+          </Link>
         </div>
-        {children}
+        <div className={classes["commetn-details"]}>
+          <div className={classes["comment-info"]}>
+            <div className={classes["writer-username"]}>@{username}</div>
+            {authCtx.isLoggedin && (
+              <div className={classes["comment-actions"]}>
+                <button
+                  className={classes["reply-button"]}
+                  onClick={replyButtonClickHandler}
+                >
+                  Reply
+                </button>
+                <CommentLike
+                  commentDto={commentDto}
+                  loggedUserUserId={authCtx.userId}
+                />
+              </div>
+            )}
+            <button
+              data-testid="more-button"
+              ref={moreButtonRef}
+              className={classes["comment-more-button"]}
+              onClick={moreButtonClickHandler}
+            >
+              <FontAwesomeIcon icon={faEllipsis} />
+              {showDropDown && (
+                <Dropdown
+                  items={dropdownItems}
+                  key={Math.random()}
+                  propClassName={classes["dropdown-more-button"]}
+                />
+              )}
+            </button>
+          </div>
+          {children}
+        </div>
       </div>
-    </div>
+
+      <div className={classes["reply-textarea"]}>
+        {showReplyTextarea && authCtx.isLoggedin && (
+          <CommentReply
+            commentDto={commentDto}
+            disableReplyMode={async () => setShowReplyTextarea(false)}
+            loggedUserUserId={authCtx.userId}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

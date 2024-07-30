@@ -9,6 +9,7 @@ import {
   CommentDto,
   NewComment,
   CommentLikeDto,
+  CommentReplyDto,
 } from "../helpers/dtos";
 
 export interface BackendService {
@@ -74,4 +75,9 @@ export interface BackendService {
     commentId: string,
     token: string
   ): Promise<{ commentLikes: { userId: string; commentId: string }[] }>;
+
+  replyComment(
+    commentReply: CommentReplyDto,
+    token: string
+  ): Promise<{ comment: CommentDto }>;
 }

@@ -3,7 +3,12 @@ import { createRelativePath } from "../helpers/api-url";
 import { HasChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
-import { CommentDto, CommentLikeDto, NewComment } from "../helpers/dtos";
+import {
+  CommentDto,
+  CommentLikeDto,
+  CommentReplyDto,
+  NewComment,
+} from "../helpers/dtos";
 
 interface CommentT {
   comments: CommentDto[];
@@ -13,6 +18,7 @@ interface CommentT {
   deleteComment: (commentId: string) => Promise<void>;
   likeComment: (newLikeComment: CommentLikeDto) => Promise<void>;
   unlikeComment: (userId: string, commentId: string) => Promise<void>;
+  replyToComment: (commentReply: CommentReplyDto) => Promise<void>;
 }
 
 const CommentContext = createContext<CommentT | undefined>(undefined);
@@ -136,6 +142,27 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     showSuccessToast("Comment unliked successfully");
   };
 
+  const replyToComment = async (commentReply: CommentReplyDto) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Please login first");
+    }
+
+    const result = await backend.replyComment(commentReply, token);
+
+    const comment = comments.find(
+      (comment) => comment.id === commentReply.commentId
+    );
+    // if (comment) {
+    //   comment.replys.unshift({
+    //     userId,
+    //     text,
+    //   });
+    // }
+    setCommetns((pre) => pre);
+    showSuccessToast("Replyed to comment successfully");
+  };
+
   const value: CommentT = {
     comments,
     getCommetns,
@@ -144,6 +171,7 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     deleteComment,
     likeComment,
     unlikeComment,
+    replyToComment,
   };
 
   return (

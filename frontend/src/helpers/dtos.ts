@@ -114,3 +114,10 @@ export type CommentLikeDto = {
   commentId: string;
   date: Date;
 };
+
+export type CommentReplyDto = {
+  text: string;
+  userId: string;
+  commentId: string;
+  date: Date;
+};
