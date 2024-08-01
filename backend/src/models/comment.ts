@@ -7,6 +7,8 @@ export interface IPostComment extends mongoose.Document {
   postID: Types.ObjectId;
   writer: Types.ObjectId;
   likes: { userId: string; commentId: string }[];
+  replies: Types.ObjectId[];
+  parentId: Types.ObjectId;
   _id: Types.ObjectId;
 }
 
@@ -28,6 +30,18 @@ const postCommentSchema = new Schema<IPostComment>({
       commentId: { type: String },
     },
   ],
+  replies: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PostComment",
+    },
+  ],
+
+  parentId: {
+    type: Schema.Types.ObjectId,
+    required: false,
+    ref: "PostComment",
+  },
 });
 
 const PostComment = model<IPostComment>("PostComment", postCommentSchema);

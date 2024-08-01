@@ -78,6 +78,7 @@ export type CommentDto = {
   postID: Types.ObjectId;
   writer: CommentWriter;
   likes: { userId: string; commentId: string }[];
+  replies: CommentDto[];
 };
 
 export type CommentWriter = {
@@ -90,5 +91,13 @@ export type CommentWriter = {
 export type CommentLikeDto = {
   userId: string;
   commentId: string;
+  date: Date;
+};
+
+export type CommentReplyDto = {
+  parentId: string;
+  userId: string;
+  postId: string;
+  text: string;
   date: Date;
 };

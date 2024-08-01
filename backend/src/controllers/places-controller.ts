@@ -13,6 +13,7 @@ import contentTypeBufferSplit from "../helpers/data-url";
 import {
   CommentDto,
   CommentLikeDto,
+  CommentReplyDto,
   NewComment,
   NewPlace,
   PlaceDto,
@@ -355,6 +356,8 @@ const checkPlaceBelongsToUser = (place: IPlace, user: IUser) => {
   return placeCreatorId === userId ? true : false;
 };
 
+//Comments
+
 export const addComment: AuthRequestHandler = async (user, req, res, next) => {
   const errors = validationResult(req.body.newComment);
   if (!errors.isEmpty()) {
@@ -414,6 +417,7 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
       placeCount: user.places.length,
     },
     likes: [],
+    replies: [],
   };
 
   res.status(201).json({
@@ -606,6 +610,41 @@ const getcommnetsDto = async (comments: IPostComment[]) => {
         postID: comment.postID,
         writer,
         likes: comment.likes,
+        replies: await getCommentsReplies(comment.replies),
+      };
+      return commentDto;
+    })
+  );
+};
+
+const getCommentsReplies = async (
+  replies: Types.ObjectId[]
+): Promise<CommentDto[]> => {
+  return await Promise.all(
+    replies.map(async (reply) => {
+      let comment: IPostComment | null;
+
+      try {
+        comment = await PostComment.findOne({
+          _id: new Types.ObjectId(reply.id),
+        });
+
+        if (!comment) {
+          throw new Error("Something went wrong, could not find comment.");
+        }
+      } catch (err) {
+        throw new Error("Something went wrong, could reply to comment.");
+      }
+      const writer = await getCommentWriter(comment);
+
+      const commentDto: CommentDto = {
+        id: comment._id.toHexString(),
+        text: comment.text,
+        date: comment.date,
+        postID: comment.postID,
+        writer,
+        likes: comment.likes,
+        replies: await getCommentsReplies(comment.replies),
       };
       return commentDto;
     })
@@ -733,5 +772,87 @@ export const unlikeComment: AuthRequestHandler = async (
 
   res.status(201).json({
     commentLikes: comment.likes,
+  });
+};
+
+export const replyComment: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const commentReply: CommentReplyDto = req.body.commentReply;
+  const { parentId, date, text, userId, postId } = commentReply;
+
+  const newReplyToComment = new PostComment({
+    text,
+    date,
+    postID: postId,
+    writer: userId,
+    parentId,
+  });
+
+  try {
+    await newReplyToComment.save();
+  } catch (error) {
+    return next(
+      createHttpError(
+        `Adding reply to comment failed, please try again. ${error}`,
+        500
+      )
+    );
+  }
+
+  let parentComment: IPostComment | null;
+
+  try {
+    parentComment = await PostComment.findOne({
+      _id: new Types.ObjectId(parentId),
+    });
+
+    if (!parentComment) {
+      return next(
+        createHttpError(
+          "Something went wrong, could not find parent comment.",
+          500
+        )
+      );
+    }
+    parentComment.replies.unshift(newReplyToComment._id);
+  } catch (err) {
+    return next(
+      createHttpError("Something went wrong, could add reply to comment.", 500)
+    );
+  }
+
+  try {
+    parentComment.save();
+  } catch (error) {
+    return next(
+      createHttpError(
+        `Saving comment's reply failed, please try again. ${error}`,
+        500
+      )
+    );
+  }
+
+  const replyCommentDto = {
+    id: newReplyToComment._id.toHexString(),
+    parentId,
+    text,
+    date,
+    postID: postId,
+    writer: {
+      userId: user.id,
+      username: user.username,
+      pictureUrl: user.picture,
+      placeCount: user.places.length,
+    },
+    likes: [],
+    replies: [],
+  };
+
+  res.status(201).json({
+    replyComment: replyCommentDto,
   });
 };
