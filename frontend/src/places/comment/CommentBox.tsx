@@ -20,7 +20,9 @@ const CommentBox = ({ placeId }: { placeId: string }) => {
   return (
     <div>
       <h3 style={{ paddingLeft: "0.5rem" }}>Comments</h3>
-      <CommetnsList comments={commentContext.comments} />
+      <div className={classes["commentList-container"]}>
+        <CommetnsList comments={commentContext.comments} />
+      </div>
 
       <div className={classes["comment-scope"]}>
         {authContext.isLoggedin && <CommentInput placeId={placeId} />}

@@ -148,17 +148,19 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
       throw new Error("Please login first");
     }
 
-    const result = await backend.replyComment(commentReply, token);
+    const pic = localStorage.getItem("userPictureUrl");
 
-    const comment = comments.find(
-      (comment) => comment.id === commentReply.commentId
+    const { replyComment } = await backend.replyComment(commentReply, token);
+    replyComment.writer.pictureUrl = pic ? createRelativePath(pic) : undefined;
+
+    const parentComment = comments.find(
+      (comment) => comment.id === commentReply.parentId
     );
-    // if (comment) {
-    //   comment.replys.unshift({
-    //     userId,
-    //     text,
-    //   });
-    // }
+
+    if (parentComment) {
+      parentComment.replies.unshift(replyComment);
+    }
+
     setCommetns((pre) => pre);
     showSuccessToast("Replyed to comment successfully");
   };

@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import CommentLike from "./like/CommentLike";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
-import CommentReply from "./reply/CommentReply";
+import CommentReplyTextarea from "./reply/CommentReplyTextarea";
 import classes from "./CommentItem.module.css";
 
 type CommentItemT = {
@@ -43,7 +43,7 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
     };
   }, [showDropDown]);
 
-  const { date, postID, text, writer, likes } = commentDto;
+  const { date, postID, text, writer, likes, replies } = commentDto;
   const { pictureUrl, userId, username, placeCount } = writer;
   const absolutePictureUrl = pictureUrl
     ? createAbsoluteApiAddress(pictureUrl)
@@ -133,7 +133,7 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
 
       <div className={classes["reply-textarea"]}>
         {showReplyTextarea && authCtx.isLoggedin && (
-          <CommentReply
+          <CommentReplyTextarea
             commentDto={commentDto}
             disableReplyMode={async () => setShowReplyTextarea(false)}
             loggedUserUserId={authCtx.userId}

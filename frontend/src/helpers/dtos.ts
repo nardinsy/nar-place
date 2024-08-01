@@ -89,11 +89,13 @@ export class LoginResult {
 
 export type CommentDto = {
   id: string;
+  parentId: string | undefined;
   text: string;
   date: string;
   postID: string;
-  likes: { userId: string; commentId: string }[];
   writer: CommentWriter;
+  likes: { userId: string; commentId: string }[];
+  replies: CommentDto[];
 };
 
 export type CommentWriter = {
@@ -116,8 +118,25 @@ export type CommentLikeDto = {
 };
 
 export type CommentReplyDto = {
-  text: string;
+  parentId: string;
   userId: string;
-  commentId: string;
+  postId: string;
+  text: string;
   date: Date;
 };
+
+// const replies2: CommentDto = {
+//   id: "66953066398f8bc122208ddf",
+//   parentId: "66960bcec258550dcd4c7fd8",
+//   text: "This is reply",
+//   date: "",
+//   postID: "660007821e89fec1dd280ae2",
+//   writer: {
+//     userId: "65f700a6e771ff3a4ddabaaf",
+//     username: "Nardin",
+//     pictureUrl: undefined,
+//     placeCount: 0,
+//   },
+//   likes: [],
+//   replies: [],
+// };

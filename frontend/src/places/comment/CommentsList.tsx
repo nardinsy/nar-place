@@ -3,6 +3,7 @@ import { CommentDto } from "../../helpers/dtos";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import EditableCommentItem from "./EditableCommentItem";
 import NotEditableCommentItem from "./NotEditableCommentItem";
+import CommentReplies from "./reply/CommentReplies";
 import classes from "./Comment.module.css";
 
 type CommetnListT = {
@@ -22,15 +23,28 @@ const CommetnsList: FC<CommetnListT> = ({ comments }) => {
       authContext.userId === comment.writer.userId
     ) {
       return (
-        <li key={index}>
-          <EditableCommentItem commentDto={comment} key={index} />
-        </li>
+        <>
+          <li key={index}>
+            <EditableCommentItem commentDto={comment} key={index} />
+          </li>
+
+          <li key={Math.random()}>
+            <CommentReplies replies={comment.replies} key={Math.random()} />
+          </li>
+        </>
       );
     }
     return (
-      <li key={index}>
-        <NotEditableCommentItem commentDto={comment} key={index} />
-      </li>
+      <>
+        <li key={index}>
+          <NotEditableCommentItem commentDto={comment} key={index} />
+        </li>
+        {comment.replies && (
+          <li key={Math.random()}>
+            <CommentReplies replies={comment.replies} key={Math.random()} />
+          </li>
+        )}
+      </>
     );
   });
 

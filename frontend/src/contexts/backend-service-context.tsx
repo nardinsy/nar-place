@@ -236,7 +236,7 @@ class BackedServiceImpl implements BackendService {
   async replyComment(
     commentReply: CommentReplyDto,
     token: string
-  ): Promise<{ comment: CommentDto }> {
+  ): Promise<{ replyComment: CommentDto }> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },

@@ -2,7 +2,6 @@ import { FC } from "react";
 import { CommentDto, CommentReplyDto } from "../../../helpers/dtos";
 import Textare from "../textarea/Textarea";
 import useRequiredCommentContext from "../../../hooks/use-required-commentContext";
-import classes from "./CommentReply.module.css";
 
 type CommentReplyT = {
   commentDto: CommentDto;
@@ -10,7 +9,7 @@ type CommentReplyT = {
   loggedUserUserId: string;
 };
 
-const CommentReply: FC<CommentReplyT> = ({
+const CommentReplyTextarea: FC<CommentReplyT> = ({
   commentDto,
   disableReplyMode,
   loggedUserUserId,
@@ -19,10 +18,11 @@ const CommentReply: FC<CommentReplyT> = ({
 
   const submitReplyToComment = async (text: string) => {
     const commentReply: CommentReplyDto = {
-      commentId: commentDto.id,
-      date: new Date(),
-      text,
+      parentId: commentDto.id,
       userId: loggedUserUserId,
+      postId: commentDto.postID,
+      text,
+      date: new Date(),
     };
 
     await commentCtx.replyToComment(commentReply);
@@ -37,4 +37,4 @@ const CommentReply: FC<CommentReplyT> = ({
   );
 };
 
-export default CommentReply;
+export default CommentReplyTextarea;

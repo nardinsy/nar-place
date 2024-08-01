@@ -1,3 +1,7 @@
+.container {
+  margin-bottom: 0.8rem;
+}
+
 .comment-textarea {
   padding: 0.4rem 0;
   font-size: 14px;

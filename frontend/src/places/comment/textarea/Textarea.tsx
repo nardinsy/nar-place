@@ -46,7 +46,7 @@ const Textare: FC<TextareaT> = ({ text, onSubmit, onCancel }) => {
   };
 
   return (
-    <>
+    <div className={classes["container"]}>
       <textarea
         className={classes["comment-textarea"]}
         value={textareaText}
@@ -75,7 +75,7 @@ const Textare: FC<TextareaT> = ({ text, onSubmit, onCancel }) => {
           Save
         </Button>
       )}
-    </>
+    </div>
   );
 };
 

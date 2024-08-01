@@ -79,5 +79,5 @@ export interface BackendService {
   replyComment(
     commentReply: CommentReplyDto,
     token: string
-  ): Promise<{ comment: CommentDto }>;
+  ): Promise<{ replyComment: CommentDto }>;
 }

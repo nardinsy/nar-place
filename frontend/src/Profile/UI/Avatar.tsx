@@ -28,7 +28,7 @@ const Avatar = ({
     <FontAwesomeIcon
       data-testid="no-image"
       icon={faCircleUser}
-      className={classes.avatar}
+      className={`${classes["avatar-img"]} ${cssClassName}`}
       style={{ width, height: width }}
     />
   );
