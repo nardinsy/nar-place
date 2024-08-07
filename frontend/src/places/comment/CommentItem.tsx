@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import CommentLike from "./like/CommentLike";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
-import CommentReplyTextarea from "./reply/CommentReplyTextarea";
+import Reply from "./reply/Reply";
 import classes from "./CommentItem.module.css";
 
 type CommentItemT = {
@@ -20,7 +20,7 @@ type CommentItemT = {
 const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
   const authCtx = useRequiredAuthContext();
   const [showDropDown, setShowDropDown] = useState(false);
-  const [showReplyTextarea, setShowReplyTextarea] = useState(false);
+  const [replyMode, setReplyMode] = useState(false);
 
   const moreButtonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -43,8 +43,8 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
     };
   }, [showDropDown]);
 
-  const { date, postID, text, writer, likes, replies } = commentDto;
-  const { pictureUrl, userId, username, placeCount } = writer;
+  // const { date, postID, text, writer, likes, replies, id } = commentDto;
+  const { pictureUrl, userId, username, placeCount } = commentDto.writer;
   const absolutePictureUrl = pictureUrl
     ? createAbsoluteApiAddress(pictureUrl)
     : undefined;
@@ -63,7 +63,11 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
 
   const replyButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setShowReplyTextarea((pre) => !pre);
+    setReplyMode((pre) => !pre);
+  };
+
+  const disableReplyMode = () => {
+    setReplyMode(false);
   };
 
   const defaultItems = [
@@ -131,15 +135,11 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
         </div>
       </div>
 
-      <div className={classes["reply-textarea"]}>
-        {showReplyTextarea && authCtx.isLoggedin && (
-          <CommentReplyTextarea
-            commentDto={commentDto}
-            disableReplyMode={async () => setShowReplyTextarea(false)}
-            loggedUserUserId={authCtx.userId}
-          />
-        )}
-      </div>
+      <Reply
+        commentDto={commentDto}
+        showReplyTextarea={replyMode}
+        closeReplyTextarea={disableReplyMode}
+      />
     </>
   );
 };

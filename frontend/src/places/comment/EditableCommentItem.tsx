@@ -23,9 +23,7 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({ commentDto }) => {
   };
 
   const deleteButtonClickHandler = async (event: MouseEvent<HTMLElement>) => {
-    await commentContext.deleteComment(id);
-    // setShowDropDown(false);
-    // setTextareaText("");
+    await commentContext.deleteComment(id, commentDto.parentId);
   };
 
   const editComment = async (text: string) => {
@@ -58,7 +56,7 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({ commentDto }) => {
         <Textare
           text={text}
           onSubmit={editComment}
-          onCancel={async () => setActiveEditingMode(false)}
+          closeTextarea={async () => setActiveEditingMode(false)}
         />
       ) : (
         <div className={classes["comment-text"]}>{commentText}</div>

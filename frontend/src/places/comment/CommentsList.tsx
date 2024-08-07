@@ -23,36 +23,19 @@ const CommetnsList: FC<CommetnListT> = ({ comments }) => {
       authContext.userId === comment.writer.userId
     ) {
       return (
-        <>
-          <li key={index}>
-            <EditableCommentItem commentDto={comment} key={index} />
-          </li>
-
-          <li key={Math.random()}>
-            <CommentReplies replies={comment.replies} key={Math.random()} />
-          </li>
-        </>
+        <li key={index}>
+          <EditableCommentItem commentDto={comment} key={index} />
+        </li>
       );
     }
     return (
-      <>
-        <li key={index}>
-          <NotEditableCommentItem commentDto={comment} key={index} />
-        </li>
-        {comment.replies && (
-          <li key={Math.random()}>
-            <CommentReplies replies={comment.replies} key={Math.random()} />
-          </li>
-        )}
-      </>
+      <li key={index}>
+        <NotEditableCommentItem commentDto={comment} key={index} />
+      </li>
     );
   });
 
-  return (
-    <div>
-      <ul className={classes["comments-list"]}>{commentsList}</ul>
-    </div>
-  );
+  return <ul className={classes["comments-list"]}>{commentsList}</ul>;
 };
 
 export default CommetnsList;

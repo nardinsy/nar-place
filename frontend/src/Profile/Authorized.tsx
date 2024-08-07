@@ -18,7 +18,7 @@ import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
 
 const Authorized = () => {
-  console.log("Authorized Component Render");
+  // console.log("Authorized Component Render");
 
   const [places, setPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);

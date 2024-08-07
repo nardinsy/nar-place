@@ -4,11 +4,11 @@ import classes from "./Textarea.module.css";
 
 type TextareaT = {
   text: string;
-  onSubmit: (text: string) => {};
-  onCancel: () => {};
+  onSubmit: (text: string) => Promise<void>;
+  closeTextarea: () => void;
 };
 
-const Textare: FC<TextareaT> = ({ text, onSubmit, onCancel }) => {
+const Textare: FC<TextareaT> = ({ text, onSubmit, closeTextarea }) => {
   const [textareaText, setTextareaText] = useState(text);
   const [submitEditButtonActive, setSubmitEditButtonActive] = useState(false);
 
@@ -25,15 +25,15 @@ const Textare: FC<TextareaT> = ({ text, onSubmit, onCancel }) => {
 
   const submitButtonClickHandler = async (event: MouseEvent<HTMLElement>) => {
     // setActiveEditingMode(false);
-    onCancel();
-    setSubmitEditButtonActive(false);
     await onSubmit(textareaText);
+    setSubmitEditButtonActive(false);
+    closeTextarea();
   };
 
   const cancelButtonClickHandler = (event: MouseEvent<HTMLElement>) => {
     // setActiveEditingMode(false);
     event.preventDefault();
-    onCancel();
+    closeTextarea();
     setSubmitEditButtonActive(false);
   };
 

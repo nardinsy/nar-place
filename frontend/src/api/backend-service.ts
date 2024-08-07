@@ -63,7 +63,11 @@ export interface BackendService {
 
   editComment(editComment: CommentDto, token: string): Promise<void>;
 
-  deleteComment(commentId: string, token: string): Promise<void>;
+  deleteComment(
+    commentId: string,
+    parentId: string | undefined,
+    token: string
+  ): Promise<void>;
 
   likeComment(
     NewCommentLike: CommentLikeDto,

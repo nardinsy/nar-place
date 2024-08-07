@@ -5,13 +5,13 @@ import useRequiredCommentContext from "../../../hooks/use-required-commentContex
 
 type CommentReplyT = {
   commentDto: CommentDto;
-  disableReplyMode: () => {};
+  closeReplyTextarea: () => void;
   loggedUserUserId: string;
 };
 
 const CommentReplyTextarea: FC<CommentReplyT> = ({
   commentDto,
-  disableReplyMode,
+  closeReplyTextarea,
   loggedUserUserId,
 }) => {
   const commentCtx = useRequiredCommentContext();
@@ -25,13 +25,13 @@ const CommentReplyTextarea: FC<CommentReplyT> = ({
       date: new Date(),
     };
 
-    await commentCtx.replyToComment(commentReply);
+    await commentCtx.replyToComment(commentDto, commentReply);
   };
 
   return (
     <Textare
       text={""}
-      onCancel={disableReplyMode}
+      closeTextarea={closeReplyTextarea}
       onSubmit={submitReplyToComment}
     />
   );

@@ -196,11 +196,15 @@ class BackedServiceImpl implements BackendService {
     return await sendHttpRequest(ENDPOINTS.editComment, requestOptions);
   }
 
-  async deleteComment(commentId: string, token: string): Promise<void> {
+  async deleteComment(
+    commentId: string,
+    parentId: string | undefined,
+    token: string
+  ): Promise<void> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ commentId }),
+      body: JSON.stringify({ commentId, parentId }),
     };
 
     return await sendHttpRequest(ENDPOINTS.deleteComment, requestOptions);

@@ -47,23 +47,22 @@ const CommentLike: FC<CommentLikeT> = ({ commentDto, loggedUserUserId }) => {
       date: new Date(),
     };
 
-    await commentCtx.likeComment(newCommentLike);
-
-    // commentDto.likes.unshift({
-    //   userId: loggedUserUserId,
-    //   commentId: commentDto.id,
-    // });
+    commentDto.likes.unshift({
+      userId: loggedUserUserId,
+      commentId: commentDto.id,
+    });
+    await commentCtx.likeComment(commentDto, newCommentLike);
 
     setUserLikedComment(true);
     setCommentLikeNumber((pre) => pre + 1);
   };
 
   const unlikeCommetn = async () => {
-    await commentCtx.unlikeComment(loggedUserUserId, commentDto.id);
+    commentDto.likes = commentDto.likes.filter(
+      (like) => like.userId !== loggedUserUserId
+    );
 
-    // commentDto.likes = commentDto.likes.filter(
-    //   (like) => like.userId !== loggedUserUserId
-    // );
+    await commentCtx.unlikeComment(commentDto, loggedUserUserId, commentDto.id);
 
     setUserLikedComment(false);
     setCommentLikeNumber((pre) => pre - 1);
