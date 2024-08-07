@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { Response, NextFunction, RequestHandler } from "express";
 import { validationResult } from "express-validator";
 import { Types } from "mongoose";
 import { AuthRequestHandler } from "../lib/auth";
@@ -487,32 +487,30 @@ export const editComment: AuthRequestHandler = async (user, req, res, next) => {
   }
 
   res.status(201).json({
-    message: "Edit comment successfully",
+    comment,
   });
 };
 
-export const deleteComment: AuthRequestHandler = async (
-  user,
-  req,
-  res,
-  next
+export const deleteParentComment = async (
+  commentId: string,
+  user: IUser,
+  res: Response,
+  next: NextFunction
 ) => {
-  const id = req.body.commentId;
-
   let comment: IPostComment | null;
   let place: IPlace | null;
 
   try {
-    comment = await PostComment.findById(id);
+    comment = await PostComment.findById(commentId);
   } catch {
     return next(
-      createHttpError("Something went wrong, could not find comment1.", 500)
+      createHttpError("Something went wrong, could not find comment.", 500)
     );
   }
 
   if (!comment) {
     return next(
-      createHttpError("Something went wrong, could not find comment2.", 500)
+      createHttpError("Something went wrong, could not find comment.", 500)
     );
   }
 
@@ -539,8 +537,9 @@ export const deleteComment: AuthRequestHandler = async (
       createHttpError("Something went wrong, could not find place.", 500)
     );
   }
+
   const newCommentsList = place.comments.filter(
-    (comment) => comment._id.toHexString() !== id
+    (comment) => comment._id.toHexString() !== commentId
   );
 
   place.comments = newCommentsList;
@@ -555,9 +554,68 @@ export const deleteComment: AuthRequestHandler = async (
       )
     );
   }
+};
+
+const deleteReplyComment = async (
+  replyId: string,
+  parentId: string,
+  user: IUser,
+  res: Response,
+  next: NextFunction
+) => {
+  let parentComment: IPostComment | null;
 
   try {
-    await PostComment.findByIdAndDelete(comment.id);
+    parentComment = await PostComment.findById(parentId);
+  } catch {
+    return next(
+      createHttpError("Something went wrong, could not find comment.", 500)
+    );
+  }
+
+  if (!parentComment) {
+    return next(
+      createHttpError("Something went wrong, could not find comment.", 500)
+    );
+  }
+
+  if (!checkCommentBelongsToUser(parentComment, user)) {
+    return res.status(401).json({
+      message: "unauthorize",
+    });
+  }
+
+  parentComment.replies = parentComment.replies.filter(
+    (reply) => reply._id.toHexString() !== replyId
+  );
+
+  try {
+    await parentComment.save();
+  } catch {
+    return next(
+      createHttpError(
+        "Something went wrong, could not save comment replies.",
+        500
+      )
+    );
+  }
+};
+
+export const deleteComment: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const { commentId, parentId } = req.body;
+  if (parentId) {
+    await deleteReplyComment(commentId, parentId, user, res, next);
+  } else {
+    await deleteParentComment(commentId, user, res, next);
+  }
+
+  try {
+    await PostComment.findByIdAndDelete(commentId);
   } catch {
     return next(
       createHttpError("Something went wrong, could not delete comments.", 500)
@@ -605,11 +663,13 @@ const getcommnetsDto = async (comments: IPostComment[]) => {
 
       const commentDto: CommentDto = {
         id: comment._id.toHexString(),
+        parentId: comment.parentId ? comment.parentId.toHexString() : undefined,
         text: comment.text,
         date: comment.date,
         postID: comment.postID,
         writer,
         likes: comment.likes,
+        // replies: comment.replies
         replies: await getCommentsReplies(comment.replies),
       };
       return commentDto;
@@ -625,20 +685,20 @@ const getCommentsReplies = async (
       let comment: IPostComment | null;
 
       try {
-        comment = await PostComment.findOne({
-          _id: new Types.ObjectId(reply.id),
-        });
+        comment = await PostComment.findOne(reply._id);
 
         if (!comment) {
-          throw new Error("Something went wrong, could not find comment.");
+          throw new Error("Something went wrong, could not find comment 1.");
         }
       } catch (err) {
-        throw new Error("Something went wrong, could reply to comment.");
+        throw new Error("Something went wrong, could not find comment 2.");
       }
+
       const writer = await getCommentWriter(comment);
 
       const commentDto: CommentDto = {
         id: comment._id.toHexString(),
+        parentId: comment.parentId.toHexString(),
         text: comment.text,
         date: comment.date,
         postID: comment.postID,

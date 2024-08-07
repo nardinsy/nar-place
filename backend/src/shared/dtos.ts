@@ -73,6 +73,7 @@ export type NewComment = {
 
 export type CommentDto = {
   id: string;
+  parentId: string | undefined;
   text: string;
   date: Date;
   postID: Types.ObjectId;
