@@ -100,7 +100,14 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
         </div>
         <div className={classes["commetn-details"]}>
           <div className={classes["comment-info"]}>
-            <div className={classes["writer-username"]}>@{username}</div>
+            <div className={classes["comment-actions"]}>
+              <Link
+                to={{ pathname: `/places/${userId}`, state: { userDto } }}
+                className={classes["writer-username"]}
+              >
+                @{username}
+              </Link>
+            </div>
             {authCtx.isLoggedin && (
               <div className={classes["comment-actions"]}>
                 <button

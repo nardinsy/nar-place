@@ -10,7 +10,7 @@ import {
   NewComment,
 } from "../helpers/dtos";
 
-interface CommentT {
+export interface CommentT {
   comments: CommentDto[];
   getCommetns: (placeId: string) => Promise<void>;
   uploadNewCommetn: (newCommetn: NewComment) => Promise<void>;

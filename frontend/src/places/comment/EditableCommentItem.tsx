@@ -17,8 +17,6 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({ commentDto }) => {
 
   const editButtonClickHandler = (event: any) => {
     event.preventDefault();
-    // event.stopPropagation();
-    // setShowDropDown(false);
     setActiveEditingMode(true);
   };
 

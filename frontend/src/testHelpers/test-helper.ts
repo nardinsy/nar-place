@@ -1,4 +1,5 @@
 import { AuthContextT } from "../contexts/auth-context";
+import { CommentT } from "../contexts/comment-contex";
 
 export const authProviderValueLoggedinProps = {
   isLoggedin: true,
@@ -17,3 +18,14 @@ export const authProviderValueLoggedoutProps = {
   signup: jest.fn(),
   login: jest.fn((userInfo) => Promise.resolve()),
 } satisfies AuthContextT;
+
+export const commentProviderValueProps: CommentT = {
+  comments: [],
+  getCommetns: jest.fn(),
+  uploadNewCommetn: jest.fn(),
+  editComment: jest.fn(),
+  deleteComment: jest.fn(),
+  likeComment: jest.fn(),
+  unlikeComment: jest.fn(),
+  replyToComment: jest.fn(),
+};

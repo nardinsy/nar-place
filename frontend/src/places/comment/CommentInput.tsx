@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, FC, useState } from "react";
+import { ChangeEvent, KeyboardEvent, FC, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { NewComment } from "../../helpers/dtos";
@@ -15,25 +15,34 @@ const CommentInput: FC<CommentInputT> = ({ placeId }) => {
   const [commentInput, setCommentInput] = useState("");
   const [submitButtonIsActive, setSubmitButtonIsActive] = useState(false);
 
-  const commentInputChangeHandler = (
+  const commentInputChangeHandler = async (
     event: ChangeEvent<HTMLTextAreaElement>
   ) => {
     event.preventDefault();
     setCommentInput(event.target.value);
 
-    if (event.target.value === "") {
+    if (event.target.value.match(/^\s+$/) || event.target.value === "") {
       setSubmitButtonIsActive(false);
       return;
     }
-    if (event.target.value !== "" && !submitButtonIsActive) {
+    if (!event.target.value.match(/^\s+$/) && !submitButtonIsActive) {
       setSubmitButtonIsActive(true);
       return;
     }
   };
 
   const keyDownHandler = async (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== "Enter" || commentInput === "") {
+    if (
+      event.key !== "Enter" ||
+      commentInput === "" ||
+      commentInput.match(/^\s+$/)
+    ) {
       return;
+    }
+
+    if (event.key === "Enter" && event.shiftKey) {
+      return;
+      // new line
     }
 
     await submit();
@@ -56,7 +65,10 @@ const CommentInput: FC<CommentInputT> = ({ placeId }) => {
   };
 
   return (
-    <div className={classes["comment-input-container"]}>
+    <div
+      className={classes["comment-input-container"]}
+      onKeyDown={keyDownHandler}
+    >
       <div className={classes["left"]}>
         <textarea
           placeholder="Add a comment"
@@ -67,10 +79,10 @@ const CommentInput: FC<CommentInputT> = ({ placeId }) => {
       </div>
 
       <div className={classes.actions}>
-        <FontAwesomeIcon
+        {/* <FontAwesomeIcon
           icon={faFaceSmile}
           className={classes["emoji-button"]}
-        />
+        /> */}
 
         <div onClick={submitCommentHandler}>
           <FontAwesomeIcon
