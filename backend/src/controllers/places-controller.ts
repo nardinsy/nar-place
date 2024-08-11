@@ -579,11 +579,11 @@ const deleteReplyComment = async (
     );
   }
 
-  if (!checkCommentBelongsToUser(parentComment, user)) {
-    return res.status(401).json({
-      message: "unauthorize",
-    });
-  }
+  // if (!checkCommentBelongsToUser(parentComment, user)) {
+  //   return res.status(401).json({
+  //     message: "unauthorize",
+  //   });
+  // }
 
   parentComment.replies = parentComment.replies.filter(
     (reply) => reply._id.toHexString() !== replyId
