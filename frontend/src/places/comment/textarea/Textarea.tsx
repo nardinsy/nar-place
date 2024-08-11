@@ -1,4 +1,4 @@
-import { useState, FC, ChangeEvent, MouseEvent } from "react";
+import { useState, FC, ChangeEvent, MouseEvent, KeyboardEvent } from "react";
 import Button from "../../../shared-UI/Button";
 import classes from "./Textarea.module.css";
 
@@ -25,9 +25,7 @@ const Textare: FC<TextareaT> = ({ text, onSubmit, closeTextarea }) => {
 
   const submitButtonClickHandler = async (event: MouseEvent<HTMLElement>) => {
     // setActiveEditingMode(false);
-    await onSubmit(textareaText);
-    setSubmitEditButtonActive(false);
-    closeTextarea();
+    await submit();
   };
 
   const cancelButtonClickHandler = (event: MouseEvent<HTMLElement>) => {
@@ -45,8 +43,31 @@ const Textare: FC<TextareaT> = ({ text, onSubmit, closeTextarea }) => {
     return true;
   };
 
+  const keyDownHandler = async (event: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      event.key !== "Enter" ||
+      textareaText === "" ||
+      textareaText.match(/^\s+$/)
+    ) {
+      return;
+    }
+
+    if (event.key === "Enter" && event.shiftKey) {
+      return;
+      // new line
+    }
+
+    await submit();
+  };
+
+  const submit = async () => {
+    await onSubmit(textareaText);
+    setSubmitEditButtonActive(false);
+    closeTextarea();
+  };
+
   return (
-    <div className={classes["container"]}>
+    <div className={classes["container"]} onKeyDown={keyDownHandler}>
       <textarea
         className={classes["comment-textarea"]}
         value={textareaText}
