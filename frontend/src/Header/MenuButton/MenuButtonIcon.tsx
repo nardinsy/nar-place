@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
-import classes from "./MenuButtonIcon.module.css";
 import Avatar from "../../Profile/UI/Avatar";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
@@ -19,7 +18,7 @@ const MenuButtonIcon = () => {
         <FontAwesomeIcon
           data-testid="icon"
           icon={faCircleUser}
-          className={classes.avatar}
+          className="text-5xl text-gray-light"
         />
       )}
     </>

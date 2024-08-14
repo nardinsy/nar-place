@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, FC, ReactNode, MouseEvent } from "react";
 import Avatar from "../Profile/UI/Avatar";
-import Dropdown from "../Header/Dropdown/DropdownCard";
+import Dropdown from "./DropdownCard";
 import Modal from "../shared-UI/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

@@ -2,7 +2,6 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import MenuButtonIcon from "./MenuButtonIcon";
 import ProfileMenuDropdown from "../Dropdown/ProfileMenuDropdown";
 import AuthDropdown from "../Dropdown/AuthDropdown";
-import classes from "./MenuButton.module.css";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
 const MenuButton = () => {
@@ -62,12 +61,7 @@ const MenuButton = () => {
   );
 
   return (
-    <div
-      data-testid="menu-button"
-      // className={classes["header-menu-button-container"]}
-      onClick={showDropDownHandler}
-      ref={ref}
-    >
+    <div data-testid="menu-button" onClick={showDropDownHandler} ref={ref}>
       <MenuButtonIcon />
       {dropdown.show && dropdown.component}
     </div>

@@ -5,12 +5,10 @@ import { MenuListT } from "../MainHeader";
 interface BoxMenuProps {
   menulist: MenuListT;
 }
+const style = { show: "translate-0", hide: "-translate-x-72" };
 
 const BoxMenu: FC<BoxMenuProps> = ({ menulist }) => {
-  const style = { show: "translate-0", hidden: "-translate-x-72" };
-
   const [showSidebar, setShowSidebar] = useState(false);
-  // const [sidebar, setSidebar] = useState(sidebarStyle.hidden);
   const sidebarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -43,9 +41,9 @@ const BoxMenu: FC<BoxMenuProps> = ({ menulist }) => {
 
       <div
         ref={sidebarRef}
-        className={`absolute top-0 left-0 w-56 h-dvh m-0 p-0 bg-white shadow-xl shadow-blue-gray-900/5 ${
-          showSidebar ? style.show : style.hidden
-        } transition ease-out delay-150 duration-1000`}
+        className={`md:hidden absolute top-0 left-0 w-56 h-dvh m-0 p-0 bg-white shadow-xl shadow-blue-gray-900/5 ${
+          showSidebar ? style.show : style.hide
+        } transition ease-out delay-150 duration-500`}
       >
         <i
           className={`bx bx-menu py-4 ml-9 text-4xl mt-px w-3 text-gray-dark cursor-pointer`}

@@ -1,5 +1,5 @@
 import { useHistory } from "react-router-dom";
-import Dropdown from "./DropdownCard";
+import Dropdown from "../../shared/DropdownCard";
 
 const AuthDropdown = ({
   closeDropdown,

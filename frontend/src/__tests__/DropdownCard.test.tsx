@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Dropdown from "../Header/Dropdown/DropdownCard";
+import Dropdown from "../shared/DropdownCard";
 
 const items = [
   {

@@ -3,7 +3,7 @@ import Avatar from "../../Profile/UI/Avatar";
 import { CommentDto, UserDto } from "../../helpers/dtos";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import { Link } from "react-router-dom";
-import Dropdown, { DropDownItem } from "../../Header/Dropdown/DropdownCard";
+import Dropdown, { DropDownItem } from "../../shared/DropdownCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import CommentLike from "./like/CommentLike";
