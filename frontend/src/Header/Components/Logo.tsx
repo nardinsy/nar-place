@@ -1,11 +1,10 @@
 import { NavLink } from "react-router-dom";
-import classes from "./Logo.module.css";
 
 const Logo = () => {
   return (
     <NavLink to="/">
-      <h2 className={classes["logo-name"]}>
-        <span>N</span>arPlace
+      <h2 className="text-primary-dark hover:text-primary-hover font-bold text-xl tracking-wide transition-all">
+        NarPlace
       </h2>
     </NavLink>
   );

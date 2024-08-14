@@ -1,20 +1,26 @@
 import MenuButton from "./MenuButton/MenuButton";
-import NavLinks from "./Navigation/NavLinks";
+import BoxMenu from "./Navigation/BoxMenu";
+import MiddleNavLinks from "./Navigation/MiddleNavLinks";
 import Logo from "./Components/Logo";
-import classes from "./MainHeader.module.css";
+
+const HeaderMenuList: MenuListT = [
+  ["Users", "home", "/"],
+  ["My Places", "image", "/myplace"],
+  ["New Place", "image-add", "/new"],
+];
+
+export type MenuListT = [title: string, icon: string, path: string][];
 
 const MainHeader = () => {
   return (
-    <header className={classes["main-header"]}>
-      <div className={classes["main-header-container"]}>
+    <div className="fixed top-0 left-0 w-full z-50">
+      <header className="flex justify-between items-center text-black py-3 px-8 md:px-29 bg-white drop-shadow-md">
+        <BoxMenu menulist={HeaderMenuList} />
         <Logo />
-
-        <NavLinks />
-
+        <MiddleNavLinks menulist={HeaderMenuList} />
         <MenuButton />
-      </div>
-      <div className={classes["header-border-line"]}></div>
-    </header>
+      </header>
+    </div>
   );
 };
 

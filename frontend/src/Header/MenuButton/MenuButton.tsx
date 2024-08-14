@@ -64,7 +64,7 @@ const MenuButton = () => {
   return (
     <div
       data-testid="menu-button"
-      className={classes["header-menu-button-container"]}
+      // className={classes["header-menu-button-container"]}
       onClick={showDropDownHandler}
       ref={ref}
     >

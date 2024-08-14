@@ -19,5 +19,5 @@
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "paths": { "@backend/*": ["../backend/src/types/*"] }
   },
-  "include": ["src"]
+  "include": ["src", "tailwind.config.ts"]
 }

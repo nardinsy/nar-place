@@ -1,11 +1,12 @@
 .main-header {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
-  padding: 0;
-  margin: 0;
+  /* padding: 0; */
+  /* margin: 0; */
   z-index: 5;
-  background-color: white;
+  background-color: rgb(184, 44, 44);
 }
 
 .main-header-container {

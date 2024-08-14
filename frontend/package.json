@@ -11,7 +11,9 @@
     "@types/react-fontawesome": "^1.6.8",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-test-renderer": "^18.3.0",
+    "autoprefixer": "^10.4.20",
     "dtos": "file:../backend/src/shared/dtos",
+    "postcss": "^8.4.41",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
@@ -53,6 +55,7 @@
     "@types/jest": "^29.5.12",
     "jest": "^29.7.0",
     "react-shallow-renderer": "^16.15.0",
+    "tailwindcss": "^3.4.9",
     "ts-jest": "^29.1.4",
     "typescript-plugin-css-modules": "^5.1.0"
   }
