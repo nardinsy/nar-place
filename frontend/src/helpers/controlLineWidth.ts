@@ -10,13 +10,13 @@ export default function controlLineWidth(text: string, lineLength: number) {
       if (result.length + element.length < lineLength) {
         result += `${element} `;
       } else {
-        result += " ...";
+        // result += " ...";
+        result += "...";
         break;
       }
     }
   } else {
     result = text;
   }
-
   return result;
 }

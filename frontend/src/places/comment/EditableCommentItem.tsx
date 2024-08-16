@@ -57,7 +57,7 @@ const EditableCommentItem: FC<EditableCommentItemT> = ({ commentDto }) => {
           closeTextarea={async () => setActiveEditingMode(false)}
         />
       ) : (
-        <div className={classes["comment-text"]}>{commentText}</div>
+        <div className="text-sm text-gray-dark">{commentText}</div>
       )}
     </CommentItem>
   );

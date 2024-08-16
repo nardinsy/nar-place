@@ -1,9 +1,9 @@
 import { useState, FC, PropsWithChildren, MouseEvent } from "react";
 import { Link } from "react-router-dom";
-import classes from "./PlaceCard.module.css";
 import { PlaceDto, UserDto } from "../../helpers/dtos";
 import wordWrap from "../../helpers/wordWrapper";
 import controlLineWidth from "../../helpers/controlLineWidth";
+import classes from "./PlaceCard.module.css";
 
 type PlaceCardProps = PropsWithChildren<{
   placeDto: PlaceDto;
@@ -78,3 +78,7 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
 };
 
 export default PlaceCard;
+
+// className="group relative w-72 h-96 rounded-xl m-4 shadow-default overflow-hidden"
+// className="object-cover w-full h-full opacity-100 -z-10 group-hover:opacity-60 transition-opacity duration-card"
+// className="hidden absolute top-0 left-0 w-full h-full z-10 group-hover:flex flex-col py-7 px-4">

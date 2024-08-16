@@ -3,8 +3,6 @@ import { CommentDto } from "../../helpers/dtos";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import EditableCommentItem from "./EditableCommentItem";
 import NotEditableCommentItem from "./NotEditableCommentItem";
-import CommentReplies from "./reply/CommentReplies";
-import classes from "./Comment.module.css";
 
 type CommetnListT = {
   comments: CommentDto[];
@@ -35,7 +33,7 @@ const CommetnsList: FC<CommetnListT> = ({ comments }) => {
     );
   });
 
-  return <ul className={classes["comments-list"]}>{commentsList}</ul>;
+  return <ul>{commentsList}</ul>;
 };
 
 export default CommetnsList;

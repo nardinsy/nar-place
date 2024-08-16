@@ -21,7 +21,7 @@ const NotEditableCommentItem: FC<CommentItemT> = ({ commentDto }) => {
 
   return (
     <CommentItem commentDto={commentDto}>
-      <div className={classes["comment-text"]}>{commentText}</div>
+      <div className="text-sm text-gray-dark">{commentText}</div>
     </CommentItem>
   );
 };

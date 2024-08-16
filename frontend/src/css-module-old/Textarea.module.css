@@ -1,26 +1,26 @@
-.container {
+/* .container {
   margin-bottom: 0.8rem;
-}
+} */
 
-.comment-textarea {
+/* .comment-textarea {
   padding: 0.4rem 0;
   font-size: 14px;
   letter-spacing: 0.3px;
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-color: rgb(231, 214, 214);
+  border-color: rgb(122, 114, 114);
   border-radius: 1rem;
   resize: none;
   outline: none;
   height: 3rem;
   padding-left: 0.5rem;
-}
+} */
 
-.textarea-button {
+/* .textarea-button {
   width: 4rem;
   height: 2rem;
   padding: 0;
   margin-top: 0.5rem;
   border-radius: 3rem;
-}
+} */

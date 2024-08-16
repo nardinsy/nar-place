@@ -3,7 +3,6 @@ import { CommentDto } from "../../../helpers/dtos";
 import CommentReplyTextarea from "./CommentReplyTextarea";
 import CommentReplies from "./CommentReplies";
 import useRequiredAuthContext from "../../../hooks/use-required-authContext";
-import classes from "../CommentItem.module.css";
 
 type ReplyT = {
   commentDto: CommentDto;
@@ -21,7 +20,7 @@ const Reply: FC<ReplyT> = ({
   return (
     <>
       {authCtx.isLoggedin && showReplyTextarea && (
-        <div className={classes["reply-textarea"]}>
+        <div className="ml-2">
           <CommentReplyTextarea
             commentDto={commentDto}
             closeReplyTextarea={closeReplyTextarea}
@@ -29,8 +28,9 @@ const Reply: FC<ReplyT> = ({
           />
         </div>
       )}
-
-      <CommentReplies replies={commentDto.replies} />
+      <div className="pl-4">
+        <CommentReplies replies={commentDto.replies} />
+      </div>
     </>
   );
 };

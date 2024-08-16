@@ -82,8 +82,8 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
 
   return (
     <>
-      <div className={classes["comment-item"]}>
-        <div className={classes["writer-avatar"]}>
+      <div className="flex flex-row pb-2">
+        <div className="w-12 h-12 flex justify-center items-center">
           <Link
             to={{
               pathname: `/places/${userId}`,
@@ -98,20 +98,21 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
             />
           </Link>
         </div>
-        <div className={classes["commetn-details"]}>
-          <div className={classes["comment-info"]}>
-            <div className={classes["comment-actions"]}>
+
+        <div className="w-full">
+          <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center">
               <Link
                 to={{ pathname: `/places/${userId}`, state: { userDto } }}
-                className={classes["writer-username"]}
+                className="text-xs text-black-light tracking-wider pr-4 hover:text-black"
               >
                 @{username}
               </Link>
             </div>
             {authCtx.isLoggedin && (
-              <div className={classes["comment-actions"]}>
+              <div className="flex flex-row items-center justify-center">
                 <button
-                  className={classes["reply-button"]}
+                  className="text-gray-fav bg-white border-none text-xs tracking-wider pr-2 hover:text-black-light"
                   onClick={replyButtonClickHandler}
                 >
                   Reply
@@ -125,7 +126,7 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
             <button
               data-testid="more-button"
               ref={moreButtonRef}
-              className={classes["comment-more-button"]}
+              className="relative px-2 border-none text-gray-fav hover:text-black-light"
               onClick={moreButtonClickHandler}
             >
               <FontAwesomeIcon icon={faEllipsis} />
@@ -133,7 +134,7 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
                 <Dropdown
                   items={dropdownItems}
                   key={Math.random()}
-                  propClassName={classes["dropdown-more-button"]}
+                  propClassName="absolute -top-8 left-8 z-20 bg-white rounded-xl shadow-default "
                 />
               )}
             </button>

@@ -1,9 +1,8 @@
-import { ChangeEvent, KeyboardEvent, FC, useState, useEffect } from "react";
+import { ChangeEvent, KeyboardEvent, FC, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { NewComment } from "../../helpers/dtos";
 import useRequiredCommentContext from "../../hooks/use-required-commentContext";
-import classes from "./CommentInput.module.css";
 
 type CommentInputT = {
   placeId: string;
@@ -66,31 +65,34 @@ const CommentInput: FC<CommentInputT> = ({ placeId }) => {
 
   return (
     <div
-      className={classes["comment-input-container"]}
+      className="border border-primary rounded-4xl w-11/12 h-14 flex flex-row justify-between items-center mb-2"
       onKeyDown={keyDownHandler}
     >
-      <div className={classes["left"]}>
+      <div className="w-10/12 pl-4 pt-3 md:w-11/12">
         <textarea
           placeholder="Add a comment"
-          className={classes["comment-input"]}
+          className="border-none outline-none resize-none py-1 min-w-full h-8 text-sm"
           value={commentInput}
           onChange={commentInputChangeHandler}
         />
       </div>
 
-      <div className={classes.actions}>
+      <div>
         {/* <FontAwesomeIcon
           icon={faFaceSmile}
           className={classes["emoji-button"]}
         /> */}
 
-        <div onClick={submitCommentHandler}>
+        <div
+          onClick={submitCommentHandler}
+          className="flex justify-center items-center pr-4"
+        >
           <FontAwesomeIcon
             icon={faPaperPlane}
             className={
               submitButtonIsActive
-                ? classes["send-button"]
-                : classes["notActive"]
+                ? "text-primary w-6 h-6 ml-1 cursor-pointer hover:text-primary-hover"
+                : "text-white w-6 h-6 ml-1"
             }
           />
         </div>

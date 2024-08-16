@@ -12,20 +12,38 @@ module.exports = {
       primary: "#5f9ea0",
       "primary-dark": "#587679",
       "primary-hover": "#7a9697",
+      "background-text": "#9abdbe",
       white: "#FFFFFF",
       black: "#000000",
+      "black-light": "#1E1E1E",
       orange: "#ff7849",
       green: "#13ce66",
       "gray-dark": "#273444",
       gray: "#8492a6",
       "gray-light": "#E5E5E5",
+      "gray-fav": "#A8A7A6",
+      "red-heart": "#E44848",
     },
     extend: {
+      display: ["group-hover"],
+      fontSize: {
+        xxs: "10px",
+      },
       keyframes: {
         sideways: {
           "0%, 100%": { left: "0", top: "0" },
           "50%": { left: "100px", top: "0" },
         },
+      },
+      boxShadow: {
+        default: "0 10px 30px 5px rgba(0, 0, 0, 0.2)",
+      },
+      transitionDuration: {
+        card: "0.3s",
+      },
+      borderRadius: {
+        card: "2rem",
+        "4xl": "3rem",
       },
     },
   },

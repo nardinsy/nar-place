@@ -14,7 +14,7 @@
 }
 
 .commetn-details {
-  width: 90%;
+  width: 100%;
 }
 
 .comment-info {
@@ -30,18 +30,15 @@
   padding-right: 1rem;
   color: rgb(100, 100, 100);
 }
-
-.writer-username:hover {
+*/ .writer-username:hover {
   color: black;
 }
-
-.comment-actions {
+*/ .comment-actions {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
-
 .reply-button {
   border: none;
   background-color: transparent;
@@ -49,16 +46,16 @@
   font-size: xx-small;
   font-weight: bold;
   text-align: center;
+  padding-right: 0.5rem;
   cursor: pointer;
 }
-
 .reply-button:hover {
   color: rgb(10, 10, 10);
 }
-
 .comment-more-button {
   position: relative;
-  padding-right: 0.3rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
   border: none;
   width: 1rem;
   height: 1rem;
@@ -79,7 +76,7 @@
 }
 
 .reply-textarea {
-  margin-left: 2rem;
+  margin-left: 0.5rem;
 }
 
 .comment-text {

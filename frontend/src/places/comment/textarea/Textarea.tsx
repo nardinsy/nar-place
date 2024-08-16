@@ -67,9 +67,9 @@ const Textare: FC<TextareaT> = ({ text, onSubmit, closeTextarea }) => {
   };
 
   return (
-    <div className={classes["container"]} onKeyDown={keyDownHandler}>
+    <div className="mb-3" onKeyDown={keyDownHandler}>
       <textarea
-        className={classes["comment-textarea"]}
+        className="text-sm tracking-wide flex flex-col w-full h-12 border border-gray-fav rounded-md outline-none resize-none pl-1"
         value={textareaText}
         onChange={changeTextareaText}
         onFocus={(e) =>
@@ -82,7 +82,7 @@ const Textare: FC<TextareaT> = ({ text, onSubmit, closeTextarea }) => {
       />
       <Button
         action="cancel"
-        className={classes["textarea-button"]}
+        className="mt-1"
         onClick={cancelButtonClickHandler}
       >
         Cancel
@@ -90,7 +90,7 @@ const Textare: FC<TextareaT> = ({ text, onSubmit, closeTextarea }) => {
       {submitEditButtonActive && (
         <Button
           action="submit"
-          className={classes["textarea-button"]}
+          className="mt-1"
           onClick={submitButtonClickHandler}
         >
           Save

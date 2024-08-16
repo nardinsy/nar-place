@@ -24,7 +24,7 @@ const Button: FC<ButtonProps> = ({
 }) => {
   const classNames = isDisabled
     ? `  ${classes["disabled-button"]} ${className} `
-    : `${classes.button} ${className} ${classes[`button-${action}`]}`;
+    : `${classes.button} ${classes[`button-${action}`]} ${className}`;
 
   const clickButtonHandler = (event: React.MouseEvent<HTMLElement>) => {
     onClick(event);

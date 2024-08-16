@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import useRequiredCommentContext from "../../../hooks/use-required-commentContext";
 import { CommentDto, CommentLikeDto } from "../../../helpers/dtos";
-import classes from "./Commentlike.module.css";
 
 type CommentLikeT = {
   commentDto: CommentDto;
@@ -72,16 +71,16 @@ const CommentLike: FC<CommentLikeT> = ({ commentDto, loggedUserUserId }) => {
     return commentDto.likes.find((like) => like.userId === loggedUserUserId);
   };
 
-  const heartIconClassName = userLikedComment ? `${classes["red-heart"]}` : "";
+  const heartIconClassName = userLikedComment ? `text-red-heart` : "";
 
   return (
-    <button className={classes["container"]}>
+    <button className="border-none bg-white">
       <FontAwesomeIcon
         onClick={likeCommentClickHandler}
         icon={faHeart}
-        className={`${classes["heart-icon"]} ${heartIconClassName}`}
+        className={`cursor-pointer text-sm text-gray-fav hover:text-red-heart ${heartIconClassName}`}
       />
-      <span className={classes["likes-number"]}>
+      <span className="text-xxs ml-1 text-gray-dark">
         {commentLikeNumber ? commentLikeNumber : ""}
       </span>
     </button>
