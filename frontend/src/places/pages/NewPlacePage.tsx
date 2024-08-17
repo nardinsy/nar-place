@@ -1,14 +1,15 @@
 import { useState, FC, useEffect } from "react";
 import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
-import classes from "./NewPlacePage.module.css";
 import picturePlaceholder from "../../assets/Image-placeholder.png";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import { placeInfoCard, PlaceInfoCardWithPictire } from "../../helpers/dtos";
+import classes from "./NewPlacePage.module.css";
 
 interface NewPlacePageProps {
   addPlace: (place: PlaceInfoCardWithPictire) => Promise<void>;
 }
+
 const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
   const authContext = useRequiredAuthContext();
   if (!authContext.isLoggedin)
@@ -41,27 +42,27 @@ const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
   };
 
   return (
-    <div className={classes["new-place-page-container"]}>
-      <div className={classes["selection-container"]}>
-        <div className={classes["picture"]}>
+    <div className="flex flex-col justify-center items-center mt-28 md:flex-row">
+      <div className="mx-5 h-image-select-card w-11/12 md:w-3/6">
+        <div className="w-full h-5/6">
           <img
-            className={classes["uploaded-picture"]}
+            className="w-full h-full rounded-2xl object-cover"
             alt=""
             src={uploadedPicture ? uploadedPicture : picturePlaceholder}
           />
         </div>
-        <div className={classes["upload-picture-button-container"]}>
+        <div className="flex justify-center items-center my-3">
           <ImageUpload
             id={authContext.token}
             onChangeImage={changeNewPicture}
-            className={classes["select-picture-button"]}
+            className="bg-primary text-white text-xl p-2 rounded-4xl border border-primary transition-colors hover:bg-white hover:text-primary hover:transition-all"
           >
             Upload new picture
           </ImageUpload>
         </div>
       </div>
 
-      <div className={classes["place-info"]}>
+      <div className="w-11/12 m-4 md:w-3/6">
         <PlaceInfoCard
           onSubmit={addNewPlace}
           submitButtonName="Post"

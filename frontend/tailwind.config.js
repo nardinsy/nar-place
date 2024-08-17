@@ -12,6 +12,7 @@ module.exports = {
       primary: "#5f9ea0",
       "primary-dark": "#587679",
       "primary-hover": "#7a9697",
+      "primary-light": "#9ABDBE",
       "background-text": "#9abdbe",
       white: "#FFFFFF",
       black: "#000000",
@@ -23,11 +24,15 @@ module.exports = {
       "gray-light": "#E5E5E5",
       "gray-fav": "#A8A7A6",
       "red-heart": "#E44848",
+      "edit-button-bg": "#f5f5f5",
     },
     extend: {
       display: ["group-hover"],
       fontSize: {
         xxs: "10px",
+      },
+      height: {
+        "image-select-card": "30rem",
       },
       keyframes: {
         sideways: {

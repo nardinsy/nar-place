@@ -1,4 +1,4 @@
-.places-container {
+/* .places-container {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -7,18 +7,18 @@
   padding: 0;
   width: 90%;
   max-width: 80rem;
-}
+} */
 
-.center {
+/* .center {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-}
-
+} */
+/* 
 .center-message {
   width: 40%;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-}
+} */

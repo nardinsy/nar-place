@@ -5,7 +5,6 @@ import EditPlaceModal from "./EditPlaceModal";
 import Button from "../../shared-UI/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import classes from "./EditablePlaceItem.module.css";
 import { PlaceDto, UserDto, placeInfoCard } from "../../helpers/dtos";
 
 interface EditablePlaceItemProps {
@@ -59,7 +58,7 @@ const EditablePlaceItem: FC<EditablePlaceItemProps> = ({
     <>
       <PlaceCard placeDto={placeDto} userDto={userDto}>
         <div
-          className={classes["place-edit-button"]}
+          className="absolute top-2 right-2 rounded-full text-black bg-edit-button-bg text-sm p-2 cursor-pointer hover:text-primary"
           onClick={showEditModalHandler}
         >
           <FontAwesomeIcon icon={faPen} />

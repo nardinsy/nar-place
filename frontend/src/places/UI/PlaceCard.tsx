@@ -44,7 +44,10 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
   const wrappedDescription = wordWrap(description, descriptionLineWidth);
 
   return (
-    <div className={classes["place-card"]} onClick={cardClickHandler}>
+    <div
+      className={`w-36 h-32 sm:w-72 sm:h-96 ${classes["place-card"]}`}
+      onClick={cardClickHandler}
+    >
       <Link
         to={{
           pathname: `/place/${id}`,
@@ -57,7 +60,10 @@ const PlaceCard: FC<PlaceCardProps> = ({ placeDto, userDto, children }) => {
           className={classes["place-image-full"]}
           loading="lazy"
         />
-        <div className={classes["card-content"]}>
+        <div className="absolute left-2 bottom-2 py-1 px-2 rounded-4xl bg-primary-light text-white sm:hidden">
+          {oneLineTitle}
+        </div>
+        <div className={`hidden sm:block ${classes["card-content"]}`}>
           <h2 className={classes["place-title"]}>{oneLineTitle}</h2>
           <div className={classes.wrapper}>
             <div className={classes.scroll}>

@@ -2,7 +2,6 @@ import { FC } from "react";
 import PlaceItem from "./PlaceItem";
 import EditablePlaceItem from "./EditablePlaceItem";
 import Card from "../../shared-UI/Card";
-import classes from "./PlacesList.module.css";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import { PlaceDto, UserDto, placeInfoCard } from "../../helpers/dtos";
 import Spinner from "../../shared-UI/Spinner";
@@ -27,7 +26,10 @@ const PlacesList: FC<PlacesListProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className={classes.center} data-testid="spinner">
+      <div
+        className="flex flex-col justify-center items-center h-screen"
+        data-testid="spinner"
+      >
         <Spinner />
       </div>
     );
@@ -35,9 +37,9 @@ const PlacesList: FC<PlacesListProps> = ({
 
   if (userPlaces.length === 0) {
     return (
-      <div className={classes.center}>
-        <Card className={classes["center-message"]}>
-          <h2>No place found.</h2>
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Card className="w-2/5 text-center shadow-default p-6">
+          <h2 className="font-bold">No place found.</h2>
         </Card>
       </div>
     );
@@ -82,7 +84,11 @@ const PlacesList: FC<PlacesListProps> = ({
     });
   }
 
-  return <ul className={classes["places-container"]}>{places}</ul>;
+  return (
+    <ul className="flex justify-center flex-wrap my-16 mx-auto w-11/12 max-w-7xl">
+      {places}
+    </ul>
+  );
 };
 
 export default PlacesList;

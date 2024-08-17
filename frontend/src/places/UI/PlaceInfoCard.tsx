@@ -1,7 +1,6 @@
 import { FC, useState, ChangeEvent, MouseEvent } from "react";
 import Button from "../../shared-UI/Button";
 import { placeInfoCard } from "../../helpers/dtos";
-import classes from "./PlaceInfoCard.module.css";
 
 interface PlaceInfoCardProps {
   onSubmit: (place: placeInfoCard) => void;
@@ -136,44 +135,37 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
   };
 
   return (
-    <div className={classes["place-info-card-container"]}>
-      <input
-        maxLength={30}
-        type="text"
-        className={
-          formInputsIsvalid.title
-            ? `${classes.inputs}`
-            : `${classes.inputs} ${classes.invalid}`
-        }
-        placeholder="Title"
-        value={formINputs.title}
-        onChange={titleChangeHandler}
-      />
+    <div className="flex flex-col shadow-default px-2 pt-8 pb-2 rounded-xl">
+      <>
+        <input
+          maxLength={30}
+          type="text"
+          className={`bg-gray-light mb-2 h-10 px-1 outline-none border border-edit-button-bg rounded-md focus:border focus:rounded-md focus:border-primary
+          ${formInputsIsvalid.title ? "" : "border-red-heart"}`}
+          placeholder="Title"
+          value={formINputs.title}
+          onChange={titleChangeHandler}
+        />
 
-      <textarea
-        maxLength={210}
-        className={
-          formInputsIsvalid.description
-            ? `${classes[`place-description`]}`
-            : `${classes[`place-description`]} ${classes.invalid}`
-        }
-        placeholder="Description about this place"
-        value={formINputs.description}
-        onChange={descriptionChangeHandler}
-      />
-      <input
-        maxLength={30}
-        className={
-          formInputsIsvalid.address
-            ? `${classes.inputs}`
-            : `${classes.inputs} ${classes.invalid}`
-        }
-        placeholder="Address"
-        value={formINputs.address}
-        onChange={addressChangeHandler}
-      />
+        <textarea
+          maxLength={210}
+          className={`bg-gray-light mb-2 h-28 px-1 resize-none outline-none border border-edit-button-bg rounded-md focus:border focus:rounded-md focus:border-primary
+          ${formInputsIsvalid.description ? "" : "border-red-heart"}`}
+          placeholder="Description about this place"
+          value={formINputs.description}
+          onChange={descriptionChangeHandler}
+        />
+        <input
+          maxLength={30}
+          className={`bg-gray-light mb-2 h-10 px-1 outline-none border border-edit-button-bg rounded-md focus:border focus:rounded-md focus:border-primary
+          ${formInputsIsvalid.address ? "" : "border-red-heart"}`}
+          placeholder="Address"
+          value={formINputs.address}
+          onChange={addressChangeHandler}
+        />
+      </>
 
-      <div className={classes["place-actions"]}>
+      <div className="flex flex-row justify-end">
         {extraAction && (
           <Button action={"delete"} onClick={extraActionHandler}>
             {extraAction["button-name"]}
