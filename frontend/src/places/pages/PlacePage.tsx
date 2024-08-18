@@ -38,7 +38,7 @@ const PlacePage: FC = () => {
         <div className="w-4/5 p-1 border-t border-gray-fav" />
 
         <div
-          className="h-image-select-card md:w-full md:overflow-y-scroll"
+          className="w-full h-image-select-card overflow-y-scroll md:h-full"
           onScroll={scrollCommentAreaHandler}
         >
           <PlaceInfo placeDto={placeDto} />
