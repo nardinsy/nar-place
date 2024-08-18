@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { CommentDto } from "../../helpers/dtos";
 import CommentItem from "./CommentItem";
-import classes from "./CommentItem.module.css";
 
 type CommentItemT = {
   commentDto: CommentDto;

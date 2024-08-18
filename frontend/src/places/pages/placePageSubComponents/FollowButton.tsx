@@ -1,9 +1,12 @@
 import { FC } from "react";
-import classes from "../PlacePage.module.css";
+import Button from "../../../shared-UI/Button";
 
 const FollowButton: FC = () => {
+  // return <div className="">Follow</div>;
   return (
-    <div className={classes["place-creator-account_follow_button"]}>Follow</div>
+    <Button action="submit" type="submit" onClick={() => {}} id="follow">
+      Follow
+    </Button>
   );
 };
 

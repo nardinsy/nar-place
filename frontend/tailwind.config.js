@@ -33,6 +33,7 @@ module.exports = {
       },
       height: {
         "image-select-card": "30rem",
+        "place-page": "85vh",
       },
       keyframes: {
         sideways: {

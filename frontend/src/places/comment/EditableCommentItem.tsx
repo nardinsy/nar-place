@@ -3,7 +3,6 @@ import { CommentDto } from "../../helpers/dtos";
 import useRequiredCommentContext from "../../hooks/use-required-commentContext";
 import Textare from "./textarea/Textarea";
 import CommentItem from "./CommentItem";
-import classes from "./CommentItem.module.css";
 
 type EditableCommentItemT = {
   commentDto: CommentDto;

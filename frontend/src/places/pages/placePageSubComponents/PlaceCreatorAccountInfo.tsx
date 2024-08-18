@@ -1,5 +1,4 @@
 import { FC } from "react";
-import classes from "../PlacePage.module.css";
 import { UserDto } from "../../../helpers/dtos";
 import Avatar from "../../../Profile/UI/Avatar";
 
@@ -15,14 +14,14 @@ const PlaceCreatorAccountInfo: FC<PlaceCreatorAccountInfoT> = ({
   const { username, pictureUrl: userPictureUrl, placeCount, userId } = userDto;
 
   return (
-    <div className={classes["place-creator-account-info"]}>
+    <div className="flex flex-row items-center justify-center text-gray-fav">
       <div>
         <Avatar pictureUrl={userPictureUrl} alt={alt} width={"4rem"} />
       </div>
 
       <div>
-        <p>{username}</p>
-        <p>
+        <p className="py-none px-2 text-sm">{username}</p>
+        <p className="py-none px-2 text-sm">
           {placeCount} {placeCount === 1 ? "Place" : "Places"}
         </p>
       </div>

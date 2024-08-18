@@ -7,7 +7,6 @@ import PlaceCreatorAccountInfo from "./placePageSubComponents/PlaceCreatorAccoun
 import FollowButton from "./placePageSubComponents/FollowButton";
 import CommentBox from "../comment/CommentBox";
 import { CommentContextProvider } from "../../contexts/comment-contex";
-import classes from "./PlacePage.module.css";
 
 const PlacePage: FC = () => {
   const {
@@ -27,18 +26,23 @@ const PlacePage: FC = () => {
   const scrollCommentAreaHandler = (event: any) => {};
 
   return (
-    <div className={classes["place-page-container"]}>
+    <div className="flex flex-col mt-16 h-auto w-full overflow-hidden md:flex-row md:w-11/12 md:h-place-page md:mx-auto md:mt-20 md:rounded-4xl md:shadow-default">
       <PlaceImage src={pictureUrl} alt={title} />
 
-      <div className={classes["place-page-info-container"]}>
-        <div className={classes["place-creator-account-container"]}>
+      <div className="relative flex flex-col items-center w-full md:w-2/5 md:h-full">
+        <div className="flex flex-row items-center justify-around w-full py-4 px-2">
           <PlaceCreatorAccountInfo userDto={userDto} alt={title} />
           <FollowButton />
         </div>
-        <div className={classes["distance"]}></div>
 
-        <div className={classes.middle} onScroll={scrollCommentAreaHandler}>
+        <div className="w-4/5 p-1 border-t border-gray-fav" />
+
+        <div
+          className="h-image-select-card md:w-full md:overflow-y-scroll"
+          onScroll={scrollCommentAreaHandler}
+        >
           <PlaceInfo placeDto={placeDto} />
+
           <CommentContextProvider>
             <CommentBox placeId={placeDto.placeId} />
           </CommentContextProvider>

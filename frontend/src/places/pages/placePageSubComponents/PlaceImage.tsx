@@ -1,5 +1,4 @@
 import { FC } from "react";
-import classes from "../PlacePage.module.css";
 
 type PlaceImageT = {
   src: string;
@@ -7,11 +6,11 @@ type PlaceImageT = {
 };
 const PlaceImage: FC<PlaceImageT> = ({ src, alt }) => {
   return (
-    <div className={classes["place-page-image-container"]}>
+    <div className="w-full h-image-select-card rounded-t-4xl mt-4 px-1 md:h-full md:w-3/5 md:rounded-l-4xl md:mt-0 md:px-0">
       <img
         src={src}
         alt={alt}
-        className={classes["place-image"]}
+        className="object-cover w-full h-image-select-card rounded-t-4xl md:h-full md:rounded-l-4xl md:rounded-r-none"
         loading="lazy"
       />
     </div>

@@ -1,5 +1,4 @@
 import { FC } from "react";
-import classes from "../PlacePage.module.css";
 import wordWrap from "../../../helpers/wordWrapper";
 import { PlaceDto } from "../../../helpers/dtos";
 
@@ -28,14 +27,15 @@ const PlaceInfo: FC<PlaceInfoT> = ({ placeDto }) => {
   });
 
   return (
-    <div className={classes["place-info"]}>
-      <h3>{oneLineTitle}</h3>
-      <p>
-        <strong className={classes.strong}>Description:</strong> {text}
+    <div className="w-full mb-8 py-0 px-4 text-black-light">
+      <h3 className="font-bold tracking-wide">{oneLineTitle}</h3>
+      <p className="tracking-wide">
+        <strong>Description:</strong>
+        <span className=" text-gray-dark">{text}</span>
       </p>
-      <p>
-        <strong className={classes.strong}>Address: </strong>
-        {oneLineAddress}
+      <p className="tracking-wide ">
+        <strong>Address: </strong>
+        <span className=" text-gray-dark">{oneLineAddress}</span>
       </p>
     </div>
   );

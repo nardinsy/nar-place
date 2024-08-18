@@ -1,6 +1,5 @@
 import { useState, FC, ChangeEvent, MouseEvent, KeyboardEvent } from "react";
 import Button from "../../../shared-UI/Button";
-import classes from "./Textarea.module.css";
 
 type TextareaT = {
   text: string;

@@ -9,7 +9,6 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import CommentLike from "./like/CommentLike";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import Reply from "./reply/Reply";
-import classes from "./CommentItem.module.css";
 
 type CommentItemT = {
   commentDto: CommentDto;
