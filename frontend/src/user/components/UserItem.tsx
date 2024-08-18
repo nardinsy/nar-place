@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import Avatar from "../../Profile/UI/Avatar";
+import Avatar from "../../shared-UI/Avatar";
 import Card from "../../shared-UI/Card";
 import { UserDto } from "../../helpers/dtos";
 import classes from "./UserItem.module.css";

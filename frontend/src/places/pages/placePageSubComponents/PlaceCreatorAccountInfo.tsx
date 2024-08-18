@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { UserDto } from "../../../helpers/dtos";
-import Avatar from "../../../Profile/UI/Avatar";
+import Avatar from "../../../shared-UI/Avatar";
 
 type PlaceCreatorAccountInfoT = {
   userDto: UserDto;

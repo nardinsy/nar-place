@@ -6,7 +6,6 @@ import ProfileEditFormUserPicture from "./ProfileEditFormUserPicture";
 import EditPasswordButton from "./EditPasswordButton";
 import EditUserInfoForm from "./EditUserInfoForm";
 import { validateNewUsername } from "../../helpers/inputsValidation";
-import classes from "./ProfileEditForm.module.css";
 
 const ProfileEditForm: FC<ProfileSettingsPageT> = ({
   changeProfilePicture,
@@ -49,10 +48,13 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
   };
 
   return (
-    <div className={classes["profile-edit-form-container"]}>
-      <form className={classes["profile-edit-form"]} id={"1"}>
-        <div className={classes["user-form-header"]}>
-          <h2>Edit Profile</h2>
+    <div className="flex justify-center items-center h-screen w-full">
+      <form
+        className="relative flex flex-col w-3/5 min-w-96 shadow-default p-8 rounded-4xl"
+        id={"1"}
+      >
+        <div className="flex justify-around p-4">
+          <h2 className="font-bold">Edit Profile</h2>
 
           <ProfileEditFormUserPicture
             onChangeImage={onChangeImage}
@@ -63,19 +65,20 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
           />
         </div>
 
-        <div className={classes["user-info"]}>
+        <div className="w-full flex flex-col p-4 mb-4">
           <EditUserInfoForm
             username={authContext.username}
             changeUsername={onChangeUsername}
           />
         </div>
-        <div className={classes.actions}>
+
+        <div className="flex justify-around">
           <Button
             type="submit"
             onClick={formSubmitHandler}
             isDisabled={!isDirty}
             action={"submit"}
-            className={classes.btn}
+            className="w-32"
           >
             Update Info
           </Button>

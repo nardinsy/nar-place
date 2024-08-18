@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Avatar from "../Profile/UI/Avatar";
+import Avatar from "../shared-UI/Avatar";
 
 const renderAvatar = (pictureUrl: string | undefined) => {
   const value = {

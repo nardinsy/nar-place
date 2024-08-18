@@ -1,7 +1,6 @@
 import { MouseEvent, FC, useState } from "react";
 import Modal from "../../shared-UI/Modal";
 import Button from "../../shared-UI/Button";
-import classes from "./ProfileEditForm.module.css";
 import {
   PasswordValidationResult,
   getValidationMessage,
@@ -58,11 +57,18 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
 
   return (
     <Modal onBackdropClick={closeChangePasswordModal}>
-      <div className={classes["user-info"]}>
-        <div className={classes.control}>
-          <label htmlFor="password">Password</label>
+      <div className="flex flex-col p-4 w-full mb-4">
+        <div className="flex flex-row items-center p-3">
+          <label
+            htmlFor="password"
+            className="w-28 text-black-light font-bold pt-1 pr-2"
+          >
+            Password
+          </label>
           <input
-            className={invalidPassword.password ? `${classes.invalid}` : ``}
+            className={`w-full text-base border rounded-4xl pl-2 py-2 outline-none border-gray focus:outline-none focus:border-primary ${
+              invalidPassword.password ? `border-red-heart` : ""
+            }`}
             id="password"
             type={showPassword ? "text" : "password"}
             value={password}
@@ -71,12 +77,17 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
           />
         </div>
 
-        <div className={classes.control}>
-          <label htmlFor="confirm">Confirm Password</label>
+        <div className="flex flex-row items-center p-3">
+          <label
+            htmlFor="confirm"
+            className="w-28 text-black-light font-bold pt-1 "
+          >
+            Confirm Password
+          </label>
           <input
-            className={
-              invalidPassword.confirmPassword ? `${classes.invalid}` : ``
-            }
+            className={`w-full text-base border rounded-4xl pl-2 py-2 outline-none border-gray focus:outline-none focus:border-primary ${
+              invalidPassword.password ? `border-red-heart` : ""
+            }`}
             id="confirm"
             type={showPassword ? "text" : "password"}
             value={confirmPassword}
@@ -84,12 +95,15 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
           />
         </div>
 
-        <div data-testid="error-message" className={classes.message}>
+        <div
+          data-testid="error-message"
+          className="text-center items-center text-red-heart"
+        >
           {invalidPassword.message ? <span>⚠️ </span> : ""}
           {invalidPassword.message}
         </div>
 
-        <div className={classes["toggle-show"]}>
+        <div className="py-4 font-bold text-black-light">
           <input
             type="checkbox"
             checked={showPassword}
@@ -99,12 +113,12 @@ const PasswordChangeModal: FC<PasswordChangeModalT> = ({
         </div>
       </div>
 
-      <div className={classes.actions}>
+      <div className="flex justify-around">
         <Button
           type="submit"
           onClick={submitChangePassword}
           action={"submit"}
-          className={classes.btn}
+          className="w-32"
         >
           Chnage
         </Button>

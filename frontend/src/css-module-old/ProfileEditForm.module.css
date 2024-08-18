@@ -1,12 +1,12 @@
-.profile-edit-form-container {
+/* .profile-edit-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100%;
-}
+} */
 
-.profile-edit-form {
+/* .profile-edit-form {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -16,22 +16,22 @@
   border-radius: 10px;
   box-shadow: 0px 0px 22px 2px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-}
+} */
 
-.user-form-header {
+/* .user-form-header {
   display: flex;
   padding: 1rem;
   justify-content: space-around;
-}
+} */
 
-.user-image {
+/* .user-image {
   position: relative;
   width: 9rem;
   height: 9rem;
   cursor: pointer;
-}
+} */
 
-.edit-user-image-button {
+/* .edit-user-image-button {
   position: absolute;
   top: 0.7rem;
   right: 0.3rem;
@@ -42,85 +42,80 @@
   color: gray;
   border: none;
   border: 0.5px solid gray;
-}
+} */
 
-.edit-user-image-button:hover {
+/* .edit-user-image-button:hover {
   outline: none;
   background-color: rgb(247, 244, 244);
   color: #5f9ea0;
-}
+} */
 
-.user-info {
+/* .user-info {
   display: flex;
   flex-direction: column;
   padding: 1rem;
   width: 100%;
   margin-bottom: 1rem;
-}
+} */
 
-.control {
+/* .control {
   display: flex;
   flex-direction: row;
   padding: 0.59rem;
+} */
 
-  /* background-color: blue; */
-}
-
-.control label {
+/* .control label {
   width: 6rem;
   color: #0b0c0c;
   font-weight: bold;
-  /* background-color: #5f9ea0; */
   padding-top: 5px;
-}
+} */
 
-.control input {
+/* .control input {
   position: relative;
   height: 2rem;
   width: 70%;
-  /* border: 0.5px solid gainsboro; */
   text-indent: 10px;
-  cursor: pointer;
   font-size: 15px;
   border: 0.5px solid gray;
-}
+  cursor: pointer;
+} */
 
-.control input:focus {
+/* .control input:focus {
   outline: none;
   border: 0.5px solid #5f9ea0;
-}
+} */
 
-.control input:hover {
+/* .control input:hover {
   outline: none;
   border: 0.5px solid #5f9ea0;
-}
+} */
 
-.actions {
+/* .actions {
   display: flex;
   justify-content: space-around;
-}
+} */
 
-.btn {
+/* .btn {
   width: 8rem;
-}
+} */
 
-.changePassword {
+/* .changePassword {
   width: 10rem;
-}
+} */
 
-.invalid {
+/* .invalid {
   border: 1px solid rgb(196, 57, 57);
-  /* background-color: rgb(255, 207, 207); */
-}
+} */
 
-.message {
+/* .message {
   text-align: center;
   align-items: center;
   color: rgb(196, 57, 57);
-}
+} */
 
-.toggle-show {
+/* .toggle-show {
   padding: 1rem 0;
   font-weight: bold;
   color: rgb(92, 90, 90);
-}
+} */

@@ -1,5 +1,5 @@
 import { FC, ReactNode, useRef, MouseEvent, useState, useEffect } from "react";
-import Avatar from "../../Profile/UI/Avatar";
+import Avatar from "../../shared-UI/Avatar";
 import { CommentDto, UserDto } from "../../helpers/dtos";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import { Link } from "react-router-dom";

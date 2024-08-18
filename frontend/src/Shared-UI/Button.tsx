@@ -22,9 +22,16 @@ const Button: FC<ButtonProps> = ({
   tabIndex = 0,
   children,
 }) => {
-  const classNames = isDisabled
-    ? `  ${classes["disabled-button"]} ${className} `
-    : `${classes.button} ${classes[`button-${action}`]} ${className}`;
+  // const classNames = isDisabled
+  //   ? `${classes["disabled-button"]} ${className}`
+  //   : `${classes.button} ${classes[`button-${action}`]} ${className}`;
+
+  const classNames = `w-32 py-2 px-3 border-0 rounded-4xl ml-3 cursor-pointer transition-all 
+      ${
+        isDisabled
+          ? `cursor-not-allowed bg-gray-fav text-gray-dark ${className}`
+          : `${classes[`button-${action}`]} ${className}`
+      }`;
 
   const clickButtonHandler = (event: React.MouseEvent<HTMLElement>) => {
     onClick(event);

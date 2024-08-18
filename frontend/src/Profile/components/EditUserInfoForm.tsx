@@ -1,5 +1,5 @@
 import { FC, ChangeEvent, useState } from "react";
-import classes from "./ProfileEditForm.module.css";
+
 interface EditUserInfoFormT {
   username: string;
   changeUsername: (username: string) => void;
@@ -17,12 +17,15 @@ const EditUserInfoForm: FC<EditUserInfoFormT> = ({
 
   return (
     <>
-      <div className={classes.control}>
-        <label className={classes.label}>Username</label>
+      <div className="flex flex-row items-center p-3">
+        <label className="text-black-light font-bold pt-1 pr-2">
+          Username:
+        </label>
         <input
           type="text"
           value={usernameInput}
           onChange={changeUsernameHandler}
+          className="relative w-full text-base border rounded-4xl pl-1 py-2 outline-none border-gray focus:outline-none focus:border-primary"
         />
       </div>
 

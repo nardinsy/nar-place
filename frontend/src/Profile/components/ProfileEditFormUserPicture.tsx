@@ -1,10 +1,9 @@
 import { FC, useState, MouseEvent } from "react";
-import Avatar from "../UI/Avatar";
+import Avatar from "../../shared-UI/Avatar";
 import PictureModal from "../../shared/PictureModal";
 import ImageUpload from "../../shared/ImageUpload";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import classes from "./ProfileEditForm.module.css";
 
 export interface ProfileEditFormUserPictureT {
   userPictureUrl: string | undefined;
@@ -75,21 +74,20 @@ const ProfileEditFormUserPicture: FC<ProfileEditFormUserPictureT> = ({
 
   return (
     <>
-      <div className={classes["user-image"]}>
+      <div className="relative w-36 h-36 cursor-pointer">
         <div onClick={onImageClickHandler} data-testid="picture-container">
           <Avatar width={"9rem"} pictureUrl={avatarURL} alt={username} />
         </div>
 
-        <div>
-          <ImageUpload
-            id={token}
-            onChangeImage={changeImage}
-            className={classes["edit-user-image-button"]}
-          >
-            <FontAwesomeIcon icon={faPen} />
-          </ImageUpload>
-        </div>
+        <ImageUpload
+          id={token}
+          onChangeImage={changeImage}
+          className="absolute top-3 right-1 bg-gray-light z-10 py-1 px-2 text-gray border border-primary rounded-full hover:outline-none hover:bg-white  hover:text-primary"
+        >
+          <FontAwesomeIcon icon={faPen} />
+        </ImageUpload>
       </div>
+
       {showPictureModal && (
         <PictureModal
           pictureUrl={userPictureUrl}

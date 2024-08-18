@@ -59,14 +59,15 @@
   color: #5f9ea0;
   background: white;
 }
+
 .disabled-button {
-  width: 5rem;
-  padding: 0.8rem;
-  border: none;
-  border-radius: 3px;
-  margin-left: 0.7rem;
-  cursor: not-allowed;
-  pointer-events: all !important;
-  color: rgb(85, 85, 85);
-  background-color: rgb(197, 197, 197);
+  /* width: 5rem; */
+  /* padding: 0.5rem 0.8rem; */
+  /* border: none; */
+  /* border-radius: 3rem; */
+  /* margin-left: 0.7rem; */
+  /* cursor: not-allowed; */
+  /* pointer-events: all !important; */
+  /* color: rgb(85, 85, 85); */
+  /* background-color: rgb(197, 197, 197); */
 }

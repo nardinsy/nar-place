@@ -1,7 +1,6 @@
 import { useState, MouseEvent, FC } from "react";
 import Button from "../../shared-UI/Button";
 import PasswordChangeModal from "./PasswordChangeModal";
-import classes from "./ProfileEditForm.module.css";
 
 interface EditPasswordT {
   changePassword: (newPAssword: string) => void;
@@ -23,13 +22,14 @@ const EditPasswordButton: FC<EditPasswordT> = ({ changePassword }) => {
   const closeChangePasswordModal = () => {
     setShowChangePasswordModal(false);
   };
+
   return (
     <>
       <Button
         type="submit"
         onClick={openChangePasswordModal}
         action={"edit"}
-        className={classes.changePassword}
+        className="w-40"
       >
         Change Password
       </Button>

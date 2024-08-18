@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, FC, ReactNode, MouseEvent } from "react";
-import Avatar from "../Profile/UI/Avatar";
+import Avatar from "../shared-UI/Avatar";
 import Dropdown from "./DropdownCard";
 import Modal from "../shared-UI/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,8 +9,8 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import classes from "./PictureModal.module.css";
 import { HasChildren } from "../helpers/props";
+import classes from "./PictureModal.module.css";
 
 type PictureModalT = {
   pictureUrl: string | undefined;

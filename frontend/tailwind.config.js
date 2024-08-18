@@ -51,6 +51,12 @@ module.exports = {
         card: "2rem",
         "4xl": "3rem",
       },
+      spacing: {
+        13: "3.25rem",
+        15: "3.75rem",
+        128: "32rem",
+        144: "36rem",
+      },
     },
   },
   plugins: [],
