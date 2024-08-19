@@ -1,4 +1,3 @@
-import classes from "./Toast.module.css";
 import { memo, useEffect } from "react";
 import { Toast } from "./ToastList";
 import { ToastType } from "../services/toast";
@@ -19,15 +18,19 @@ const ToastItem = memo(
     };
 
     return (
-      <li className={classes.toast} id={toast.id} key={toast.id}>
+      <li
+        className="w-fit flex flex-row items-center p-4 mb-2 rounded-md bg-white text-gray shadow-default animate-sideways"
+        id={toast.id}
+        key={toast.id}
+      >
         {/* <div>{Math.floor(Math.random() * (100) + 1)}</div> */}
-        <div className={classes["toast-icon"]}>
+        <div className="py-0 px-4">
           {toast.type === ToastType.success ? "✅" : "⛔"}
         </div>
         <div>{toast.message}</div>
         <button
           onClick={closeToastHandler}
-          className={classes["toast-close-btn"]}
+          className="border-none rounded-full py-2 px-4 bg-white cursor-pointer hover:text-red-heart"
         >
           {"\u{2715}"}
         </button>

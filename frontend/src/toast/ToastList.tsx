@@ -1,8 +1,7 @@
-import ToastItem from "./ToastItem";
-import classes from "./Toast.module.css";
-import useRequiredToastContext from "../hooks/use-required-toastContext";
 import { useEffect, useState, useCallback } from "react";
+import useRequiredToastContext from "../hooks/use-required-toastContext";
 import { ToastServer, ToastService, ToastType } from "../services/toast";
+import ToastItem from "./ToastItem";
 
 export type Toast = {
   type: ToastType;
@@ -51,9 +50,14 @@ const ToastList = () => {
   const toastElemens = toasts.map((toast) => {
     return <ToastItem toast={toast} key={toast.id} onDelete={deleteToast} />;
   });
+
   if (toasts.length === 0) return <></>;
 
-  return <ul className={classes.toasts}>{toastElemens}</ul>;
+  return (
+    <ul className="fixed bottom-4 right-4 flex flex-col flex-wrap items-end z-[120]">
+      {toastElemens}
+    </ul>
+  );
 };
 
 export default ToastList;

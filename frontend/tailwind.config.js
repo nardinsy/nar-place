@@ -42,11 +42,19 @@ module.exports = {
           "0%, 100%": { left: "0", top: "0" },
           "50%": { left: "100px", top: "0" },
         },
+        slidein: {
+          "0%": { transform: "translateX(100%)" },
+          "60%": { transform: " translateX(-15%)" },
+          "80%": { transform: "translateX(5%)" },
+          "100%": { transform: " translateX(0%)" },
+        },
+      },
+      animation: {
+        sideways: "sideways 3s linear ",
       },
       boxShadow: {
         default: "0 10px 30px 5px rgba(0, 0, 0, 0.2)",
       },
-
       transitionDuration: {
         card: "0.3s",
         4: "0.4s",
