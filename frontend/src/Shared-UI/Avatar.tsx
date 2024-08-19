@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
-import classes from "./Avatar.module.css";
 
 const Avatar = ({
   cssClassName,
@@ -21,19 +20,21 @@ const Avatar = ({
       src={pictureUrl}
       alt={alt}
       style={{ width, height: width }}
-      className={`${classes["avatar-img"]} ${cssClassName}`}
+      className={`block rounded-full w-full h-full object-cover ${cssClassName}`}
       loading="lazy"
     />
   ) : (
     <FontAwesomeIcon
       data-testid="no-image"
       icon={faCircleUser}
-      className={`${classes["avatar-img"]} ${cssClassName}`}
+      className={`block rounded-full w-full h-full object-cover ${cssClassName}`}
       style={{ width, height: width }}
     />
   );
 
-  return <div className={`${classes.avatar} ${cssClassName}`}>{content}</div>;
+  return (
+    <div className={`text-5xl text-gray-light ${cssClassName}`}>{content}</div>
+  );
 };
 
 export default Avatar;

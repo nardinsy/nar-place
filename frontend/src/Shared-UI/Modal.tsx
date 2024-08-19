@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
-import classes from "./Modal.module.css";
-import { FC, useEffect, useRef } from "react";
+import { FC } from "react";
 import { HasChildren } from "../helpers/props";
+import classes from "./Modal.module.css";
 
 type ModalOverlayProps = HasChildren & {
   cssClassName: string | undefined;

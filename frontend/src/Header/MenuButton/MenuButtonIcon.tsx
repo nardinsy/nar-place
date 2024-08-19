@@ -12,7 +12,7 @@ const MenuButtonIcon = () => {
         <Avatar
           pictureUrl={authContext.userPictureUrl}
           alt={authContext.username}
-          width={"50px"}
+          width={"3rem"}
         />
       ) : (
         <FontAwesomeIcon

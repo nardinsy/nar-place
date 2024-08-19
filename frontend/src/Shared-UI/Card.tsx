@@ -1,5 +1,3 @@
-import classes from "./Card.module.css";
-
 type CardProps = {
   className?: string | undefined;
   style?: React.CSSProperties | undefined;
@@ -8,7 +6,10 @@ type CardProps = {
 
 const Card = ({ className, style, children }: CardProps) => {
   return (
-    <div className={`${classes.card} ${className}`} style={style}>
+    <div
+      className={`relative m-0 rounded-md overflow-hidden bg-white ${className}`}
+      style={style}
+    >
       {children}
     </div>
   );

@@ -1,7 +1,6 @@
 import { HasChildren } from "../helpers/props";
-import classes from "./MessageModal.module.css";
 import Modal from "./Modal";
-import React, { FC } from "react";
+import { FC } from "react";
 
 type MessageProps = HasChildren & {
   className?: string;
@@ -10,12 +9,12 @@ type MessageProps = HasChildren & {
 };
 
 const MessageModal: FC<MessageProps> = ({ className, message, children }) => {
-  const classNames = `${classes.message} ${className}`;
+  const classNames = `font-bold text-gray text-base p-4" ${className}`;
 
   return (
     <Modal>
-      <div className={classes["message-container"]}>
-        <div className={classes.message}>{message}</div>
+      <div className="flex flex-col items-center justify-center text-center">
+        <div className="font-bold text-gray text-base p-4">{message}</div>
         <div>{children}</div>
       </div>
     </Modal>

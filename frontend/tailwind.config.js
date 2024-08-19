@@ -48,9 +48,21 @@ module.exports = {
           "80%": { transform: "translateX(5%)" },
           "100%": { transform: " translateX(0%)" },
         },
+        "slide-down": {
+          from: {
+            opacity: "0",
+            transform: "translateY(-3rem)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
       },
+
       animation: {
         sideways: "sideways 3s linear ",
+        "slide-down": "slide-down 300ms ease-out forwards",
       },
       boxShadow: {
         default: "0 10px 30px 5px rgba(0, 0, 0, 0.2)",
