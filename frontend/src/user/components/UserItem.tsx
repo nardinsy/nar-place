@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Avatar from "../../shared-UI/Avatar";
 import Card from "../../shared-UI/Card";
 import { UserDto } from "../../helpers/dtos";
-import classes from "./UserItem.module.css";
 
 type UserItemProps = { userDto: UserDto; key: string };
 
@@ -12,20 +11,25 @@ const UserItem: FC<UserItemProps> = ({ userDto }) => {
   const { userId, username, pictureUrl, placeCount } = userDto;
 
   return (
-    <li className={classes["user-item"]} key={userId} data-testid={userId}>
-      <Card className={classes["user-item__content"]}>
+    <li
+      className="m-4 min-w-32 border rounded-md border-user-item-border"
+      key={userId}
+      data-testid={userId}
+    >
+      <Card className="p-0">
         <Link
           to={{
             pathname: `/places/${userId}`,
             state: { userDto },
           }}
+          className="flex items-center w-full h-full p-2 hover:bg-gray-light"
         >
-          <div className={classes["user-item__image"]}>
-            <Avatar pictureUrl={pictureUrl} alt={username} width={"4rem"} />
+          <div className="w-12 h-12 mr-4">
+            <Avatar pictureUrl={pictureUrl} alt={username} width={"3rem"} />
           </div>
           <div>
-            <p className={classes["user-item__info__name"]}>{username}</p>
-            <p className={classes["user-item__info__count"]}>
+            <p className="mb-2 text-blue-dark text-sm font-bold">{username}</p>
+            <p className="text-xs text-gray">
               {placeCount} {placeCount === 1 ? "Place" : "Places"}
             </p>
           </div>
@@ -36,3 +40,5 @@ const UserItem: FC<UserItemProps> = ({ userDto }) => {
 };
 
 export default UserItem;
+
+// border border-gray-dark rounded-lg

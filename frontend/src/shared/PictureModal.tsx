@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, FC, ReactNode, MouseEvent } from "react";
+import { useState, useRef, FC, ReactNode, MouseEvent } from "react";
 import Avatar from "../shared-UI/Avatar";
 import Dropdown from "./DropdownCard";
 import Modal from "../shared-UI/Modal";
@@ -9,7 +9,6 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { HasChildren } from "../helpers/props";
 import classes from "./PictureModal.module.css";
 
 type PictureModalT = {

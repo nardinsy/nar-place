@@ -25,6 +25,8 @@ module.exports = {
       "gray-fav": "#A8A7A6",
       "red-heart": "#E44848",
       "edit-button-bg": "#f5f5f5",
+      "blue-dark": " #252f3b",
+      "user-item-border": "#d7dce4",
     },
     extend: {
       display: ["group-hover"],
@@ -44,8 +46,10 @@ module.exports = {
       boxShadow: {
         default: "0 10px 30px 5px rgba(0, 0, 0, 0.2)",
       },
+
       transitionDuration: {
         card: "0.3s",
+        4: "0.4s",
       },
       borderRadius: {
         card: "2rem",

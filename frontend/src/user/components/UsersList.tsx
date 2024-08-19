@@ -1,7 +1,6 @@
 import UserItem from "./UserItem";
 import Card from "../../shared-UI/Card";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
-import classes from "./UsersList.module.css";
 import { UserDto } from "../../helpers/dtos";
 import Spinner from "../../shared-UI/Spinner";
 
@@ -14,7 +13,10 @@ const UsersList = ({
 }) => {
   if (loading) {
     return (
-      <div className={classes.center} data-testid="users-spinner">
+      <div
+        className="flex flex-col items-center justify-center h-screen"
+        data-testid="users-spinner"
+      >
         <Spinner />
       </div>
     );
@@ -22,8 +24,8 @@ const UsersList = ({
 
   if (users.length === 0) {
     return (
-      <div className={classes.center}>
-        <Card className={classes["center-message"]}>
+      <div className="flex flex-col items-center justify-center h-screen">
+        <Card className="w-2/5 text-center shadow-default">
           <h2>No user found.</h2>
         </Card>
       </div>
@@ -36,8 +38,12 @@ const UsersList = ({
       : undefined;
     return <UserItem key={user.userId} userDto={{ ...user, pictureUrl }} />;
   });
+
   return (
-    <ul className={classes["users-list"]} data-testid="users-list">
+    <ul
+      className="flex justify-center flex-wrap my-20 p-0 w-full"
+      data-testid="users-list"
+    >
       {userItems}
     </ul>
   );

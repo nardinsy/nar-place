@@ -1,5 +1,3 @@
-import classes from "./DropdownCard.module.css";
-
 export type DropDownItem = { title: string; handler: (event: any) => any };
 
 const Dropdown = ({
@@ -13,21 +11,21 @@ const Dropdown = ({
     return (
       <li
         key={item.title}
-        className={classes["dropdown-item"]}
+        className="cursor-context-menu hover:bg-primary hover:text-white transition-colors ease-in duration-[0.3s]"
         onClick={item.handler}
       >
-        <div className={classes["option-title"]}>{item.title}</div>
+        <div className="p-3">{item.title}</div>
       </li>
     );
   });
 
   const finalClassName = propClassName
     ? propClassName
-    : classes["dropdown-container"];
+    : "absolute top-14 right-1 bg-white shadow-default z-50 rounded-xl w-60";
 
   return (
     <div className={finalClassName} data-testid="drop">
-      <ul className={classes["dropdown-items"]}>{rows}</ul>
+      <ul className="my-3 flex flex-col p-0">{rows}</ul>
     </div>
   );
 };
