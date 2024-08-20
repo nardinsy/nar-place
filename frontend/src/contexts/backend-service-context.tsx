@@ -2,12 +2,15 @@ import { FC, createContext } from "react";
 import { BackendService } from "../api/backend-service";
 import { HasChildren } from "../helpers/props";
 import {
+  CommentActions,
   CommentDto,
   CommentLikeDto,
+  CommentNotificationDto,
   CommentReplyDto,
   LoginResult,
   NewComment,
   NewPlace,
+  NotificationDto,
   PlaceDto,
   UserDto,
   UserLoginInformation,
@@ -248,6 +251,36 @@ class BackedServiceImpl implements BackendService {
     };
 
     return await sendHttpRequest(ENDPOINTS.replyComment, requestOptions);
+  }
+
+  async getNotifications(
+    userId: string,
+    token: string
+  ): Promise<NotificationDto[]> {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify({ userId }),
+    };
+
+    // return await sendHttpRequest(ENDPOINTS.getNotifications, requestOptions);
+    const t: CommentNotificationDto = {
+      type: "Comment",
+      content: {
+        action: CommentActions.LikeComment,
+        commentId: "1",
+        placeId: "",
+      },
+      from: {
+        pictureUrl:
+          "http://192.168.1.13:5000/api/users/profile-picture/668ce9ef3d408c8453070e34",
+        userId: "65f700a6e771ff3a4ddabaaf",
+        username: "Nardin",
+        placeCount: 10,
+      },
+    };
+
+    return [t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t];
   }
 }
 

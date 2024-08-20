@@ -10,6 +10,7 @@ import {
   NewComment,
   CommentLikeDto,
   CommentReplyDto,
+  NotificationDto,
 } from "../helpers/dtos";
 
 export interface BackendService {
@@ -84,4 +85,6 @@ export interface BackendService {
     commentReply: CommentReplyDto,
     token: string
   ): Promise<{ replyComment: CommentDto }>;
+
+  getNotifications(userId: string, token: string): Promise<NotificationDto[]>;
 }

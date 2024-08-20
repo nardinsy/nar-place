@@ -125,6 +125,36 @@ export type CommentReplyDto = {
   date: Date;
 };
 
+export enum CommentActions {
+  LikeComment,
+  UnlikeComment,
+  ReplyComment,
+  WriteComment,
+}
+
+export type CommentNotificationDto = {
+  type: "Comment";
+  from: {
+    userId: string;
+    username: string;
+    pictureUrl: string | undefined;
+    placeCount?: number;
+  };
+  content: { placeId: string; commentId: string; action: CommentActions };
+};
+
+export type FollowNotificationDto = {
+  type: "Follow";
+  from: {
+    userId: string;
+    username: string;
+    pictureUrl: string | undefined;
+    placeCount?: number;
+  };
+};
+
+export type NotificationDto = CommentNotificationDto | FollowNotificationDto;
+
 // const replies2: CommentDto = {
 //   id: "66953066398f8bc122208ddf",
 //   parentId: "66960bcec258550dcd4c7fd8",
