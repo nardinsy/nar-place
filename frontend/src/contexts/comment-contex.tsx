@@ -1,6 +1,6 @@
 import { createContext, useState, FC } from "react";
 import { createRelativePath } from "../helpers/api-url";
-import { HasChildren } from "../helpers/props";
+import { HasChildren, WithChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
 import {
@@ -32,11 +32,14 @@ export interface CommentT {
     parentCommentDto: CommentDto,
     commentReply: CommentReplyDto
   ) => Promise<void>;
+  commentActionTo: string;
 }
 
 const CommentContext = createContext<CommentT | undefined>(undefined);
 
-export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
+export const CommentContextProvider: FC<
+  WithChildren<{ commentActionTo: string }>
+> = ({ children, commentActionTo }) => {
   const backend = useRequiredBackend();
   const showSuccessToast = useRequiredToastContext().showSuccess;
 
@@ -71,7 +74,7 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     //   writer,
     // };
 
-    const result = await backend.addComment(newCommetn, token);
+    const result = await backend.addComment(newCommetn, commentActionTo, token);
     const comment = result.comment;
     comment.writer.pictureUrl = pic ? createRelativePath(pic) : undefined;
 
@@ -132,7 +135,7 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     if (!token) {
       throw new Error("Please login first");
     }
-    await backend.likeComment(newCommentLike, token);
+    await backend.likeComment(newCommentLike, commentActionTo, token);
 
     findAndUpdateComment(updatedComment);
     showSuccessToast("Comment liked successfully");
@@ -165,7 +168,11 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
 
     const pic = localStorage.getItem("userPictureUrl");
 
-    const { replyComment } = await backend.replyComment(commentReply, token);
+    const { replyComment } = await backend.replyComment(
+      commentReply,
+      commentActionTo,
+      token
+    );
     replyComment.writer.pictureUrl = pic ? createRelativePath(pic) : undefined;
 
     parentCommentDto.replies.unshift(replyComment);
@@ -194,6 +201,7 @@ export const CommentContextProvider: FC<HasChildren> = ({ children }) => {
     likeComment,
     unlikeComment,
     replyToComment,
+    commentActionTo,
   };
 
   return (

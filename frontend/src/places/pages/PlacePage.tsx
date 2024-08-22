@@ -43,7 +43,7 @@ const PlacePage: FC = () => {
         >
           <PlaceInfo placeDto={placeDto} />
 
-          <CommentContextProvider>
+          <CommentContextProvider commentActionTo={userDto.userId}>
             <CommentBox placeId={placeDto.placeId} />
           </CommentContextProvider>
         </div>

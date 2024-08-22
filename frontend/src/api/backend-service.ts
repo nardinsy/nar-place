@@ -57,6 +57,7 @@ export interface BackendService {
 
   addComment(
     NewComment: NewComment,
+    commentActionTo: string,
     token: string
   ): Promise<{ comment: CommentDto }>;
 
@@ -72,6 +73,7 @@ export interface BackendService {
 
   likeComment(
     NewCommentLike: CommentLikeDto,
+    commentActionTo: string,
     token: string
   ): Promise<{ commentLikeDto: CommentLikeDto }>;
 
@@ -83,6 +85,7 @@ export interface BackendService {
 
   replyComment(
     commentReply: CommentReplyDto,
+    commentActionTo: string,
     token: string
   ): Promise<{ replyComment: CommentDto }>;
 

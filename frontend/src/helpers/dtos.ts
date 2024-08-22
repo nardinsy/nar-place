@@ -84,7 +84,11 @@ export type UserInfoType = {
 
 export class LoginResult {
   public readonly message = "User logged in successfully";
-  constructor(public readonly token: string, public readonly user: UserDto) {}
+  constructor(
+    public readonly token: string,
+    public readonly user: UserDto,
+    public readonly oldNotifications?: NotificationDto[]
+  ) {}
 }
 
 export type CommentDto = {
@@ -132,28 +136,20 @@ export enum CommentActions {
   WriteComment,
 }
 
-export type CommentNotificationDto = {
-  type: "Comment";
+export type NotificationDto = {
+  kind: "Comment" | "Follow";
   from: {
     userId: string;
     username: string;
     pictureUrl: string | undefined;
     placeCount?: number;
   };
-  content: { placeId: string; commentId: string; action: CommentActions };
-};
-
-export type FollowNotificationDto = {
-  type: "Follow";
-  from: {
-    userId: string;
-    username: string;
-    pictureUrl: string | undefined;
-    placeCount?: number;
+  commentContent: {
+    placeId: string;
+    commentId: string;
+    action: CommentActions;
   };
 };
-
-export type NotificationDto = CommentNotificationDto | FollowNotificationDto;
 
 // const replies2: CommentDto = {
 //   id: "66953066398f8bc122208ddf",

@@ -1,10 +1,4 @@
-import {
-  CommentActions,
-  CommentNotificationDto,
-  FollowNotificationDto,
-  NotificationDto,
-  UserDto,
-} from "../helpers/dtos";
+import { CommentActions, NotificationDto, UserDto } from "../helpers/dtos";
 import Avatar from "../shared-UI/Avatar";
 import { createAbsoluteApiAddress } from "../helpers/api-url";
 import { Link } from "react-router-dom";
@@ -16,16 +10,21 @@ const NotificationItem = ({
 }) => {
   const { from }: { from: UserDto } = notificationDto;
   let message;
-  if (notificationDto.type === "Comment") {
+
+  if (notificationDto.kind === "Comment") {
     message = getCommentNotificationMessage(notificationDto);
-  } else if (notificationDto.type === "Follow") {
+  } else if (notificationDto.kind === "Follow") {
     message = getFollowNotificationMessage(notificationDto);
   }
+
+  const absolutePictuteUrl = notificationDto.from.pictureUrl
+    ? createAbsoluteApiAddress(notificationDto.from.pictureUrl)
+    : undefined;
 
   return (
     <div className="flex flex-row items-center">
       <Avatar
-        pictureUrl={from.pictureUrl}
+        pictureUrl={absolutePictuteUrl}
         alt={"user"}
         width={"2rem"}
         cssClassName="mr-1"
@@ -50,23 +49,32 @@ const NotificationItem = ({
 };
 
 const getCommentNotificationMessage = (
-  notificationDto: CommentNotificationDto
+  notificationDto: NotificationDto
 ): string => {
-  const { content } = notificationDto;
-  switch (content.action) {
+  const { commentContent } = notificationDto;
+
+  let message: string = "Notification";
+
+  switch (+commentContent.action) {
     case CommentActions.LikeComment:
-      return `liked your comment`;
+      message = `liked your comment`;
+      break;
     case CommentActions.ReplyComment:
-      return `replied to your comment`;
+      message = `replied to your comment`;
+      break;
     case CommentActions.UnlikeComment:
-      return `unliked to your comment`;
+      message = `unliked to your comment`;
+      break;
     case CommentActions.WriteComment:
-      return `commented on your post`;
+      message = `commented on your post`;
+      break;
   }
+
+  return message;
 };
 
 const getFollowNotificationMessage = (
-  notificationDto: FollowNotificationDto
+  notificationDto: NotificationDto
 ): string => {
   return `wants to follow you`;
 };

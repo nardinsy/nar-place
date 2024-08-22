@@ -5,7 +5,6 @@ import {
   CommentActions,
   CommentDto,
   CommentLikeDto,
-  CommentNotificationDto,
   CommentReplyDto,
   LoginResult,
   NewComment,
@@ -166,14 +165,17 @@ class BackedServiceImpl implements BackendService {
     );
   }
 
+  // Comment
+
   async addComment(
     newComment: NewComment,
+    commentActionTo: string,
     token: string
   ): Promise<{ comment: CommentDto }> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ newComment }),
+      body: JSON.stringify({ newComment, commentActionTo }),
     };
 
     return await sendHttpRequest(ENDPOINTS.addComment, requestOptions);
@@ -215,12 +217,13 @@ class BackedServiceImpl implements BackendService {
 
   async likeComment(
     newCommentLike: CommentLikeDto,
+    commentActionTo: string,
     token: string
   ): Promise<{ commentLikeDto: CommentLikeDto }> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ newCommentLike }),
+      body: JSON.stringify({ newCommentLike, commentActionTo }),
     };
 
     return await sendHttpRequest(ENDPOINTS.likeComment, requestOptions);
@@ -242,12 +245,13 @@ class BackedServiceImpl implements BackendService {
 
   async replyComment(
     commentReply: CommentReplyDto,
+    commentActionTo: string,
     token: string
   ): Promise<{ replyComment: CommentDto }> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ commentReply }),
+      body: JSON.stringify({ commentReply, commentActionTo }),
     };
 
     return await sendHttpRequest(ENDPOINTS.replyComment, requestOptions);
@@ -258,29 +262,28 @@ class BackedServiceImpl implements BackendService {
     token: string
   ): Promise<NotificationDto[]> {
     const requestOptions = {
-      method: "POST",
+      method: "GET",
       headers: { "Content-Type": "application/json", token },
-      body: JSON.stringify({ userId }),
     };
 
-    // return await sendHttpRequest(ENDPOINTS.getNotifications, requestOptions);
-    const t: CommentNotificationDto = {
-      type: "Comment",
-      content: {
-        action: CommentActions.LikeComment,
-        commentId: "1",
-        placeId: "",
-      },
-      from: {
-        pictureUrl:
-          "http://192.168.1.13:5000/api/users/profile-picture/668ce9ef3d408c8453070e34",
-        userId: "65f700a6e771ff3a4ddabaaf",
-        username: "Nardin",
-        placeCount: 10,
-      },
-    };
+    return await sendHttpRequest(ENDPOINTS.getNewNotifications, requestOptions);
+    // const t: CommentNotificationDto = {
+    //   type: "Comment",
+    //   content: {
+    //     action: CommentActions.LikeComment,
+    //     commentId: "1",
+    //     placeId: "",
+    //   },
+    //   from: {
+    //     pictureUrl:
+    //       "http://192.168.1.13:5000/api/users/profile-picture/668ce9ef3d408c8453070e34",
+    //     userId: "65f700a6e771ff3a4ddabaaf",
+    //     username: "Nardin",
+    //     placeCount: 10,
+    //   },
+    // };
 
-    return [t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t];
+    // return [t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t];
   }
 }
 

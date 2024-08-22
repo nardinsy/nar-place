@@ -28,4 +28,5 @@ export const commentProviderValueProps: CommentT = {
   likeComment: jest.fn(),
   unlikeComment: jest.fn(),
   replyToComment: jest.fn(),
+  commentActionTo: "65f700a6e771ff3a4ddabaaf",
 };
