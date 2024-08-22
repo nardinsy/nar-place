@@ -11,6 +11,7 @@ import {
   changePassword,
   changeUsername,
   getNewNotifications,
+  mergeAndResetNotifications,
 } from "../controllers/users-controller";
 
 const usersRouter = routerAuth();
@@ -40,4 +41,6 @@ usersRouter.postAuth("/change/username", changeUsername);
 usersRouter.get("/profile-picture/:uid", getUserProfilePicture);
 // usersRouter.postAuth("/editUserInfo", editUserInfo);
 usersRouter.getAuth("/new-notification", getNewNotifications);
+
+usersRouter.getAuth("/update-notifications", mergeAndResetNotifications);
 export default usersRouter;

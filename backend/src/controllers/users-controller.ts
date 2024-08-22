@@ -368,21 +368,6 @@ export const getNewNotifications: AuthRequestHandler = async (
     })
   );
 
-  user.newNotifications.forEach((notification) =>
-    user.oldNotifications.unshift(notification)
-  );
-  user.newNotifications = [];
-
-  try {
-    user.save();
-  } catch (error) {
-    return next(
-      createHttpError(
-        "Could not update user notifications, please try again.",
-        500
-      )
-    );
-  }
   res.status(200).json(newNotificationsDto);
 };
 
@@ -405,4 +390,28 @@ const getOldNotifications = async (ids: Types.ObjectId[]) => {
       return notification;
     })
   );
+};
+
+export const mergeAndResetNotifications: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  user.newNotifications.forEach((notification) =>
+    user.oldNotifications.unshift(notification)
+  );
+  user.newNotifications = [];
+
+  try {
+    user.save();
+  } catch (error) {
+    return next(
+      createHttpError(
+        "Could not update user notifications, please try again.",
+        500
+      )
+    );
+  }
+  res.status(200).json({ message: "ًAll notification marked as read" });
 };
