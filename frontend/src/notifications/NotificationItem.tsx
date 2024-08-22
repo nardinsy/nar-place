@@ -8,7 +8,13 @@ const NotificationItem = ({
 }: {
   notificationDto: NotificationDto;
 }) => {
+  const absolutePictuteUrl = notificationDto.from.pictureUrl
+    ? createAbsoluteApiAddress(notificationDto.from.pictureUrl)
+    : undefined;
+
   const { from }: { from: UserDto } = notificationDto;
+  from.pictureUrl = absolutePictuteUrl;
+
   let message;
 
   if (notificationDto.kind === "Comment") {
@@ -16,10 +22,6 @@ const NotificationItem = ({
   } else if (notificationDto.kind === "Follow") {
     message = getFollowNotificationMessage(notificationDto);
   }
-
-  const absolutePictuteUrl = notificationDto.from.pictureUrl
-    ? createAbsoluteApiAddress(notificationDto.from.pictureUrl)
-    : undefined;
 
   return (
     <div className="flex flex-row items-center">
