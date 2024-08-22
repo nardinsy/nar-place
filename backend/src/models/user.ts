@@ -10,6 +10,8 @@ export interface IUser extends mongoose.Document {
   places: Types.ObjectId[];
   picture: Types.ObjectId | null;
   _id: Types.ObjectId;
+  oldNotifications: Types.ObjectId[];
+  newNotifications: Types.ObjectId[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -18,6 +20,8 @@ const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
   places: [{ type: Schema.Types.ObjectId, required: true, ref: "Place" }],
   picture: { type: Schema.Types.ObjectId, ref: "Picture" },
+  oldNotifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
+  newNotifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
 });
 
 const User = model<IUser>("User", userSchema);

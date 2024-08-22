@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { IUserNotification } from "../models/notification";
 
 export class UserDto {
   constructor(
@@ -68,7 +69,7 @@ export type Base64<imageType extends string> =
 export type NewComment = {
   text: string;
   date: Date;
-  postID: Types.ObjectId;
+  postID: string;
 };
 
 export type CommentDto = {

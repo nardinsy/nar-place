@@ -10,6 +10,7 @@ import {
   getUserProfilePicture,
   changePassword,
   changeUsername,
+  getNewNotifications,
 } from "../controllers/users-controller";
 
 const usersRouter = routerAuth();
@@ -38,4 +39,5 @@ usersRouter.postAuth("/change/username", changeUsername);
 
 usersRouter.get("/profile-picture/:uid", getUserProfilePicture);
 // usersRouter.postAuth("/editUserInfo", editUserInfo);
+usersRouter.getAuth("/new-notification", getNewNotifications);
 export default usersRouter;

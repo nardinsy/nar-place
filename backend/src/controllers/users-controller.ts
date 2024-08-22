@@ -1,4 +1,5 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
+import { Types } from "mongoose";
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -11,6 +12,7 @@ import { AuthRequestHandler } from "../lib/auth";
 import contentTypeBufferSplit from "../helpers/data-url";
 import ProfilePicture, { IProfilePicture } from "../models/profile-picture";
 import { LoginResult } from "../shared/results";
+import UserNotification, { IUserNotification } from "../models/notification";
 
 export const getProfilePictureUrl = (id: string): string => {
   return `users/profile-picture/${id}`;
@@ -131,6 +133,10 @@ export const login: RequestHandler = async (req, res, next) => {
 
   const token = await generateToken(existingUser);
 
+  const oldNotifications = await getOldNotifications(
+    existingUser.oldNotifications
+  );
+
   const userDto = new UserDto(
     existingUser.id,
     existingUser.username,
@@ -140,7 +146,7 @@ export const login: RequestHandler = async (req, res, next) => {
     existingUser.places.length
   );
 
-  res.status(200).json(new LoginResult(token, userDto));
+  res.status(200).json(new LoginResult(token, userDto, oldNotifications));
 };
 
 export const logout: AuthRequestHandler = async (user, req, res, next) => {
@@ -331,4 +337,72 @@ const deleteUserPictureFromDB = async (id: string) => {
     console.log(error);
     return undefined;
   }
+};
+
+// notifications
+
+export const getNewNotifications: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const notificationsId = user.newNotifications;
+
+  const newNotificationsDto = await Promise.all(
+    notificationsId.map(async (notificationId) => {
+      let notification: IUserNotification | null;
+
+      try {
+        notification = await UserNotification.findOne(notificationId);
+
+        if (!notification) {
+          throw new Error(
+            "Something went wrong, could not find notification 1."
+          );
+        }
+      } catch (err) {
+        throw new Error("Something went wrong, could not find notification 2.");
+      }
+      return notification;
+    })
+  );
+
+  user.newNotifications.forEach((notification) =>
+    user.oldNotifications.unshift(notification)
+  );
+  user.newNotifications = [];
+
+  try {
+    user.save();
+  } catch (error) {
+    return next(
+      createHttpError(
+        "Could not update user notifications, please try again.",
+        500
+      )
+    );
+  }
+  res.status(200).json(newNotificationsDto);
+};
+
+const getOldNotifications = async (ids: Types.ObjectId[]) => {
+  return await Promise.all(
+    ids.map(async (id) => {
+      let notification: IUserNotification | null;
+
+      try {
+        notification = await UserNotification.findOne(id);
+
+        if (!notification) {
+          throw new Error(
+            "Something went wrong, could not find notification 1."
+          );
+        }
+      } catch (err) {
+        throw new Error("Something went wrong, could not find notification 2.");
+      }
+      return notification;
+    })
+  );
 };

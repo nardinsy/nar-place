@@ -19,6 +19,10 @@ import {
   PlaceDto,
 } from "../shared/dtos";
 import { getProfilePictureUrl } from "./users-controller";
+import UserNotification, {
+  CommentActions,
+  IUserNotification,
+} from "../models/notification";
 
 export const getPlacePictureUrl = (id: string) => {
   return `places/place-picture/${id}`;
@@ -369,6 +373,8 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
   }
 
   const { text, date, postID }: NewComment = req.body.newComment;
+  const commentActionTo: string = req.body.commentActionTo;
+
   const newComment = new PostComment({ text, date, postID, writer: user._id });
 
   try {
@@ -404,6 +410,14 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
   } catch (err) {
     console.log(err);
   }
+
+  await addCommetnNotification(
+    user,
+    commentActionTo,
+    postID,
+    newComment._id.toHexString(),
+    CommentActions.WriteComment
+  );
 
   const commentDto = {
     id: newComment._id.toHexString(),
@@ -720,6 +734,8 @@ const checkCommentBelongsToUser = (comment: IPostComment, user: IUser) => {
 
 export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
   const commentLike: CommentLikeDto = req.body.newCommentLike;
+  const commentActionTo: string = req.body.commentActionTo;
+
   const { userId, commentId, date } = commentLike;
 
   const newCommentLike = new CommentLike({ userId, commentId, date });
@@ -780,6 +796,16 @@ export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
       )
     );
   }
+
+  comment.postID;
+
+  await addCommetnNotification(
+    user,
+    commentActionTo,
+    comment.postID.toHexString(),
+    commentId,
+    CommentActions.LikeComment
+  );
 
   const commentLikeDto: CommentLikeDto = {
     userId: newCommentLike.userId.toHexString(),
@@ -842,6 +868,8 @@ export const replyComment: AuthRequestHandler = async (
   next
 ) => {
   const commentReply: CommentReplyDto = req.body.commentReply;
+  const commentActionTo: string = req.body.commentActionTo;
+
   const { parentId, date, text, userId, postId } = commentReply;
 
   const newReplyToComment = new PostComment({
@@ -896,6 +924,14 @@ export const replyComment: AuthRequestHandler = async (
     );
   }
 
+  await addCommetnNotification(
+    user,
+    commentActionTo,
+    postId,
+    newReplyToComment._id.toHexString(),
+    CommentActions.ReplyComment
+  );
+
   const replyCommentDto = {
     id: newReplyToComment._id.toHexString(),
     parentId,
@@ -915,4 +951,60 @@ export const replyComment: AuthRequestHandler = async (
   res.status(201).json({
     replyComment: replyCommentDto,
   });
+};
+
+// notification
+const addCommetnNotification = async (
+  from: IUser,
+  to: string,
+  placeId: string,
+  commentId: string,
+  action: CommentActions
+) => {
+  const fromUser = {
+    userId: from.id,
+    username: from.username,
+    pictureUrl: from.picture
+      ? getProfilePictureUrl(from.picture.toHexString())
+      : undefined,
+    placeCount: from.places.length,
+  };
+  const commentContent = {
+    placeId,
+    commentId,
+    action,
+  };
+
+  const commentNotification: IUserNotification = new UserNotification({
+    kind: "Comment",
+    from: fromUser,
+    commentContent,
+  });
+
+  try {
+    await commentNotification.save();
+  } catch (error) {
+    throw new Error("Adding comment failed, please try again.");
+  }
+
+  let toUser: IUser | null;
+  try {
+    toUser = await User.findOne({
+      _id: new Types.ObjectId(to),
+    });
+
+    if (!toUser) {
+      throw new Error("Could't find user, please try again");
+    }
+  } catch (err) {
+    throw new Error("Could't find user, please try again");
+  }
+
+  toUser.newNotifications.unshift(commentNotification._id);
+
+  try {
+    await toUser.save();
+  } catch (error) {
+    throw new Error("Updating user notification failed, please try again.");
+  }
 };
