@@ -257,33 +257,25 @@ class BackedServiceImpl implements BackendService {
     return await sendHttpRequest(ENDPOINTS.replyComment, requestOptions);
   }
 
-  async getNotifications(
-    userId: string,
-    token: string
-  ): Promise<NotificationDto[]> {
+  async getNewNotifications(token: string): Promise<NotificationDto[]> {
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json", token },
     };
 
     return await sendHttpRequest(ENDPOINTS.getNewNotifications, requestOptions);
-    // const t: CommentNotificationDto = {
-    //   type: "Comment",
-    //   content: {
-    //     action: CommentActions.LikeComment,
-    //     commentId: "1",
-    //     placeId: "",
-    //   },
-    //   from: {
-    //     pictureUrl:
-    //       "http://192.168.1.13:5000/api/users/profile-picture/668ce9ef3d408c8453070e34",
-    //     userId: "65f700a6e771ff3a4ddabaaf",
-    //     username: "Nardin",
-    //     placeCount: 10,
-    //   },
-    // };
+  }
 
-    // return [t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t];
+  async mergeAndResetNotifications(token: string): Promise<void> {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json", token },
+    };
+
+    return await sendHttpRequest(
+      ENDPOINTS.mergeAndResetNotifications,
+      requestOptions
+    );
   }
 }
 

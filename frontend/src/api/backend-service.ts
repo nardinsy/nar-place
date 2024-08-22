@@ -89,5 +89,7 @@ export interface BackendService {
     token: string
   ): Promise<{ replyComment: CommentDto }>;
 
-  getNotifications(userId: string, token: string): Promise<NotificationDto[]>;
+  getNewNotifications(token: string): Promise<NotificationDto[]>;
+
+  mergeAndResetNotifications(token: string): Promise<void>;
 }

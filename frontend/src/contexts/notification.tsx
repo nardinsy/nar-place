@@ -1,12 +1,12 @@
 import { createContext, useState, useEffect, FC } from "react";
-import { useHistory } from "react-router-dom";
 import { WithChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import { NotificationDto } from "../helpers/dtos";
 
 interface NotificationContextT {
-  notifications: NotificationDto[];
-  notificationBadge: number;
+  oldNotifications: NotificationDto[];
+  newNotifications: NotificationDto[];
+  mergeAndResetNotifications: () => Promise<void>;
 }
 
 const NotificationContext = createContext<NotificationContextT | undefined>(
@@ -18,33 +18,34 @@ export const NotificationContextProvider: FC<
 > = ({ children, userId, token }) => {
   const backend = useRequiredBackend();
 
-  const [notifications, setNotifications] = useState<NotificationDto[]>([]);
-  const [notificationBadge, setNotificationBadge] = useState(0);
+  const [oldNotifications, setOldNotifications] = useState<NotificationDto[]>(
+    []
+  );
+  const [newNotifications, setNewNotifications] = useState<NotificationDto[]>(
+    []
+  );
 
   useEffect(() => {
-    const fetchNotifications = async () => {
-      const newNotifications = await backend.getNotifications(userId, token);
+    const fetchNewNotifications = async () => {
+      const newNotifications = await backend.getNewNotifications(token);
 
-      const currentNotifLenght = +localStorage.getItem("notificationBadge")!;
-      const newNotificationsLenght = newNotifications.length;
-
-      if (newNotificationsLenght > currentNotifLenght) {
-        setNotificationBadge(newNotificationsLenght - currentNotifLenght);
-      }
-
-      localStorage.setItem(
-        "notificationBadge",
-        String(newNotifications.length)
-      );
-      setNotifications(newNotifications);
+      setNewNotifications(newNotifications);
     };
 
-    fetchNotifications();
+    fetchNewNotifications();
   }, []);
 
+  const mergeAndResetNotifications = async () => {
+    setOldNotifications((pre) => [...newNotifications, ...pre]);
+    setNewNotifications([]);
+
+    await backend.mergeAndResetNotifications(token);
+  };
+
   const value: NotificationContextT = {
-    notifications,
-    notificationBadge,
+    oldNotifications,
+    newNotifications,
+    mergeAndResetNotifications,
   };
 
   return (
@@ -55,3 +56,15 @@ export const NotificationContextProvider: FC<
 };
 
 export default NotificationContext;
+
+// const currentNotifLenght = +localStorage.getItem("notificationBadge")!;
+// const newNotificationsLenght = newNotifications.length;
+
+// if (newNotificationsLenght > currentNotifLenght) {
+//   setNotificationBadge(newNotificationsLenght - currentNotifLenght);
+// }
+
+// localStorage.setItem(
+//   "notificationBadge",
+//   String(newNotifications.length)
+// );

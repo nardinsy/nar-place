@@ -7,7 +7,7 @@ interface NotificationDropdownT {}
 
 const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
   const notifCtx = useRequiredNotificationContext();
-  const notifications = notifCtx.notifications;
+  const notifications = notifCtx.oldNotifications;
   const ref = useRef<HTMLDivElement | null>(null);
 
   const rows = notifications.map(

@@ -24,9 +24,13 @@ const NotificationButton = () => {
     };
   }, [showDropdown]);
 
-  const notificationButtonHandler = (e: React.MouseEvent<HTMLElement>) => {
+  const notificationButtonHandler = async (
+    e: React.MouseEvent<HTMLElement>
+  ) => {
     e.preventDefault();
     setShowDropdown((pre) => !pre);
+
+    await notifCtx.mergeAndResetNotifications();
   };
 
   return (
@@ -34,9 +38,9 @@ const NotificationButton = () => {
       <button
         className={`relative bx bx-bell text-2xl cursor-pointer hover:bg-gray-light rounded-full mx-4 py-1 px-2`}
       >
-        {notifCtx.notificationBadge > 0 ? (
+        {notifCtx.newNotifications.length > 0 ? (
           <span className="absolute top-0 right-0 w-5 h-5 rounded-full flex justify-center items-center bg-red-heart text-white text-[0.6rem]">
-            {notifCtx.notificationBadge}
+            {notifCtx.newNotifications.length}
           </span>
         ) : (
           ""
