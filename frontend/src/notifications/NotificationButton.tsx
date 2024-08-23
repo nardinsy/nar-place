@@ -43,7 +43,7 @@ const NotificationButton = () => {
   return (
     <div onClick={notificationButtonHandler} ref={ref}>
       <button
-        className={`relative bx bx-bell text-2xl cursor-pointer hover:bg-gray-light rounded-full mx-4 py-1 px-2`}
+        className={`relative bx bx-bell text-2xl cursor-pointer hover:bg-gray-light border-none rounded-full mx-4 py-1 px-2`}
       >
         {notifCtx.newNotifications.length > 0 ? (
           <span className="absolute top-0 right-0 w-5 h-5 rounded-full flex justify-center items-center bg-red-heart text-white text-[0.6rem]">

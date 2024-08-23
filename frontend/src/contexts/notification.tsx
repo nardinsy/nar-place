@@ -57,15 +57,3 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
 };
 
 export default NotificationContext;
-
-// const currentNotifLenght = +localStorage.getItem("notificationBadge")!;
-// const newNotificationsLenght = newNotifications.length;
-
-// if (newNotificationsLenght > currentNotifLenght) {
-//   setNotificationBadge(newNotificationsLenght - currentNotifLenght);
-// }
-
-// localStorage.setItem(
-//   "notificationBadge",
-//   String(newNotifications.length)
-// );

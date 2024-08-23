@@ -30,7 +30,7 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
           <NotificationItem notificationDto={notification} />
           {status === "NEW" && (
             <span
-              className={`absolute right-0 w-2 h-2 rounded bg-primary-hover mx-2`}
+              className={`absolute right-0 w-2 h-2 rounded bg-primary-light mx-2`}
             />
           )}
         </li>
