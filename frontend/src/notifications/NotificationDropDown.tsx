@@ -2,16 +2,25 @@ import { FC, useRef } from "react";
 import useRequiredNotificationContext from "../hooks/use-required-notificationContext";
 import NotificationItem from "./NotificationItem";
 import { NotificationDto } from "../helpers/dtos";
+import useRequiredAuthContext from "../hooks/use-required-authContext";
 
 interface NotificationDropdownT {}
 
 const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
   const notifCtx = useRequiredNotificationContext();
-  const notifications = notifCtx.oldNotifications;
+  const authCtx = useRequiredAuthContext();
+
+  if (!authCtx.isLoggedin) {
+    throw new Error("");
+  }
+
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const rows = notifications.map(
-    (notification: NotificationDto, index: number) => {
+  const generateNotificationsItem = (
+    notifications: NotificationDto[] | undefined
+  ) => {
+    if (!notifications) return <></>;
+    return notifications.map((notification: NotificationDto, index: number) => {
       return (
         <li
           key={index}
@@ -20,8 +29,14 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
           <NotificationItem notificationDto={notification} />
         </li>
       );
-    }
+    });
+  };
+
+  const oldNotifications = generateNotificationsItem(
+    authCtx.readOldNotificationsFromLocalStorage()
   );
+
+  const newNotifications = generateNotificationsItem(notifCtx.newNotifications);
 
   return (
     <div
@@ -31,7 +46,9 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
     >
       <div className="font-bold px-6 pt-4 tracking-wide">Notifications</div>
       <ul className="my-3 flex flex-col px-2 max-h-72 overflow-x-hidden overflow-y-scroll scroll-my-13">
-        {rows}
+        {newNotifications}
+        <li key={"a special key"}>-----------------------</li>
+        {oldNotifications}
       </ul>
     </div>
   );

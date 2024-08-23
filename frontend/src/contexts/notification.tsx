@@ -2,9 +2,9 @@ import { createContext, useState, useEffect, FC } from "react";
 import { WithChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import { NotificationDto } from "../helpers/dtos";
+import useRequiredAuthContext from "../hooks/use-required-authContext";
 
 interface NotificationContextT {
-  oldNotifications: NotificationDto[];
   newNotifications: NotificationDto[];
   mergeAndResetNotifications: () => Promise<void>;
 }
@@ -13,22 +13,24 @@ const NotificationContext = createContext<NotificationContextT | undefined>(
   undefined
 );
 
-export const NotificationContextProvider: FC<
-  WithChildren<{ userId: string; token: string }>
-> = ({ children, userId, token }) => {
+export const NotificationContextProvider: FC<WithChildren<{}>> = ({
+  children,
+}) => {
   const backend = useRequiredBackend();
+  const authCtx = useRequiredAuthContext();
 
-  const [oldNotifications, setOldNotifications] = useState<NotificationDto[]>(
-    []
-  );
+  if (!authCtx.isLoggedin) {
+    throw new Error("");
+    //redirect to login page
+  }
+
   const [newNotifications, setNewNotifications] = useState<NotificationDto[]>(
     []
   );
 
   useEffect(() => {
     const fetchNewNotifications = async () => {
-      const newNotifications = await backend.getNewNotifications(token);
-
+      const newNotifications = await backend.getNewNotifications(authCtx.token);
       setNewNotifications(newNotifications);
     };
 
@@ -36,14 +38,13 @@ export const NotificationContextProvider: FC<
   }, []);
 
   const mergeAndResetNotifications = async () => {
-    setOldNotifications((pre) => [...newNotifications, ...pre]);
+    authCtx.updateOldNotifications(newNotifications);
     setNewNotifications([]);
 
-    await backend.mergeAndResetNotifications(token);
+    await backend.mergeAndResetNotifications(authCtx.token);
   };
 
   const value: NotificationContextT = {
-    oldNotifications,
     newNotifications,
     mergeAndResetNotifications,
   };

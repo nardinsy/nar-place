@@ -13,7 +13,7 @@ const NotificationButton = () => {
       if (!ref.current) return;
 
       if (showDropdown && !ref.current.contains(e.target)) {
-        setShowDropdown(false);
+        closeDropDown();
       }
     };
 
@@ -28,9 +28,16 @@ const NotificationButton = () => {
     e: React.MouseEvent<HTMLElement>
   ) => {
     e.preventDefault();
-    setShowDropdown((pre) => !pre);
+    showDropdown ? await closeDropDown() : openDropDown();
+  };
 
+  const closeDropDown = async () => {
+    setShowDropdown(false);
     await notifCtx.mergeAndResetNotifications();
+  };
+
+  const openDropDown = () => {
+    setShowDropdown(true);
   };
 
   return (

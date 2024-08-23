@@ -13,7 +13,8 @@ const NotificationItem = ({
     : undefined;
 
   const { from }: { from: UserDto } = notificationDto;
-  from.pictureUrl = absolutePictuteUrl;
+
+  const userDto: UserDto = { ...from, pictureUrl: absolutePictuteUrl };
 
   let message;
 
@@ -35,7 +36,7 @@ const NotificationItem = ({
         <Link
           to={{
             pathname: `/places/${from.userId}`,
-            state: { userDto: from },
+            state: { userDto },
           }}
         >
           <span className="font-bold text-gray-dark hover:underline">

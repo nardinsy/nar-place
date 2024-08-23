@@ -8,6 +8,7 @@ import {
 import { HasChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
+import { NotificationDto } from "../helpers/dtos";
 
 interface LoggedOutAuthContextT {
   isLoggedin: false;
@@ -25,6 +26,8 @@ interface LoggedInAuthContextT {
   logout: () => Promise<void>;
   setPictureUrl: (picture: string | undefined) => void;
   setUsername: (username: string) => void;
+  readOldNotificationsFromLocalStorage: () => NotificationDto[] | undefined;
+  updateOldNotifications: (notifications: NotificationDto[]) => void;
 }
 
 type LoginInfo =
@@ -59,8 +62,37 @@ const saveUserInfoToLocalStorage = (
   localStorage.setItem("placeCount", String(placeCount));
 };
 
+const readOldNotificationsFromLocalStorage = ():
+  | NotificationDto[]
+  | undefined => {
+  if (localStorage.getItem("oldNotifications")) {
+    return JSON.parse(localStorage.getItem("oldNotifications")!);
+  }
+  return undefined;
+};
+
+const updateOldNotifications = (notifications: NotificationDto[]) => {
+  if (localStorage.getItem("oldNotifications")) {
+    let currentOldNotifications: NotificationDto[] = JSON.parse(
+      localStorage.getItem("oldNotifications")!
+    );
+
+    currentOldNotifications = [...notifications, ...currentOldNotifications];
+
+    localStorage.removeItem("oldNotifications");
+
+    localStorage.setItem(
+      "oldNotifications",
+      JSON.stringify(currentOldNotifications)
+    );
+    return;
+  }
+  localStorage.setItem("oldNotifications", JSON.stringify(notifications));
+};
+
 export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
+
   const history = useHistory();
   const backend = useRequiredBackend();
   const showSuccessToast = useRequiredToastContext().showSuccess;
@@ -101,11 +133,15 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     // }
 
     const data = await backend.login(userInfo);
-    const { token, user } = data;
+    const { token, user, oldNotifications } = data;
 
     const pictureUrl = user.pictureUrl
       ? createAbsoluteApiAddress(user.pictureUrl)
       : undefined;
+
+    if (oldNotifications) {
+      updateOldNotifications(oldNotifications);
+    }
 
     const placeCount = user.placeCount ? user.placeCount : 0;
 
@@ -132,6 +168,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     localStorage.removeItem("username");
     localStorage.removeItem("userPictureUrl");
     localStorage.removeItem("placeCount");
+    localStorage.removeItem("oldNotifications");
 
     showSuccessToast("See you soon, have fun 🫡");
     history.replace("/");
@@ -184,6 +221,8 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
         logout,
         setPictureUrl: setPictureUrlMethod,
         setUsername: changeUsernameMethod,
+        readOldNotificationsFromLocalStorage,
+        updateOldNotifications,
       }
     : { isLoggedin: false, signup, login };
 

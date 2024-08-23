@@ -25,10 +25,7 @@ const MainHeader = () => {
         <MiddleNavLinks menulist={HeaderMenuList} />
         <div className="flex flex-row items-center p-0 m-0">
           {authCtx.isLoggedin && (
-            <NotificationContextProvider
-              userId={authCtx.userId}
-              token={authCtx.token}
-            >
+            <NotificationContextProvider>
               <NotificationButton />
             </NotificationContextProvider>
           )}

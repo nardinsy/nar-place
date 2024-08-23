@@ -11,6 +11,8 @@ export const authProviderValueLoggedinProps = {
   logout: jest.fn(() => Promise.resolve()),
   setPictureUrl: jest.fn(),
   setUsername: jest.fn(),
+  readOldNotificationsFromLocalStorage: jest.fn(),
+  updateOldNotifications: jest.fn(),
 } satisfies AuthContextT;
 
 export const authProviderValueLoggedoutProps = {
