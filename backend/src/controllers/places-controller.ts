@@ -932,6 +932,14 @@ export const replyComment: AuthRequestHandler = async (
     CommentActions.ReplyComment
   );
 
+  await addCommetnNotification(
+    user,
+    parentComment.writer.toHexString(),
+    postId,
+    newReplyToComment._id.toHexString(),
+    CommentActions.ReplyComment
+  );
+
   const replyCommentDto = {
     id: newReplyToComment._id.toHexString(),
     parentId,
@@ -961,6 +969,8 @@ const addCommetnNotification = async (
   commentId: string,
   action: CommentActions
 ) => {
+  if (from.id === to) return;
+
   const fromUser = {
     userId: from.id,
     username: from.username,
