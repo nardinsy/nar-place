@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { UserDto, PlaceDto } from "../../helpers/dtos";
-
 import useRequiredBackend from "../../hooks/use-required-backend";
 import Spinner from "../../shared-UI/Spinner";
 import PlacePageContent from "./PlacePageContent";
@@ -11,7 +10,7 @@ interface RouteParams {
   placeId: string;
 }
 
-const PlacePage = () => {
+const PlacePage: FC = () => {
   const backend = useRequiredBackend();
 
   const {
@@ -24,7 +23,6 @@ const PlacePage = () => {
   } = useLocation();
 
   const { placeId } = useParams<RouteParams>();
-  console.log(placeId);
 
   const [placeDto, setPlaceDto] = useState<PlaceDto>();
   const [userDto, setUserDto] = useState<UserDto>();

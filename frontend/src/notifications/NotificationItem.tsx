@@ -1,12 +1,6 @@
-import {
-  CommentActions,
-  NotificationDto,
-  PlaceDto,
-  UserDto,
-} from "../helpers/dtos";
+import { CommentActions, NotificationDto, UserDto } from "../helpers/dtos";
 import Avatar from "../shared-UI/Avatar";
 import { createAbsoluteApiAddress } from "../helpers/api-url";
-import { Link, NavLink } from "react-router-dom";
 
 const NotificationItem = ({
   notificationDto,
@@ -19,7 +13,7 @@ const NotificationItem = ({
 
   const { from }: { from: UserDto } = notificationDto;
 
-  const userDto: UserDto = { ...from, pictureUrl: absolutePictuteUrl };
+  // const userDto: UserDto = { ...from, pictureUrl: absolutePictuteUrl };
   // const placeDto: PlaceDto = {}
   let message;
 
@@ -30,7 +24,7 @@ const NotificationItem = ({
   }
 
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row items-center w-full">
       <Avatar
         pictureUrl={absolutePictuteUrl}
         alt={"user"}
@@ -38,24 +32,17 @@ const NotificationItem = ({
         cssClassName="mr-1"
       />
       <div className="text-gray-fav tracking-wide text-sm">
-        <Link
+        {/* <Link
           to={{
             pathname: `/places/${from.userId}`,
             state: { userDto },
           }}
-        >
-          <span className="font-bold text-gray-dark hover:underline">
-            {from.username}
-          </span>
-          <span> </span>
-        </Link>
-        <Link
-          to={{
-            pathname: `/place/${notificationDto.commentContent.placeId}`,
-          }}
-        >
-          {message}
-        </Link>
+        > */}
+        <span className="font-bold text-gray-dark ">{from.username}</span>
+        <span> </span>
+        {/* </Link> */}
+
+        {message}
       </div>
     </div>
   );

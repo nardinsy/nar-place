@@ -18,8 +18,6 @@ const MyPlacePage: FC<MyPlacePageProps> = ({
   deletePlace,
   loading,
 }) => {
-  console.log("Myplace Page Render");
-
   let userDto;
   const authContext = useRequiredAuthContext();
 

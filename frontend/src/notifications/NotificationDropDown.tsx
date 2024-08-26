@@ -3,6 +3,7 @@ import useRequiredNotificationContext from "../hooks/use-required-notificationCo
 import NotificationItem from "./NotificationItem";
 import { NotificationDto } from "../helpers/dtos";
 import useRequiredAuthContext from "../hooks/use-required-authContext";
+import { Link } from "react-router-dom";
 
 interface NotificationDropdownT {}
 
@@ -21,17 +22,24 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
     status: "OLD" | "NEW"
   ) => {
     if (!notifications) return <></>;
+
     return notifications.map((notification: NotificationDto, index: number) => {
       return (
-        <li
-          key={index}
-          className="cursor-context-menu flex flex-row items-center px-4 py-3 rounded-xl mb-1 hover:bg-[#E9E9E9] transition-colors ease-in duration-[0.1s]"
+        <Link
+          to={{
+            pathname: `/place/${notification.commentContent.placeId}`,
+          }}
         >
-          {status === "NEW" && (
-            <span className={`w-2 h-2 mr-2 rounded bg-[#7CB9E8] `} />
-          )}
-          <NotificationItem notificationDto={notification} />
-        </li>
+          <li
+            key={index}
+            className="cursor-context-menu flex flex-row items-center px-1 py-2 rounded-xl mb-1 hover:bg-[#E9E9E9] transition-colors ease-in duration-[0.1s]"
+          >
+            {status === "NEW" && (
+              <span className={`w-2 h-2 mr-2 rounded bg-[#7CB9E8] `} />
+            )}
+            <NotificationItem notificationDto={notification} />
+          </li>
+        </Link>
       );
     });
   };
