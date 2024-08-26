@@ -17,6 +17,7 @@ import {
   NewComment,
   NewPlace,
   PlaceDto,
+  UserDto,
 } from "../shared/dtos";
 import { getProfilePictureUrl } from "./users-controller";
 import UserNotification, {
@@ -358,6 +359,61 @@ const checkPlaceBelongsToUser = (place: IPlace, user: IUser) => {
   const placeCreatorId = place.creator.toHexString();
 
   return placeCreatorId === userId ? true : false;
+};
+
+export const getPlaceById: RequestHandler = async (req, res, next) => {
+  const placeId: string = req.params.placeId;
+  let place: IPlace | null;
+  let user: IUser | null;
+
+  try {
+    place = await Place.findOne({
+      _id: new Types.ObjectId(placeId),
+    });
+
+    if (!place) {
+      return next(
+        createHttpError("Something went wrong, could not find place.", 500)
+      );
+    }
+  } catch (err) {
+    return next(
+      createHttpError("Something went wrong, could not find place 1.", 500)
+    );
+  }
+
+  try {
+    user = await User.findOne(place.creator);
+
+    if (!user) {
+      return next(
+        createHttpError("Something went wrong, could not find user.", 500)
+      );
+    }
+  } catch (err) {
+    return next(
+      createHttpError("Something went wrong, could not find user 1.", 500)
+    );
+  }
+
+  const placeDto = new PlaceDto(
+    place.title,
+    place.description,
+    place.address,
+    place.picture,
+    place.id,
+    place.creator,
+    getPlacePictureUrl(place.picture._id.toHexString())
+  );
+
+  const userDto = new UserDto(
+    user.id,
+    user.username,
+    user.picture ? getProfilePictureUrl(user.picture.toHexString()) : undefined,
+    user.places.length
+  );
+
+  res.status(200).json({ placeDto, userDto });
 };
 
 //Comments

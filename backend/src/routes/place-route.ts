@@ -15,6 +15,7 @@ import {
   likeComment,
   unlikeComment,
   replyComment,
+  getPlaceById,
 } from "../controllers/places-controller";
 
 const placeRouter = routerAuth();
@@ -65,6 +66,8 @@ placeRouter.deleteAuth("/delete-place/:pid", deletePlaceById);
 placeRouter.get("/any-user-places-by-userId/:uid", getAnyUserPlacesByUserId);
 
 placeRouter.get("/place-picture/:id", getPlacePictureByUrl);
+
+placeRouter.get("/place/:placeId", getPlaceById);
 
 placeRouter.postAuth(
   "/addComment",
