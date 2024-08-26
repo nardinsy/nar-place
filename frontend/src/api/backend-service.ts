@@ -55,6 +55,10 @@ export interface BackendService {
     places: PlaceDto[];
   }>;
 
+  getPlaceById(
+    placeId: string
+  ): Promise<{ placeDto: PlaceDto; userDto: UserDto }>;
+
   addComment(
     NewComment: NewComment,
     commentActionTo: string,

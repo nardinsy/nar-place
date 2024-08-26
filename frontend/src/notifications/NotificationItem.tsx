@@ -1,7 +1,12 @@
-import { CommentActions, NotificationDto, UserDto } from "../helpers/dtos";
+import {
+  CommentActions,
+  NotificationDto,
+  PlaceDto,
+  UserDto,
+} from "../helpers/dtos";
 import Avatar from "../shared-UI/Avatar";
 import { createAbsoluteApiAddress } from "../helpers/api-url";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const NotificationItem = ({
   notificationDto,
@@ -15,7 +20,7 @@ const NotificationItem = ({
   const { from }: { from: UserDto } = notificationDto;
 
   const userDto: UserDto = { ...from, pictureUrl: absolutePictuteUrl };
-
+  // const placeDto: PlaceDto = {}
   let message;
 
   if (notificationDto.kind === "Comment") {
@@ -44,8 +49,13 @@ const NotificationItem = ({
           </span>
           <span> </span>
         </Link>
-
-        {message}
+        <Link
+          to={{
+            pathname: `/place/${notificationDto.commentContent.placeId}`,
+          }}
+        >
+          {message}
+        </Link>
       </div>
     </div>
   );

@@ -1,14 +1,19 @@
-import { FC, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { UserDto, PlaceDto } from "../../helpers/dtos";
-import PlaceImage from "./placePageSubComponents/PlaceImage";
-import PlaceInfo from "./placePageSubComponents/PlaceInfo";
-import PlaceCreatorAccountInfo from "./placePageSubComponents/PlaceCreatorAccountInfo";
-import FollowButton from "./placePageSubComponents/FollowButton";
-import CommentBox from "../comment/CommentBox";
-import { CommentContextProvider } from "../../contexts/comment-contex";
 
-const PlacePage: FC = () => {
+import useRequiredBackend from "../../hooks/use-required-backend";
+import Spinner from "../../shared-UI/Spinner";
+import PlacePageContent from "./PlacePageContent";
+import { createAbsoluteApiAddress } from "../../helpers/api-url";
+
+interface RouteParams {
+  placeId: string;
+}
+
+const PlacePage = () => {
+  const backend = useRequiredBackend();
+
   const {
     state,
   }: {
@@ -17,39 +22,56 @@ const PlacePage: FC = () => {
       userDto: UserDto;
     };
   } = useLocation();
-  const { placeDto, userDto } = state;
-  const { title, pictureUrl } = placeDto;
+
+  const { placeId } = useParams<RouteParams>();
+  console.log(placeId);
+
+  const [placeDto, setPlaceDto] = useState<PlaceDto>();
+  const [userDto, setUserDto] = useState<UserDto>();
+
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    const fetchPlace = async (placeId: string) => {
+      setLoading(true);
+      const result = await backend.getPlaceById(placeId);
+      const absPlacePictureUrl = createAbsoluteApiAddress(
+        result.placeDto.pictureUrl
+      );
+      const placeDto = { ...result.placeDto, pictureUrl: absPlacePictureUrl };
+
+      const absolutePictuteUrl = result.userDto.pictureUrl
+        ? createAbsoluteApiAddress(result.userDto.pictureUrl)
+        : undefined;
+
+      const userDto = { ...result.userDto, pictureUrl: absolutePictuteUrl };
+
+      setPlaceDto(placeDto);
+      setUserDto(userDto);
+      setLoading(false);
+    };
+
+    if (state) {
+      setPlaceDto(state.placeDto);
+      setUserDto(state.userDto);
+      setLoading(false);
+    } else {
+      fetchPlace(placeId);
+    }
+
     window.scrollTo(0, 0);
-  }, []);
+    return () => {};
+  }, [placeId]);
 
-  const scrollCommentAreaHandler = (event: any) => {};
-
-  return (
-    <div className="flex flex-col mt-16 h-auto w-full overflow-hidden md:flex-row md:w-11/12 md:h-place-page md:mx-auto md:mt-20 md:rounded-4xl md:shadow-default">
-      <PlaceImage src={pictureUrl} alt={title} />
-
-      <div className="relative flex flex-col items-center w-full md:w-2/5 md:h-full">
-        <div className="flex flex-row items-center justify-around w-full py-4 px-2">
-          <PlaceCreatorAccountInfo userDto={userDto} alt={title} />
-          <FollowButton />
-        </div>
-
-        <div className="w-4/5 p-1 border-t border-gray-fav" />
-
-        <div
-          className="w-full h-image-select-card overflow-y-scroll md:h-full"
-          onScroll={scrollCommentAreaHandler}
-        >
-          <PlaceInfo placeDto={placeDto} />
-
-          <CommentContextProvider commentActionTo={userDto.userId}>
-            <CommentBox placeId={placeDto.placeId} />
-          </CommentContextProvider>
-        </div>
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <Spinner />
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <PlacePageContent placeDto={placeDto!} userDto={userDto!} />;
+  }
 };
 
 export default PlacePage;

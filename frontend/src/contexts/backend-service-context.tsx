@@ -165,6 +165,21 @@ class BackedServiceImpl implements BackendService {
     );
   }
 
+  async getPlaceById(
+    placeId: string
+  ): Promise<{ placeDto: PlaceDto; userDto: UserDto }> {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    return await sendHttpRequest(
+      ENDPOINTS.getPlaceById,
+      requestOptions,
+      placeId
+    );
+  }
+
   // Comment
 
   async addComment(

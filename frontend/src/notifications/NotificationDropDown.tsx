@@ -25,14 +25,12 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
       return (
         <li
           key={index}
-          className="relative cursor-context-menu flex flex-row items-center px-4 py-6 rounded-xl mb-1 hover:bg-edit-button-bg transition-colors ease-in duration-[0.1s]"
+          className="cursor-context-menu flex flex-row items-center px-4 py-3 rounded-xl mb-1 hover:bg-[#E9E9E9] transition-colors ease-in duration-[0.1s]"
         >
-          <NotificationItem notificationDto={notification} />
           {status === "NEW" && (
-            <span
-              className={`absolute right-0 w-2 h-2 rounded bg-primary-light mx-2`}
-            />
+            <span className={`w-2 h-2 mr-2 rounded bg-[#7CB9E8] `} />
           )}
+          <NotificationItem notificationDto={notification} />
         </li>
       );
     });
