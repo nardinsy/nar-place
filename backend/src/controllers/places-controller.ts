@@ -863,6 +863,17 @@ export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
     CommentActions.LikeComment
   );
 
+  await addCommetnNotification(
+    user,
+    comment.writer.toHexString(),
+    comment.postID.toHexString(),
+    commentId,
+    CommentActions.LikeComment
+  );
+  console.log(commentActionTo);
+
+  console.log(comment.writer.toHexString());
+
   const commentLikeDto: CommentLikeDto = {
     userId: newCommentLike.userId.toHexString(),
     commentId: newCommentLike.commentId.toHexString(),
