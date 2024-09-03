@@ -41,7 +41,6 @@ const PlacePage: FC = () => {
       const absolutePictuteUrl = result.userDto.pictureUrl
         ? createAbsoluteApiAddress(result.userDto.pictureUrl)
         : undefined;
-
       const userDto = { ...result.userDto, pictureUrl: absolutePictuteUrl };
 
       setPlaceDto(placeDto);

@@ -151,6 +151,28 @@ export type NotificationDto = {
   };
 };
 
+export type CommentWriterPh = {
+  userId: string;
+  username: string;
+  pictureUrl: string | undefined;
+  placeCount?: number;
+};
+
+export type NotificationDtoPh =
+  | {
+      kind: "Comment";
+      from: CommentWriter;
+      commentContent: {
+        placeId: string;
+        commentId: string;
+        action: CommentActions;
+      };
+    }
+  | {
+      kind: "Follow";
+      from: CommentWriter;
+    };
+
 // const replies2: CommentDto = {
 //   id: "66953066398f8bc122208ddf",
 //   parentId: "66960bcec258550dcd4c7fd8",

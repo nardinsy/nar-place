@@ -29,6 +29,7 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
           to={{
             pathname: `/place/${notification.commentContent.placeId}`,
           }}
+          key={index}
         >
           <li
             key={index}
@@ -50,7 +51,7 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
   );
 
   const newNotifications = generateNotificationsItem(
-    notifCtx.newNotifications,
+    notifCtx.commentNotifications,
     "NEW"
   );
 
@@ -63,7 +64,7 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
       <div className="font-bold px-6 pt-4 tracking-wide">Notifications</div>
       <ul className="my-3 flex flex-col px-2 max-h-72 overflow-x-hidden overflow-y-scroll scroll-my-13">
         {newNotifications}
-        {oldNotifications}
+        {/* {oldNotifications} */}
       </ul>
     </div>
   );

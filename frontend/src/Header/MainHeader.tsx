@@ -4,7 +4,7 @@ import MiddleNavLinks from "./Navigation/MiddleNavLinks";
 import Logo from "./Components/Logo";
 import NotificationButton from "../notifications/NotificationButton";
 import useRequiredAuthContext from "../hooks/use-required-authContext";
-import { NotificationContextProvider } from "../contexts/notification";
+import { NotificationContextProvider } from "../contexts/notification-context";
 
 const HeaderMenuList: MenuListT = [
   ["Users", "home", "/"],
