@@ -13,6 +13,7 @@ import contentTypeBufferSplit from "../helpers/data-url";
 import ProfilePicture, { IProfilePicture } from "../models/profile-picture";
 import { LoginResult } from "../shared/results";
 import UserNotification, { IUserNotification } from "../models/notification";
+import { Server, Socket } from "socket.io";
 
 export const getProfilePictureUrl = (id: string): string => {
   return `users/profile-picture/${id}`;

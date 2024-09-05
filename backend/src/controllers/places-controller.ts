@@ -11,11 +11,13 @@ import CommentLike from "../models/comment-like";
 import getCoordsForAddress from "../util/location";
 import contentTypeBufferSplit from "../helpers/data-url";
 import {
+  CommentAction,
   CommentDto,
   CommentLikeDto,
   CommentReplyDto,
   NewComment,
   NewPlace,
+  NotificationDto,
   PlaceDto,
   UserDto,
 } from "../shared/dtos";
@@ -428,6 +430,24 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
     return next(error);
   }
 
+  // let not: NotificationDto = {
+  //   kind: "Comment",
+  //   from: {
+  //     userId: "65f9252ffab99b539ad85e84",
+  //     username: "Nar",
+  //     pictureUrl: "users/profile-picture/65f9253ffab99b539ad85e8b",
+  //     placeCount: 11,
+  //   },
+  //   commentContent: {
+  //     placeId: "65f700dae771ff3a4ddababd",
+  //     commentId: "66c73826dbbbbff5158fd3df",
+  //     action: CommentAction.WriteComment,
+  //   },
+  // };
+
+  // const ws = getWSServer(req.app);
+  // ws.emit("");
+
   const { text, date, postID }: NewComment = req.body.newComment;
   const commentActionTo: string = req.body.commentActionTo;
 
@@ -474,6 +494,8 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
     newComment._id.toHexString(),
     CommentActions.WriteComment
   );
+
+  // client.to(commentActionTo).emit("you-have-new-comment", not);
 
   const commentDto = {
     id: newComment._id.toHexString(),

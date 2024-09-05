@@ -1,8 +1,6 @@
-import { Document } from "mongoose";
-
 export interface JwtData {
   email: string;
-  password: string;
+  userId: string;
 }
 
 export interface ResponsePlace {

@@ -103,3 +103,25 @@ export type CommentReplyDto = {
   text: string;
   date: Date;
 };
+
+export enum CommentAction {
+  LikeComment,
+  UnlikeComment,
+  ReplyComment,
+  WriteComment,
+}
+
+export type NotificationDto = {
+  kind: "Comment" | "Follow";
+  from: {
+    userId: string;
+    username: string;
+    pictureUrl: string | undefined;
+    placeCount?: number;
+  };
+  commentContent: {
+    placeId: string;
+    commentId: string;
+    action: CommentAction;
+  };
+};
