@@ -1,4 +1,4 @@
-import { CommentActions, NotificationDto, UserDto } from "../helpers/dtos";
+import { CommentAction, NotificationDto, UserDto } from "../helpers/dtos";
 import Avatar from "../shared-UI/Avatar";
 import { createAbsoluteApiAddress } from "../helpers/api-url";
 
@@ -56,16 +56,16 @@ const getCommentNotificationMessage = (
   let message: string = "Notification";
 
   switch (+commentContent.action) {
-    case CommentActions.LikeComment:
+    case CommentAction.LikeComment:
       message = `liked your comment`;
       break;
-    case CommentActions.ReplyComment:
+    case CommentAction.ReplyComment:
       message = `replied to your comment`;
       break;
-    case CommentActions.UnlikeComment:
+    case CommentAction.UnlikeComment:
       message = `unliked to your comment`;
       break;
-    case CommentActions.WriteComment:
+    case CommentAction.WriteComment:
       message = `commented on your post`;
       break;
   }

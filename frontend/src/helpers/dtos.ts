@@ -129,7 +129,7 @@ export type CommentReplyDto = {
   date: Date;
 };
 
-export enum CommentActions {
+export enum CommentAction {
   LikeComment,
   UnlikeComment,
   ReplyComment,
@@ -147,7 +147,7 @@ export type NotificationDto = {
   commentContent: {
     placeId: string;
     commentId: string;
-    action: CommentActions;
+    action: CommentAction;
   };
 };
 
@@ -165,7 +165,7 @@ export type NotificationDtoPh =
       commentContent: {
         placeId: string;
         commentId: string;
-        action: CommentActions;
+        action: CommentAction;
       };
     }
   | {

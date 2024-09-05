@@ -2,7 +2,7 @@ import { FC, createContext } from "react";
 import { BackendService } from "../api/backend-service";
 import { HasChildren } from "../helpers/props";
 import {
-  CommentActions,
+  CommentAction,
   CommentDto,
   CommentLikeDto,
   CommentReplyDto,
