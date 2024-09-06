@@ -9,9 +9,9 @@ export interface ServerToClientEvents {
   "userId-inquiry": () => void;
   connected: () => void;
   "invalid-token": () => void;
-  "you-have-new-comment": (notification: NotificationDto) => void;
-  "new-reply-to-your-comment": (notification: NotificationDto) => void;
-  "somebody-likes-your-comment": (notification: NotificationDto) => void;
+  "place-received-comment": (notification: NotificationDto) => void;
+  "comment-replied": (notification: NotificationDto) => void;
+  "comment-liked": (notification: NotificationDto) => void;
 }
 
 interface ClientToServerEvents {
@@ -75,17 +75,17 @@ class WebSocketImpl implements WebSocketService {
     // });
     // socket.connect();
 
-    this._socket.on("you-have-new-comment", (notification) => {
+    this._socket.on("place-received-comment", (notification) => {
       console.log(notification);
       onRecieveNewNotificationCallback(notification);
     });
 
-    this._socket.on("new-reply-to-your-comment", (notification) => {
+    this._socket.on("comment-replied", (notification) => {
       console.log(notification);
       onRecieveNewNotificationCallback(notification);
     });
 
-    this._socket.on("somebody-likes-your-comment", (notification) => {
+    this._socket.on("comment-liked", (notification) => {
       console.log(notification);
       onRecieveNewNotificationCallback(notification);
     });

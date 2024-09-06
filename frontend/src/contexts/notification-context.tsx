@@ -36,17 +36,17 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
     []
   );
 
-  const fetchCurrentNotifications = useCallback(async () => {
+  const fetchAndSetCurrentNotifications = useCallback(async () => {
     console.log("This should call only one time");
     const { currentNotifications } = await backend.getCurrentNotifications(
       authCtx.token
     );
     setCurrentNotifications(currentNotifications);
-  }, []);
+  }, [authCtx.token, backend]);
 
   useEffect(() => {
-    fetchCurrentNotifications();
-  }, [fetchCurrentNotifications]);
+    fetchAndSetCurrentNotifications();
+  }, [fetchAndSetCurrentNotifications]);
 
   useEffect(() => {
     // const fetchNewNotifications = async () => {
@@ -73,7 +73,7 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
     return () => {
       socket.close();
     };
-  }, []);
+  }, [authCtx.token]);
 
   const mergeAndResetNotifications = async () => {
     // authCtx.updateOldNotifications(newNotifications);
