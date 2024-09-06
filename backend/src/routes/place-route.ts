@@ -8,6 +8,10 @@ import {
   deletePlaceById,
   getAnyUserPlacesByUserId,
   getPlacePictureByUrl,
+  getPlaceById,
+} from "../controllers/places-controller";
+
+import {
   addComment,
   getPlaceCommetns,
   editComment,
@@ -15,8 +19,7 @@ import {
   likeComment,
   unlikeComment,
   replyComment,
-  getPlaceById,
-} from "../controllers/places-controller";
+} from "../controllers/places-comment-controller";
 
 const placeRouter = routerAuth();
 //test

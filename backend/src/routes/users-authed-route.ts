@@ -5,15 +5,17 @@ import {
   signup,
   login,
   logout,
-  editUserInfo,
   changeProfilePicture,
   getUserProfilePicture,
   changePassword,
   changeUsername,
+} from "../controllers/users-controller";
+
+import {
   getNewNotifications,
   mergeAndResetNotifications,
   getCurrentNotifications,
-} from "../controllers/users-controller";
+} from "../controllers/users-notification-controller";
 
 const usersRouter = routerAuth();
 
