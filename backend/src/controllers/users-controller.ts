@@ -134,9 +134,9 @@ export const login: RequestHandler = async (req, res, next) => {
 
   const token = await generateToken(existingUser);
 
-  const oldNotifications = await getOldNotifications(
-    existingUser.oldNotifications
-  );
+  // const oldNotifications = await getOldNotifications(
+  //   existingUser.oldNotifications
+  // );
 
   const userDto = new UserDto(
     existingUser.id,
@@ -147,7 +147,7 @@ export const login: RequestHandler = async (req, res, next) => {
     existingUser.places.length
   );
 
-  res.status(200).json(new LoginResult(token, userDto, oldNotifications));
+  res.status(200).json(new LoginResult(token, userDto));
 };
 
 export const logout: AuthRequestHandler = async (user, req, res, next) => {
@@ -372,26 +372,26 @@ export const getNewNotifications: AuthRequestHandler = async (
   res.status(200).json(newNotificationsDto);
 };
 
-const getOldNotifications = async (ids: Types.ObjectId[]) => {
-  return await Promise.all(
-    ids.map(async (id) => {
-      let notification: IUserNotification | null;
+// const getOldNotifications = async (ids: Types.ObjectId[]) => {
+//   return await Promise.all(
+//     ids.map(async (id) => {
+//       let notification: IUserNotification | null;
 
-      try {
-        notification = await UserNotification.findOne(id);
+//       try {
+//         notification = await UserNotification.findOne(id);
 
-        if (!notification) {
-          throw new Error(
-            "Something went wrong, could not find notification 1."
-          );
-        }
-      } catch (err) {
-        throw new Error("Something went wrong, could not find notification 2.");
-      }
-      return notification;
-    })
-  );
-};
+//         if (!notification) {
+//           throw new Error(
+//             "Something went wrong, could not find notification 1."
+//           );
+//         }
+//       } catch (err) {
+//         throw new Error("Something went wrong, could not find notification 2.");
+//       }
+//       return notification;
+//     })
+//   );
+// };
 
 export const mergeAndResetNotifications: AuthRequestHandler = async (
   user,
@@ -415,4 +415,32 @@ export const mergeAndResetNotifications: AuthRequestHandler = async (
     );
   }
   res.status(200).json({ message: "ًAll notification marked as read" });
+};
+
+export const getCurrentNotifications: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const currentNotifications = await Promise.all(
+    user.oldNotifications.map(async (id) => {
+      let notification: IUserNotification | null;
+
+      try {
+        notification = await UserNotification.findOne(id);
+
+        if (!notification) {
+          throw new Error(
+            "Something went wrong, could not find notification 1."
+          );
+        }
+      } catch (err) {
+        throw new Error("Something went wrong, could not find notification 2.");
+      }
+      return notification;
+    })
+  );
+
+  res.status(200).json({ currentNotifications });
 };
