@@ -1,12 +1,6 @@
 import mongoose from "mongoose";
 import { model, Schema, Types } from "mongoose";
-
-export enum CommentActions {
-  LikeComment,
-  UnlikeComment,
-  ReplyComment,
-  WriteComment,
-}
+import { CommentAction } from "../shared/dtos";
 
 export interface IUserNotification extends mongoose.Document {
   _id: Types.ObjectId;
@@ -20,7 +14,7 @@ export interface IUserNotification extends mongoose.Document {
   commentContent: {
     placeId: string;
     commentId: string;
-    action: CommentActions;
+    action: CommentAction;
   };
 }
 

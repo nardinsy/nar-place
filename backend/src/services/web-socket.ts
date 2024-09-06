@@ -9,9 +9,9 @@ interface ServerToClientEvents {
   "userId-inquiry": () => void;
   connected: () => void;
   "invalid-token": () => void;
-  "you-have-new-comment": (notification: NotificationDto) => void;
-  "new-reply-to-your-comment": (notification: NotificationDto) => void;
-  "somebody-likes-your-comment": (notification: NotificationDto) => void;
+  "place-received-comment": (notification: NotificationDto) => void;
+  "comment-replied": (notification: NotificationDto) => void;
+  "comment-liked": (notification: NotificationDto) => void;
 }
 
 interface ClientToServerEvents {

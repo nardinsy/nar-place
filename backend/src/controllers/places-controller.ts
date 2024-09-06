@@ -22,10 +22,8 @@ import {
   UserDto,
 } from "../shared/dtos";
 import { getProfilePictureUrl } from "./users-controller";
-import UserNotification, {
-  CommentActions,
-  IUserNotification,
-} from "../models/notification";
+import UserNotification, { IUserNotification } from "../models/notification";
+import { getWSServer } from "../services/web-socket";
 
 export const getPlacePictureUrl = (id: string) => {
   return `places/place-picture/${id}`;
@@ -430,23 +428,7 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
     return next(error);
   }
 
-  // let not: NotificationDto = {
-  //   kind: "Comment",
-  //   from: {
-  //     userId: "65f9252ffab99b539ad85e84",
-  //     username: "Nar",
-  //     pictureUrl: "users/profile-picture/65f9253ffab99b539ad85e8b",
-  //     placeCount: 11,
-  //   },
-  //   commentContent: {
-  //     placeId: "65f700dae771ff3a4ddababd",
-  //     commentId: "66c73826dbbbbff5158fd3df",
-  //     action: CommentAction.WriteComment,
-  //   },
-  // };
-
-  // const ws = getWSServer(req.app);
-  // ws.emit("");
+  const ws = getWSServer(req.app);
 
   const { text, date, postID }: NewComment = req.body.newComment;
   const commentActionTo: string = req.body.commentActionTo;
@@ -487,15 +469,17 @@ export const addComment: AuthRequestHandler = async (user, req, res, next) => {
     console.log(err);
   }
 
-  await addCommetnNotification(
+  const notificationDto = await addCommetnNotificationToUser(
     user,
     commentActionTo,
     postID,
     newComment._id.toHexString(),
-    CommentActions.WriteComment
+    CommentAction.WriteComment
   );
 
-  // client.to(commentActionTo).emit("you-have-new-comment", not);
+  if (notificationDto) {
+    ws.to(commentActionTo).emit("place-received-comment", notificationDto);
+  }
 
   const commentDto = {
     id: newComment._id.toHexString(),
@@ -814,6 +798,8 @@ export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
   const commentLike: CommentLikeDto = req.body.newCommentLike;
   const commentActionTo: string = req.body.commentActionTo;
 
+  const ws = getWSServer(req.app);
+
   const { userId, commentId, date } = commentLike;
 
   const newCommentLike = new CommentLike({ userId, commentId, date });
@@ -877,24 +863,29 @@ export const likeComment: AuthRequestHandler = async (user, req, res, next) => {
 
   comment.postID;
 
-  await addCommetnNotification(
-    user,
-    commentActionTo,
-    comment.postID.toHexString(),
-    commentId,
-    CommentActions.LikeComment
-  );
+  // const notificationDto1 = await addCommetnNotificationToUser(
+  //   user,
+  //   commentActionTo,
+  //   comment.postID.toHexString(),
+  //   commentId,
+  //   CommentAction.LikeComment
+  // );
 
-  await addCommetnNotification(
+  // if (notificationDto1) {
+  //   ws.to(commentActionTo).emit("", notificationDto1);
+  // }
+
+  const notificationDto = await addCommetnNotificationToUser(
     user,
     comment.writer.toHexString(),
     comment.postID.toHexString(),
     commentId,
-    CommentActions.LikeComment
+    CommentAction.LikeComment
   );
-  console.log(commentActionTo);
 
-  console.log(comment.writer.toHexString());
+  if (notificationDto) {
+    ws.to(comment.writer.toHexString()).emit("comment-liked", notificationDto);
+  }
 
   const commentLikeDto: CommentLikeDto = {
     userId: newCommentLike.userId.toHexString(),
@@ -959,6 +950,8 @@ export const replyComment: AuthRequestHandler = async (
   const commentReply: CommentReplyDto = req.body.commentReply;
   const commentActionTo: string = req.body.commentActionTo;
 
+  const ws = getWSServer(req.app);
+
   const { parentId, date, text, userId, postId } = commentReply;
 
   const newReplyToComment = new PostComment({
@@ -1013,21 +1006,28 @@ export const replyComment: AuthRequestHandler = async (
     );
   }
 
-  await addCommetnNotification(
-    user,
-    commentActionTo,
-    postId,
-    newReplyToComment._id.toHexString(),
-    CommentActions.ReplyComment
-  );
+  // await addCommetnNotificationToUser(
+  //   user,
+  //   commentActionTo,
+  //   postId,
+  //   newReplyToComment._id.toHexString(),
+  //   CommentAction.ReplyComment
+  // );
 
-  await addCommetnNotification(
+  const notificationDto = await addCommetnNotificationToUser(
     user,
     parentComment.writer.toHexString(),
     postId,
     newReplyToComment._id.toHexString(),
-    CommentActions.ReplyComment
+    CommentAction.ReplyComment
   );
+
+  if (notificationDto) {
+    ws.to(parentComment.writer.toHexString()).emit(
+      "comment-replied",
+      notificationDto
+    );
+  }
 
   const replyCommentDto = {
     id: newReplyToComment._id.toHexString(),
@@ -1051,12 +1051,12 @@ export const replyComment: AuthRequestHandler = async (
 };
 
 // notification
-const addCommetnNotification = async (
+const addCommetnNotificationToUser = async (
   from: IUser,
   to: string,
   placeId: string,
   commentId: string,
-  action: CommentActions
+  action: CommentAction
 ) => {
   if (from.id === to) return;
 
@@ -1106,4 +1106,12 @@ const addCommetnNotification = async (
   } catch (error) {
     throw new Error("Updating user notification failed, please try again.");
   }
+
+  const notificationDto: NotificationDto = {
+    kind: commentNotification.kind,
+    commentContent: commentNotification.commentContent,
+    from: commentNotification.from,
+  };
+
+  return notificationDto;
 };
