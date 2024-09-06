@@ -48,6 +48,7 @@ export enum ENDPOINTS {
   replyComment = "places/reply-comment",
 
   getNewNotifications = "users/new-notification",
+  getCurrentNotifications = "users/current-notifications",
   mergeAndResetNotifications = "users/update-notifications",
 }
 

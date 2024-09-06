@@ -272,6 +272,20 @@ class BackedServiceImpl implements BackendService {
     return await sendHttpRequest(ENDPOINTS.replyComment, requestOptions);
   }
 
+  async getCurrentNotifications(
+    token: string
+  ): Promise<{ currentNotifications: NotificationDto[] }> {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json", token },
+    };
+
+    return await sendHttpRequest(
+      ENDPOINTS.getCurrentNotifications,
+      requestOptions
+    );
+  }
+
   async getNewNotifications(token: string): Promise<NotificationDto[]> {
     const requestOptions = {
       method: "GET",

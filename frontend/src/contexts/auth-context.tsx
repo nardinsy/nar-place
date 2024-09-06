@@ -27,7 +27,7 @@ interface LoggedInAuthContextT {
   setPictureUrl: (picture: string | undefined) => void;
   setUsername: (username: string) => void;
   readOldNotificationsFromLocalStorage: () => NotificationDto[] | undefined;
-  updateOldNotifications: (notifications: NotificationDto[]) => void;
+  // updateOldNotifications: (notifications: NotificationDto[]) => void;
 }
 
 type LoginInfo =
@@ -71,24 +71,24 @@ const readOldNotificationsFromLocalStorage = ():
   return undefined;
 };
 
-const updateOldNotifications = (notifications: NotificationDto[]) => {
-  if (localStorage.getItem("oldNotifications")) {
-    let currentOldNotifications: NotificationDto[] = JSON.parse(
-      localStorage.getItem("oldNotifications")!
-    );
+// const updateOldNotifications = (notifications: NotificationDto[]) => {
+//   if (localStorage.getItem("oldNotifications")) {
+//     let currentOldNotifications: NotificationDto[] = JSON.parse(
+//       localStorage.getItem("oldNotifications")!
+//     );
 
-    currentOldNotifications = [...notifications, ...currentOldNotifications];
+//     currentOldNotifications = [...notifications, ...currentOldNotifications];
 
-    localStorage.removeItem("oldNotifications");
+//     localStorage.removeItem("oldNotifications");
 
-    localStorage.setItem(
-      "oldNotifications",
-      JSON.stringify(currentOldNotifications)
-    );
-    return;
-  }
-  localStorage.setItem("oldNotifications", JSON.stringify(notifications));
-};
+//     localStorage.setItem(
+//       "oldNotifications",
+//       JSON.stringify(currentOldNotifications)
+//     );
+//     return;
+//   }
+//   localStorage.setItem("oldNotifications", JSON.stringify(notifications));
+// };
 
 export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
@@ -133,15 +133,15 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     // }
 
     const data = await backend.login(userInfo);
-    const { token, user, oldNotifications } = data;
+    const { token, user } = data;
 
     const pictureUrl = user.pictureUrl
       ? createAbsoluteApiAddress(user.pictureUrl)
       : undefined;
 
-    if (oldNotifications) {
-      updateOldNotifications(oldNotifications);
-    }
+    // if (oldNotifications) {
+    //   updateOldNotifications(oldNotifications);
+    // }
 
     const placeCount = user.placeCount ? user.placeCount : 0;
 
@@ -222,7 +222,7 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
         setPictureUrl: setPictureUrlMethod,
         setUsername: changeUsernameMethod,
         readOldNotificationsFromLocalStorage,
-        updateOldNotifications,
+        // updateOldNotifications,
       }
     : { isLoggedin: false, signup, login };
 

@@ -1,6 +1,6 @@
 import { createContext, FC } from "react";
 import { HasChildren } from "../helpers/props";
-import { connectWebSocket, WebSocketService } from "../services/webSocket";
+import { createWebSocket, WebSocketService } from "../services/webSocket";
 
 // export class WebSocketImplWithPharaz {
 //   // protected _socket;
@@ -81,7 +81,7 @@ interface WebSocketContextT {
   socket: WebSocketService;
 }
 
-const socket = connectWebSocket();
+const socket = createWebSocket();
 const WebSocketContext = createContext<WebSocketContextT>({ socket });
 
 export const WebSocketContextProvider: FC<HasChildren> = ({ children }) => {

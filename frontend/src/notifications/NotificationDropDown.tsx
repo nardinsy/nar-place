@@ -46,12 +46,13 @@ const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
   };
 
   const oldNotifications = generateNotificationsItem(
-    authCtx.readOldNotificationsFromLocalStorage(),
+    // authCtx.readOldNotificationsFromLocalStorage(),
+    notifCtx.currentNotifications,
     "OLD"
   );
 
   const newNotifications = generateNotificationsItem(
-    notifCtx.commentNotifications,
+    notifCtx.newNotifications,
     "NEW"
   );
 

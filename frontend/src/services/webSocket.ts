@@ -16,16 +16,12 @@ export interface ServerToClientEvents {
 
 interface ClientToServerEvents {
   announce: ({ token }: { token: string }) => void;
-  // "admin-add-new-comment": NotificationDto;
-  // "admin-reply-to-comment": NotificationDto;
-  // "admin-likes-comment": NotificationDto;
 }
 
 export interface WebSocketService {
   connect: (token: string) => Promise<boolean>;
-  welcome: () => void;
-  close: () => void;
   listenToCommentNotifications: (callback: OnRecieveNotification) => void;
+  close: () => void;
 }
 
 class WebSocketImpl implements WebSocketService {
@@ -39,7 +35,6 @@ class WebSocketImpl implements WebSocketService {
       }
     );
     this._socket = socket;
-    // this._socket.connect();
   }
 
   connect(token: string): Promise<boolean> {
@@ -56,6 +51,7 @@ class WebSocketImpl implements WebSocketService {
       });
 
       this._socket.on("invalid-token", () => {
+        console.log("Invalid token, can not connect to socket");
         resolve(false);
       });
     });
@@ -67,17 +63,6 @@ class WebSocketImpl implements WebSocketService {
     // this._socket.on("connected", () => {
     //   console.log("Connect to socket successfully");
     // });
-  }
-
-  welcome() {
-    // this._socket.on("name-inquiry", () => {
-    //   console.log("He asked my name");
-    //   this._socket.emit("announce", { name: "Nardin" });
-    // });
-  }
-
-  close() {
-    this._socket.close();
   }
 
   listenToCommentNotifications(
@@ -105,8 +90,12 @@ class WebSocketImpl implements WebSocketService {
       onRecieveNewNotificationCallback(notification);
     });
   }
+
+  close() {
+    this._socket.close();
+  }
 }
 
-export const connectWebSocket = (): WebSocketService => {
+export const createWebSocket = (): WebSocketService => {
   return new WebSocketImpl();
 };

@@ -3,11 +3,11 @@ import { WithChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import { NotificationDto } from "../helpers/dtos";
 import useRequiredAuthContext from "../hooks/use-required-authContext";
-import { connectWebSocket } from "../services/webSocket";
+import { createWebSocket } from "../services/webSocket";
 
 interface NotificationContextT {
   newNotifications: NotificationDto[];
-  commentNotifications: NotificationDto[];
+  currentNotifications: NotificationDto[];
   mergeAndResetNotifications: () => Promise<void>;
 }
 
@@ -15,7 +15,7 @@ const NotificationContext = createContext<NotificationContextT | undefined>(
   undefined
 );
 
-const socket = connectWebSocket();
+const socket = createWebSocket();
 
 export const NotificationContextProvider: FC<WithChildren<{}>> = ({
   children,
@@ -28,21 +28,33 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
     //redirect to login page
   }
 
+  const [currentNotifications, setCurrentNotifications] = useState<
+    NotificationDto[]
+  >([]);
+
   const [newNotifications, setNewNotifications] = useState<NotificationDto[]>(
     []
   );
 
-  const [commentNotifications, setCommentNotifications] = useState<
-    NotificationDto[]
-  >([]);
+  const fetchCurrentNotifications = useCallback(async () => {
+    console.log("This should call only one time");
+    const { currentNotifications } = await backend.getCurrentNotifications(
+      authCtx.token
+    );
+    setCurrentNotifications(currentNotifications);
+  }, []);
 
   useEffect(() => {
-    const fetchNewNotifications = async () => {
-      const newNotifications = await backend.getNewNotifications(authCtx.token);
-      setNewNotifications(newNotifications);
-    };
+    fetchCurrentNotifications();
+  }, [fetchCurrentNotifications]);
 
-    fetchNewNotifications();
+  useEffect(() => {
+    // const fetchNewNotifications = async () => {
+    //   const newNotifications = await backend.getNewNotifications(authCtx.token);
+    //   setNewNotifications(newNotifications);
+    // };
+
+    // fetchNewNotifications();
 
     const connectSocket = async () => {
       const isConnected = await socket.connect(authCtx.token);
@@ -52,7 +64,7 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
       }
 
       socket.listenToCommentNotifications((newNotification) => {
-        setCommentNotifications((pre) => [newNotification, ...pre]);
+        setNewNotifications((pre) => [newNotification, ...pre]);
       });
     };
 
@@ -64,7 +76,8 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
   }, []);
 
   const mergeAndResetNotifications = async () => {
-    authCtx.updateOldNotifications(newNotifications);
+    // authCtx.updateOldNotifications(newNotifications);
+    setCurrentNotifications((pre) => [...newNotifications, ...pre]);
     setNewNotifications([]);
 
     await backend.mergeAndResetNotifications(authCtx.token);
@@ -72,7 +85,7 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
 
   const value: NotificationContextT = {
     newNotifications,
-    commentNotifications,
+    currentNotifications,
     mergeAndResetNotifications,
   };
 
