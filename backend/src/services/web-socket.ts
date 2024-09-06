@@ -79,23 +79,8 @@ export const clientHandler = (
   });
 };
 
-let not: NotificationDto = {
-  kind: "Comment",
-  from: {
-    userId: "65f9252ffab99b539ad85e84",
-    username: "Nar",
-    pictureUrl: "users/profile-picture/65f9253ffab99b539ad85e8b",
-    placeCount: 11,
-  },
-  commentContent: {
-    placeId: "65f700dae771ff3a4ddababd",
-    commentId: "66c73826dbbbbff5158fd3df",
-    action: CommentAction.WriteComment,
-  },
-};
-
 const validateSocketHandshakerToken = (socket: WSSocket): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     socket.emit("userId-inquiry");
 
     socket.on("announce", ({ token }) => {
@@ -108,21 +93,6 @@ const validateSocketHandshakerToken = (socket: WSSocket): Promise<boolean> => {
       resolve(true);
     });
   });
-
-  //   socket.emit("userId-inquiry");
-  //   socket.on("announce", ({ userId, token }) => {
-  //     let decodedToken: JwtData;
-
-  //     decodedToken = jwt.verify(token, privateKey, () => {
-  //       socket.emit("invalid-token");
-  //       return false;
-  //     }) as unknown as JwtData;
-
-  //     if (decodedToken.userId === userId) {
-  //       socket.join(userId);
-  //       return true;
-  //     }
-  //   });
 };
 
 export const getWSServer = (app: Application): WSServer => {
