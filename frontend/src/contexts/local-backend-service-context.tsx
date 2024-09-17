@@ -200,11 +200,18 @@ class LocalBackendService implements BackendService {
     pictureFile: string | ArrayBuffer | undefined,
     token: string
   ): Promise<{ userInfo: UserDto }> {
-    return new Promise((resolve, reject) => {
-      const user = this.findUser(token);
+    const user = this.findUser(token);
+    user.picture = pictureFile as string;
 
-      // user.picture = pictureFile;
-    });
+    this.changedUserInfo(user);
+    const userDto: UserDto = {
+      userId: user.userId,
+      username: user.username,
+      pictureUrl: user.picture,
+      placeCount: user.places.length,
+    };
+
+    return Promise.resolve({ userInfo: userDto });
   }
 
   changePassword(newPassword: string, token: string): Promise<void> {
