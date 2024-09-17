@@ -36,16 +36,25 @@ const saveToLocalStorageList = (title: string, value: string) => {
 // REMEMBER TO SET INITIAL LOCAL STORAGE **********************
 // REMEMBER TO manage user picture type **********************
 
-const setUpLocalStorage = () => {
-  localStorage.setItem(LocalStorageKeys.LoggedUsers, JSON.stringify([]));
-  localStorage.setItem(LocalStorageKeys.Users, JSON.stringify([]));
-  localStorage.setItem(LocalStorageKeys.Comments, JSON.stringify([]));
-  localStorage.setItem(LocalStorageKeys.Notifications, JSON.stringify([]));
-  localStorage.setItem(LocalStorageKeys.Places, JSON.stringify([]));
-};
-
 class LocalBackendService implements BackendService {
   // global
+  setLocalStorageKeys = () => {
+    if (!localStorage.getItem(LocalStorageKeys.Users)) {
+      localStorage.setItem(LocalStorageKeys.Users, JSON.stringify([]));
+    }
+    if (!localStorage.getItem(LocalStorageKeys.LoggedUsers)) {
+      localStorage.setItem(LocalStorageKeys.LoggedUsers, JSON.stringify([]));
+    }
+    if (!localStorage.getItem(LocalStorageKeys.Comments)) {
+      localStorage.setItem(LocalStorageKeys.Comments, JSON.stringify([]));
+    }
+    if (!localStorage.getItem(LocalStorageKeys.Notifications)) {
+      localStorage.setItem(LocalStorageKeys.Notifications, JSON.stringify([]));
+    }
+    if (!localStorage.getItem(LocalStorageKeys.Places)) {
+      localStorage.setItem(LocalStorageKeys.Places, JSON.stringify([]));
+    }
+  };
 
   storeValue: StoreValue = (key, value) => {
     localStorage.removeItem(key);
@@ -191,6 +200,10 @@ class LocalBackendService implements BackendService {
     );
     this.storeValue(LocalStorageKeys.LoggedUsers, filteredLoggedUsers);
 
+    localStorage.removeItem(LocalStorageKeys.Comments);
+    localStorage.removeItem(LocalStorageKeys.Notifications);
+    localStorage.removeItem(LocalStorageKeys.Places);
+
     return Promise.resolve();
   }
 
@@ -234,7 +247,6 @@ class LocalBackendService implements BackendService {
 
   getLoggedUserPlaces(token: string): Promise<{ places: PlaceDto[] }> {
     const user = this.findUser(token);
-
     return Promise.resolve({ places: user.places });
   }
 
@@ -252,6 +264,9 @@ class LocalBackendService implements BackendService {
       pictureUrl: picture,
     };
 
+    user.places.unshift(placeDto);
+    this.changedUserInfo(user);
+
     return Promise.resolve({ place: placeDto });
   }
 
@@ -259,21 +274,74 @@ class LocalBackendService implements BackendService {
     placeInfo: placeInfoCard & { id: string },
     token: string
   ): Promise<{ place: PlaceDto }> {
-    throw new Error("Method not implemented.");
+    const user = this.findUser(token);
+    const { id, title, description, address } = placeInfo;
+    const placeIndex = user.places.findIndex((p) => p.placeId === id);
+
+    const placeDto: PlaceDto = {
+      ...user.places[placeIndex],
+      address,
+      description,
+      title,
+    };
+
+    user.places[placeIndex] = placeDto;
+    this.changedUserInfo(user);
+
+    return Promise.resolve({ place: placeDto });
   }
 
   deletePlaceById(placeId: string, token: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    const user = this.findUser(token);
+    const filteredPlaces = user.places.filter((p) => p.placeId !== placeId);
+
+    user.places = filteredPlaces;
+
+    this.changedUserInfo(user);
+
+    return Promise.resolve();
   }
 
   getAnyUserPlacesByUserId(userId: string): Promise<{ places: PlaceDto[] }> {
-    throw new Error("Method not implemented.");
+    const users = this.retrieveValue(LocalStorageKeys.Users);
+
+    const user = users.find((user) => user.userId === userId);
+    if (!user) throw new Error("Can not find user");
+
+    return Promise.resolve({ places: user.places });
   }
 
   getPlaceById(
     placeId: string
   ): Promise<{ placeDto: PlaceDto; userDto: UserDto }> {
-    throw new Error("Method not implemented.");
+    const users = this.retrieveValue(LocalStorageKeys.Users);
+
+    let usersPlaces: PlaceDto[] = [];
+
+    users.forEach((user) => {
+      usersPlaces = [...usersPlaces, ...user.places];
+    });
+
+    const place = usersPlaces.find((p) => p.placeId === placeId);
+    if (!place) {
+      throw new Error("Can not find place with this id");
+    }
+
+    const placeDto: PlaceDto = { ...place };
+    const user = users.find((u) => u.userId === placeDto.creator);
+
+    if (!user) {
+      throw new Error("Can not find user with this id");
+    }
+
+    const userDto: UserDto = {
+      userId: user.userId,
+      username: user.username,
+      pictureUrl: user.picture,
+      placeCount: user.places.length,
+    };
+
+    return Promise.resolve({ placeDto, userDto });
   }
 
   // comments
@@ -361,12 +429,8 @@ class LocalBackendService implements BackendService {
 const LocalBackendContex = createContext<BackendService | undefined>(undefined);
 
 export const LocalBackendContextProvider: FC<HasChildren> = ({ children }) => {
-  // const setUpLocalStorageKeys = useCallback(setUpLocalStorage, []);
-  // setUpLocalStorage();
-  // useEffect(() => {
-  //   setUpLocalStorageKeys();
-  // }, [setUpLocalStorageKeys]);
   const service = new LocalBackendService();
+  service.setLocalStorageKeys();
   return (
     <LocalBackendContex.Provider value={service}>
       {children}

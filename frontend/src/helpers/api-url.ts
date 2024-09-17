@@ -61,7 +61,8 @@ const getApiAddress = (endPoint: string, param?: string) => {
 };
 
 const createAbsoluteApiAddress = (relativePath: string) => {
-  return `${BASE_URL}${relativePath}`;
+  // return `${BASE_URL}${relativePath}`;
+  return relativePath;
 };
 
 const createRelativePath = (absolutePath: string) => {
