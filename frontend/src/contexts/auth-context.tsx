@@ -9,6 +9,7 @@ import { HasChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
 import { NotificationDto } from "../helpers/dtos";
+import useRequiredLocalBackendContext from "../hooks/use-required-local-backend-service-contex";
 
 interface LoggedOutAuthContextT {
   isLoggedin: false;
@@ -27,7 +28,6 @@ interface LoggedInAuthContextT {
   setPictureUrl: (picture: string | undefined) => void;
   setUsername: (username: string) => void;
   readOldNotificationsFromLocalStorage: () => NotificationDto[] | undefined;
-  // updateOldNotifications: (notifications: NotificationDto[]) => void;
 }
 
 type LoginInfo =
@@ -71,30 +71,12 @@ const readOldNotificationsFromLocalStorage = ():
   return undefined;
 };
 
-// const updateOldNotifications = (notifications: NotificationDto[]) => {
-//   if (localStorage.getItem("oldNotifications")) {
-//     let currentOldNotifications: NotificationDto[] = JSON.parse(
-//       localStorage.getItem("oldNotifications")!
-//     );
-
-//     currentOldNotifications = [...notifications, ...currentOldNotifications];
-
-//     localStorage.removeItem("oldNotifications");
-
-//     localStorage.setItem(
-//       "oldNotifications",
-//       JSON.stringify(currentOldNotifications)
-//     );
-//     return;
-//   }
-//   localStorage.setItem("oldNotifications", JSON.stringify(notifications));
-// };
-
 export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
 
   const history = useHistory();
-  const backend = useRequiredBackend();
+  // const backend = useRequiredBackend();
+  const backend = useRequiredLocalBackendContext();
   const showSuccessToast = useRequiredToastContext().showSuccess;
 
   useEffect(() => {
@@ -138,10 +120,6 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
     const pictureUrl = user.pictureUrl
       ? createAbsoluteApiAddress(user.pictureUrl)
       : undefined;
-
-    // if (oldNotifications) {
-    //   updateOldNotifications(oldNotifications);
-    // }
 
     const placeCount = user.placeCount ? user.placeCount : 0;
 
@@ -222,7 +200,6 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
         setPictureUrl: setPictureUrlMethod,
         setUsername: changeUsernameMethod,
         readOldNotificationsFromLocalStorage,
-        // updateOldNotifications,
       }
     : { isLoggedin: false, signup, login };
 

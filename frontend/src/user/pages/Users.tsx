@@ -2,11 +2,13 @@ import { useEffect, useState, useCallback } from "react";
 import UsersList from "../components/UsersList";
 import { UserDto } from "../../helpers/dtos";
 import useRequiredBackend from "../../hooks/use-required-backend";
+import useRequiredLocalBackendContext from "../../hooks/use-required-local-backend-service-contex";
 
 const Users = () => {
   const [users, setUsers] = useState<UserDto[] | []>([]);
   const [loading, setLoading] = useState(true);
-  const backend = useRequiredBackend();
+  // const backend = useRequiredBackend();
+  const backend = useRequiredLocalBackendContext();
 
   useEffect(() => {
     const getUsers = async () => {

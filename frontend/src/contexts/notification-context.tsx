@@ -4,6 +4,7 @@ import useRequiredBackend from "../hooks/use-required-backend";
 import { NotificationDto } from "../helpers/dtos";
 import useRequiredAuthContext from "../hooks/use-required-authContext";
 import { createWebSocket } from "../services/webSocket";
+import useRequiredLocalBackendContext from "../hooks/use-required-local-backend-service-contex";
 
 interface NotificationContextT {
   newNotifications: NotificationDto[];
@@ -20,7 +21,9 @@ const socket = createWebSocket();
 export const NotificationContextProvider: FC<WithChildren<{}>> = ({
   children,
 }) => {
-  const backend = useRequiredBackend();
+  // const backend = useRequiredBackend();
+  const backend = useRequiredLocalBackendContext();
+
   const authCtx = useRequiredAuthContext();
 
   if (!authCtx.isLoggedin) {

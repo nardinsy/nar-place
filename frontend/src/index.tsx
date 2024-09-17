@@ -7,6 +7,7 @@ import { AuthContextProvider } from "./contexts/auth-context";
 import { BackendContextProvider } from "./contexts/backend-service-context";
 import { ToastServiceContexProvider } from "./contexts/toast-service-context";
 import ErrorContextProvider from "./contexts/error-context";
+import { LocalBackendContextProvider } from "./contexts/local-backend-service-context";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,13 +17,15 @@ root.render(
   <BrowserRouter>
     <ToastServiceContexProvider>
       {/* <ErrorContextProvider> */}
-      <BackendContextProvider>
+      {/* <BackendContextProvider> */}
+      <LocalBackendContextProvider>
         <AuthContextProvider>
           {/* <React.StrictMode> */}
           <App />
           {/* </React.StrictMode> */}
         </AuthContextProvider>
-      </BackendContextProvider>
+      </LocalBackendContextProvider>
+      {/* </BackendContextProvider> */}
       {/* </ErrorContextProvider> */}
     </ToastServiceContexProvider>
   </BrowserRouter>
