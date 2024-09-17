@@ -20,9 +20,19 @@ export type IUser = {
   email: string;
   password: string;
   picture: string | undefined;
-  places: PlaceDto[];
+  places: IPlace[];
   oldNotifications: NotificationDto[];
   newNotifications: NotificationDto[];
+};
+
+export type IPlace = {
+  placeId: string;
+  title: string;
+  description: string;
+  address: string;
+  picture: string;
+  creator: string;
+  comments: CommentDto[];
 };
 
 export type loggedUsers = { token: string; email: string; userId: string };

@@ -13,6 +13,7 @@ import {
   CommentLikeDto,
   CommentReplyDto,
   NotificationDto,
+  CommentWriter,
 } from "../helpers/dtos";
 import { BackendService } from "../api/backend-service";
 import uuid from "react-uuid";
@@ -21,6 +22,7 @@ import {
   IUser,
   StoreValue,
   RetrieveValue,
+  IPlace,
 } from "../helpers/local-storage-types";
 
 const saveToLocalStorageList = (title: string, value: string) => {
@@ -88,6 +90,15 @@ class LocalBackendService implements BackendService {
     return user;
   };
 
+  findUserByUserId = (userId: string) => {
+    const users = this.retrieveValue(LocalStorageKeys.Users);
+
+    const user = users.find((u) => u.userId === userId);
+    if (!user) throw new Error("Can not find user");
+
+    return user;
+  };
+
   changedUserInfo = (user: IUser) => {
     const users = this.retrieveValue(LocalStorageKeys.Users);
 
@@ -115,6 +126,22 @@ class LocalBackendService implements BackendService {
       resolve(userDtos);
     });
   }
+
+  getPlaceDtoFromIPlace = (places: IPlace[]) => {
+    const placeDtos = places.map((place) => {
+      let { comments: _, ...rest } = place;
+
+      const placeDto: PlaceDto = {
+        ...rest,
+        pictureUrl: rest.picture,
+        pictureId: "",
+      };
+
+      return placeDto;
+    });
+
+    return placeDtos;
+  };
 
   // auth
 
@@ -247,7 +274,9 @@ class LocalBackendService implements BackendService {
 
   getLoggedUserPlaces(token: string): Promise<{ places: PlaceDto[] }> {
     const user = this.findUser(token);
-    return Promise.resolve({ places: user.places });
+
+    const places = this.getPlaceDtoFromIPlace(user.places);
+    return Promise.resolve({ places });
   }
 
   addPlace(place: NewPlace, token: string): Promise<{ place: PlaceDto }> {
@@ -264,7 +293,17 @@ class LocalBackendService implements BackendService {
       pictureUrl: picture,
     };
 
-    user.places.unshift(placeDto);
+    const IPlace: IPlace = {
+      address,
+      title,
+      description,
+      placeId: uuid(),
+      creator: user.userId,
+      comments: [],
+      picture,
+    };
+
+    user.places.unshift(IPlace);
     this.changedUserInfo(user);
 
     return Promise.resolve({ place: placeDto });
@@ -278,14 +317,24 @@ class LocalBackendService implements BackendService {
     const { id, title, description, address } = placeInfo;
     const placeIndex = user.places.findIndex((p) => p.placeId === id);
 
-    const placeDto: PlaceDto = {
+    const IPlace: IPlace = {
       ...user.places[placeIndex],
       address,
       description,
       title,
     };
 
-    user.places[placeIndex] = placeDto;
+    const placeDto: PlaceDto = {
+      placeId: id,
+      title,
+      description,
+      address,
+      creator: IPlace.creator,
+      pictureId: IPlace.picture,
+      pictureUrl: IPlace.picture,
+    };
+
+    user.places[placeIndex] = IPlace;
     this.changedUserInfo(user);
 
     return Promise.resolve({ place: placeDto });
@@ -307,8 +356,8 @@ class LocalBackendService implements BackendService {
 
     const user = users.find((user) => user.userId === userId);
     if (!user) throw new Error("Can not find user");
-
-    return Promise.resolve({ places: user.places });
+    const places = this.getPlaceDtoFromIPlace(user.places);
+    return Promise.resolve({ places });
   }
 
   getPlaceById(
@@ -316,18 +365,25 @@ class LocalBackendService implements BackendService {
   ): Promise<{ placeDto: PlaceDto; userDto: UserDto }> {
     const users = this.retrieveValue(LocalStorageKeys.Users);
 
-    let usersPlaces: PlaceDto[] = [];
+    let allusersPlaces: IPlace[] = [];
 
     users.forEach((user) => {
-      usersPlaces = [...usersPlaces, ...user.places];
+      allusersPlaces = [...allusersPlaces, ...user.places];
     });
 
-    const place = usersPlaces.find((p) => p.placeId === placeId);
+    const place = allusersPlaces.find((p) => p.placeId === placeId);
     if (!place) {
       throw new Error("Can not find place with this id");
     }
 
-    const placeDto: PlaceDto = { ...place };
+    let { comments: _, ...rest } = place;
+
+    const placeDto: PlaceDto = {
+      ...rest,
+      pictureUrl: rest.picture,
+      pictureId: "",
+    };
+
     const user = users.find((u) => u.userId === placeDto.creator);
 
     if (!user) {
@@ -351,7 +407,35 @@ class LocalBackendService implements BackendService {
     commentActionTo: string,
     token: string
   ): Promise<{ comment: CommentDto }> {
-    throw new Error("Method not implemented.");
+    const { date, postID, text } = NewComment;
+
+    const from = this.findUser(token);
+    const to = this.findUserByUserId(commentActionTo);
+
+    const commentWriter: CommentWriter = {
+      userId: from.userId,
+      username: from.username,
+      pictureUrl: from.picture,
+      placeCount: from.places.length,
+    };
+
+    const comment: CommentDto = {
+      id: uuid(),
+      postID,
+      text,
+      writer: commentWriter,
+      likes: [],
+      replies: [],
+      date: date.toDateString(),
+      parentId: undefined,
+    };
+
+    const place = to.places.find((p) => p.placeId === postID);
+    if (!place) {
+      throw new Error("Can not find place");
+    }
+
+    return Promise.resolve({ comment });
   }
 
   getComments(placeId: string): Promise<CommentDto[]> {
