@@ -36,13 +36,13 @@ const saveToLocalStorageList = (title: string, value: string) => {
 // REMEMBER TO SET INITIAL LOCAL STORAGE **********************
 // REMEMBER TO manage user picture type **********************
 
-// const setUpLocalStorage = () => {
-//   localStorage.setItem(LocalStorageKeys.LoggedUsers, JSON.stringify([]));
-//   localStorage.setItem(LocalStorageKeys.Users, JSON.stringify([]));
-//   localStorage.setItem(LocalStorageKeys.Comments, JSON.stringify([]));
-//   localStorage.setItem(LocalStorageKeys.Notifications, JSON.stringify([]));
-//   localStorage.setItem(LocalStorageKeys.Places, JSON.stringify([]));
-// };
+const setUpLocalStorage = () => {
+  localStorage.setItem(LocalStorageKeys.LoggedUsers, JSON.stringify([]));
+  localStorage.setItem(LocalStorageKeys.Users, JSON.stringify([]));
+  localStorage.setItem(LocalStorageKeys.Comments, JSON.stringify([]));
+  localStorage.setItem(LocalStorageKeys.Notifications, JSON.stringify([]));
+  localStorage.setItem(LocalStorageKeys.Places, JSON.stringify([]));
+};
 
 class LocalBackendService implements BackendService {
   // global
@@ -331,15 +331,30 @@ class LocalBackendService implements BackendService {
   getCurrentNotifications(
     token: string
   ): Promise<{ currentNotifications: NotificationDto[] }> {
-    throw new Error("Method not implemented.");
+    const user = this.findUser(token);
+
+    const currentNotifications: NotificationDto[] = user.oldNotifications;
+    return Promise.resolve({ currentNotifications });
   }
 
   getNewNotifications(token: string): Promise<NotificationDto[]> {
-    throw new Error("Method not implemented.");
+    const user = this.findUser(token);
+
+    const newNotifications: NotificationDto[] = user.newNotifications;
+    return Promise.resolve(newNotifications);
   }
 
   mergeAndResetNotifications(token: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    const user = this.findUser(token);
+
+    user.oldNotifications = [
+      ...user.newNotifications,
+      ...user.oldNotifications,
+    ];
+
+    user.newNotifications = [];
+
+    return Promise.resolve();
   }
 }
 
@@ -347,7 +362,7 @@ const LocalBackendContex = createContext<BackendService | undefined>(undefined);
 
 export const LocalBackendContextProvider: FC<HasChildren> = ({ children }) => {
   // const setUpLocalStorageKeys = useCallback(setUpLocalStorage, []);
-
+  // setUpLocalStorage();
   // useEffect(() => {
   //   setUpLocalStorageKeys();
   // }, [setUpLocalStorageKeys]);
