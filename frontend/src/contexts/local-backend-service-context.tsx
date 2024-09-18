@@ -14,6 +14,7 @@ import {
   CommentReplyDto,
   NotificationDto,
   CommentWriter,
+  CommentAction,
 } from "../helpers/dtos";
 import { BackendService } from "../api/backend-service";
 import uuid from "react-uuid";
@@ -24,6 +25,8 @@ import {
   RetrieveValue,
   IPlace,
 } from "../helpers/local-storage-types";
+import { resolve } from "path";
+import { comment } from "postcss";
 
 const saveToLocalStorageList = (title: string, value: string) => {
   if (!localStorage.getItem(title)) return;
@@ -77,7 +80,7 @@ class LocalBackendService implements BackendService {
     }
   };
 
-  findUser = (token: string) => {
+  findUserByToken = (token: string) => {
     const loggedUsers = this.retrieveValue(LocalStorageKeys.LoggedUsers);
     const users = this.retrieveValue(LocalStorageKeys.Users);
 
@@ -141,6 +144,42 @@ class LocalBackendService implements BackendService {
     });
 
     return placeDtos;
+  };
+
+  addCommetnNotificationToUser = async (
+    from: IUser,
+    to: string,
+    placeId: string,
+    commentId: string,
+    action: CommentAction
+  ) => {
+    if (from.userId === to) return;
+
+    const fromUser = {
+      userId: from.userId,
+      username: from.username,
+      pictureUrl: from.picture,
+      placeCount: from.places.length,
+    };
+
+    const commentContent = {
+      placeId,
+      commentId,
+      action,
+    };
+
+    const commentNotification: NotificationDto = {
+      kind: "Comment",
+      from: fromUser,
+      commentContent,
+    };
+
+    const toUser = this.findUserByUserId(to);
+    toUser.newNotifications.unshift(commentNotification);
+
+    this.changedUserInfo(toUser);
+
+    return commentNotification;
   };
 
   // auth
@@ -240,7 +279,7 @@ class LocalBackendService implements BackendService {
     pictureFile: string | ArrayBuffer | undefined,
     token: string
   ): Promise<{ userInfo: UserDto }> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
     user.picture = pictureFile as string;
 
     this.changedUserInfo(user);
@@ -255,7 +294,7 @@ class LocalBackendService implements BackendService {
   }
 
   changePassword(newPassword: string, token: string): Promise<void> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
     user.password = newPassword;
     this.changedUserInfo(user);
 
@@ -263,7 +302,7 @@ class LocalBackendService implements BackendService {
   }
 
   changeUsername(newUsername: string, token: string): Promise<void> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
     user.username = newUsername;
     this.changedUserInfo(user);
 
@@ -273,14 +312,14 @@ class LocalBackendService implements BackendService {
   //places
 
   getLoggedUserPlaces(token: string): Promise<{ places: PlaceDto[] }> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
 
     const places = this.getPlaceDtoFromIPlace(user.places);
     return Promise.resolve({ places });
   }
 
   addPlace(place: NewPlace, token: string): Promise<{ place: PlaceDto }> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
     const { title, description, address, picture } = place;
 
     const placeDto: PlaceDto = {
@@ -313,7 +352,7 @@ class LocalBackendService implements BackendService {
     placeInfo: placeInfoCard & { id: string },
     token: string
   ): Promise<{ place: PlaceDto }> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
     const { id, title, description, address } = placeInfo;
     const placeIndex = user.places.findIndex((p) => p.placeId === id);
 
@@ -341,7 +380,7 @@ class LocalBackendService implements BackendService {
   }
 
   deletePlaceById(placeId: string, token: string): Promise<void> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
     const filteredPlaces = user.places.filter((p) => p.placeId !== placeId);
 
     user.places = filteredPlaces;
@@ -409,7 +448,7 @@ class LocalBackendService implements BackendService {
   ): Promise<{ comment: CommentDto }> {
     const { date, postID, text } = NewComment;
 
-    const from = this.findUser(token);
+    const from = this.findUserByToken(token);
     const to = this.findUserByUserId(commentActionTo);
 
     const commentWriter: CommentWriter = {
@@ -419,8 +458,9 @@ class LocalBackendService implements BackendService {
       placeCount: from.places.length,
     };
 
+    const newCommentId = uuid();
     const comment: CommentDto = {
-      id: uuid(),
+      id: newCommentId,
       postID,
       text,
       writer: commentWriter,
@@ -434,16 +474,69 @@ class LocalBackendService implements BackendService {
     if (!place) {
       throw new Error("Can not find place");
     }
+    place.comments.unshift(comment);
+
+    this.changedUserInfo(to);
+
+    const notificationDto = this.addCommetnNotificationToUser(
+      from,
+      commentActionTo,
+      postID,
+      newCommentId,
+      CommentAction.WriteComment
+    );
 
     return Promise.resolve({ comment });
   }
 
   getComments(placeId: string): Promise<CommentDto[]> {
-    throw new Error("Method not implemented.");
+    const users = this.retrieveValue(LocalStorageKeys.Users);
+
+    let commentDto: CommentDto[] = [];
+    users.forEach((user) => {
+      const place = user.places.find((p) => p.placeId === placeId);
+      if (place) {
+        commentDto = place.comments;
+      }
+    });
+
+    return Promise.resolve(commentDto);
   }
 
   editComment(editComment: CommentDto, token: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    const { id, parentId, postID, date, text, writer, likes, replies } =
+      editComment;
+
+    const editer = this.findUserByToken(token);
+    if (editer.userId !== writer.userId) {
+      throw new Error("You can not edit this comment");
+    }
+
+    const allUsers = this.retrieveValue(LocalStorageKeys.Users);
+    const userIndex = allUsers.findIndex((user) =>
+      user.places.find((place) => place.placeId === postID)
+    );
+
+    const places = allUsers[userIndex].places.map((place) => {
+      if (place.placeId === postID) {
+        const comments = place.comments.map((comment) => {
+          if (comment.id === id) {
+            comment.date = date;
+            comment.text = text;
+            return comment;
+          }
+          return comment;
+        });
+        place.comments = comments;
+      }
+      return place;
+    });
+
+    const user = allUsers[userIndex];
+    user.places = places;
+    this.changedUserInfo(user);
+
+    return Promise.resolve();
   }
 
   deleteComment(
@@ -451,7 +544,46 @@ class LocalBackendService implements BackendService {
     parentId: string | undefined,
     token: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    const deletor = this.findUserByToken(token);
+
+    const allUsers = this.retrieveValue(LocalStorageKeys.Users);
+    let allComments: CommentDto[] = [];
+
+    allUsers.forEach((user) => {
+      user.places.forEach(
+        (place) => (allComments = [...allComments, ...place.comments])
+      );
+    });
+
+    const cm = allComments.find((comment) => comment.id === commentId);
+    const placeId = cm?.postID;
+
+    const userIndex = allUsers.findIndex((user) =>
+      user.places.find((place) => place.placeId === placeId) ? true : false
+    );
+
+    const commentUser = allUsers[userIndex];
+    if (!commentUser) throw new Error("Can not find user");
+    const placeIndex = commentUser.places.findIndex(
+      (place) => place.placeId === placeId
+    );
+
+    let filteredComments = commentUser.places[placeIndex].comments.filter(
+      (comment) => comment.id !== commentId
+    );
+
+    filteredComments = filteredComments.filter((comment) => {
+      if (comment.parentId) {
+        return comment.parentId === commentId ? "" : comment;
+      }
+      return comment;
+    });
+
+    commentUser.places[placeIndex].comments = filteredComments;
+
+    this.changedUserInfo(commentUser);
+
+    return Promise.resolve();
   }
 
   likeComment(
@@ -475,7 +607,49 @@ class LocalBackendService implements BackendService {
     commentActionTo: string,
     token: string
   ): Promise<{ replyComment: CommentDto }> {
-    throw new Error("Method not implemented.");
+    const { date, parentId, postId, text, userId } = commentReply;
+
+    const to = this.findUserByUserId(commentActionTo);
+    const from = this.findUserByUserId(userId);
+
+    const writer: CommentWriter = {
+      userId,
+      username: from.username,
+      pictureUrl: from.picture,
+      placeCount: from.places.length,
+    };
+
+    const newCommentId = uuid();
+    const newReplyComment: CommentDto = {
+      date: date.toString(),
+      id: newCommentId,
+      likes: [],
+      parentId,
+      postID: postId,
+      replies: [],
+      text,
+      writer,
+    };
+
+    const newPlaces = to.places.map((place) => {
+      if (place.placeId === postId) {
+        place.comments.unshift(newReplyComment);
+      }
+      return place;
+    });
+
+    to.places = newPlaces;
+    this.changedUserInfo(to);
+
+    this.addCommetnNotificationToUser(
+      from,
+      commentActionTo,
+      postId,
+      newCommentId,
+      CommentAction.ReplyComment
+    );
+
+    return Promise.resolve({ replyComment: newReplyComment });
   }
 
   // notifications
@@ -483,21 +657,21 @@ class LocalBackendService implements BackendService {
   getCurrentNotifications(
     token: string
   ): Promise<{ currentNotifications: NotificationDto[] }> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
 
     const currentNotifications: NotificationDto[] = user.oldNotifications;
     return Promise.resolve({ currentNotifications });
   }
 
   getNewNotifications(token: string): Promise<NotificationDto[]> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
 
     const newNotifications: NotificationDto[] = user.newNotifications;
     return Promise.resolve(newNotifications);
   }
 
   mergeAndResetNotifications(token: string): Promise<void> {
-    const user = this.findUser(token);
+    const user = this.findUserByToken(token);
 
     user.oldNotifications = [
       ...user.newNotifications,
