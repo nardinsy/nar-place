@@ -502,6 +502,37 @@ class LocalBackendService implements BackendService {
     return Promise.resolve(commentDto);
   }
 
+  checkIfCommentIsParent = (
+    comment: CommentDto,
+    parentId: string,
+    commentId: string
+  ) => {
+    return comment.id === parentId &&
+      comment.replies.find((reply) => reply.id === commentId)
+      ? true
+      : false;
+  };
+
+  findAndReplaceReplies = (
+    primaryList: CommentDto[],
+    parentId: string,
+    commentId: string,
+    callback: (commentId: string, replies: CommentDto[]) => CommentDto[]
+  ) => {
+    primaryList.forEach((item) => {
+      if (this.checkIfCommentIsParent(item, parentId, commentId)) {
+        item.replies = callback(commentId, item.replies);
+        return;
+      } else if (item.replies.length > 0) {
+        this.findAndReplaceReplies(item.replies, parentId, commentId, callback);
+        return;
+      }
+      return;
+    });
+
+    return;
+  };
+
   editComment(editComment: CommentDto, token: string): Promise<void> {
     const { id, parentId, postID, date, text, writer, likes, replies } =
       editComment;
@@ -545,13 +576,6 @@ class LocalBackendService implements BackendService {
   ): Promise<void> {
     const owner = this.findUserByToken(token);
 
-    const checkCommentIsParentOrNot = (comment: CommentDto) => {
-      return comment.id === parentId &&
-        comment.replies.find((reply) => reply.id === commentId)
-        ? true
-        : false;
-    };
-
     const deleteTargetCommentFromReplies = (
       targetCommentId: string,
       replies: CommentDto[]
@@ -559,35 +583,18 @@ class LocalBackendService implements BackendService {
       const filteredComments = replies.filter(
         (item) => item.id !== targetCommentId
       );
-      // console.log("original", replies);
-      // console.log("filtered", filteredComments);
 
-      // listOfCom = filteredComments;
       return filteredComments;
-    };
-
-    const dfsFindComment = (primaryList: CommentDto[]) => {
-      let newList: CommentDto[] = primaryList;
-      primaryList.forEach((item) => {
-        if (checkCommentIsParentOrNot(item)) {
-          newList = deleteTargetCommentFromReplies(commentId, item.replies);
-          item.replies = newList;
-          // console.log("delelte", newList);
-          return;
-        } else if (item.replies.length > 0) {
-          const newList = dfsFindComment(item.replies);
-          item.replies = newList;
-          return;
-        }
-        return;
-      });
-      // console.log(newList);
-      return newList;
     };
 
     if (parentId) {
       owner.places.forEach((place) => {
-        dfsFindComment(place.comments);
+        this.findAndReplaceReplies(
+          place.comments,
+          parentId,
+          commentId,
+          deleteTargetCommentFromReplies
+        );
       });
     } else {
       owner.places.forEach((place) => {
