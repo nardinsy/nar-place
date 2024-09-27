@@ -1,10 +1,4 @@
-import {
-  CommentDto,
-  NotificationDto,
-  PlaceDto,
-  UserDto,
-  UserSignupInformation,
-} from "./dtos";
+import { CommentDto, NotificationDto, PlaceDto } from "../helpers/dtos";
 
 export enum LocalStorageKeys {
   LoggedUsers = "loggedUsers",

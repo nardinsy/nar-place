@@ -24,8 +24,7 @@ import {
   StoreValue,
   RetrieveValue,
   IPlace,
-} from "../helpers/local-storage-types";
-import { resolve } from "path";
+} from "../local-storage/local-storage-types";
 import { comment } from "postcss";
 
 const saveToLocalStorageList = (title: string, value: string) => {
@@ -544,44 +543,68 @@ class LocalBackendService implements BackendService {
     parentId: string | undefined,
     token: string
   ): Promise<void> {
-    const deletor = this.findUserByToken(token);
+    const owner = this.findUserByToken(token);
 
-    const allUsers = this.retrieveValue(LocalStorageKeys.Users);
-    let allComments: CommentDto[] = [];
+    const checkCommentIsParentOrNot = (comment: CommentDto) => {
+      return comment.id === parentId &&
+        comment.replies.find((reply) => reply.id === commentId)
+        ? true
+        : false;
+    };
 
-    allUsers.forEach((user) => {
-      user.places.forEach(
-        (place) => (allComments = [...allComments, ...place.comments])
+    const deleteTargetCommentFromReplies = (
+      targetCommentId: string,
+      replies: CommentDto[]
+    ) => {
+      const filteredComments = replies.filter(
+        (item) => item.id !== targetCommentId
       );
-    });
+      // console.log("original", replies);
+      // console.log("filtered", filteredComments);
 
-    const cm = allComments.find((comment) => comment.id === commentId);
-    const placeId = cm?.postID;
+      // listOfCom = filteredComments;
+      return filteredComments;
+    };
 
-    const userIndex = allUsers.findIndex((user) =>
-      user.places.find((place) => place.placeId === placeId) ? true : false
-    );
+    const dfsFindComment = (primaryList: CommentDto[]) => {
+      let newList: CommentDto[] = primaryList;
+      primaryList.forEach((item) => {
+        if (checkCommentIsParentOrNot(item)) {
+          newList = deleteTargetCommentFromReplies(commentId, item.replies);
+          item.replies = newList;
+          // console.log("delelte", newList);
+          return;
+        } else if (item.replies.length > 0) {
+          const newList = dfsFindComment(item.replies);
+          item.replies = newList;
+          return;
+        }
+        return;
+      });
+      // console.log(newList);
+      return newList;
+    };
 
-    const commentUser = allUsers[userIndex];
-    if (!commentUser) throw new Error("Can not find user");
-    const placeIndex = commentUser.places.findIndex(
-      (place) => place.placeId === placeId
-    );
+    if (parentId) {
+      owner.places.forEach((place) => {
+        dfsFindComment(place.comments);
+      });
+    } else {
+      owner.places.forEach((place) => {
+        place.comments.forEach((comment) => {
+          if (comment.id !== commentId) {
+            return;
+          }
+          const filteredComments = place.comments.filter(
+            (comment) => comment.id !== commentId
+          );
+          place.comments = filteredComments;
+          return;
+        });
+      });
+    }
 
-    let filteredComments = commentUser.places[placeIndex].comments.filter(
-      (comment) => comment.id !== commentId
-    );
-
-    filteredComments = filteredComments.filter((comment) => {
-      if (comment.parentId) {
-        return comment.parentId === commentId ? "" : comment;
-      }
-      return comment;
-    });
-
-    commentUser.places[placeIndex].comments = filteredComments;
-
-    this.changedUserInfo(commentUser);
+    this.changedUserInfo(owner);
 
     return Promise.resolve();
   }
@@ -591,7 +614,36 @@ class LocalBackendService implements BackendService {
     commentActionTo: string,
     token: string
   ): Promise<{ commentLikeDto: CommentLikeDto }> {
-    throw new Error("Method not implemented.");
+    const { commentId, date, userId } = NewCommentLike;
+
+    const to = this.findUserByUserId(commentActionTo);
+    const from = this.findUserByToken(token);
+
+    const placeIndex = to.places.findIndex((place) =>
+      place.comments.find((comment) => comment.id === commentId)
+    );
+
+    const commentIndex = to.places[placeIndex].comments.findIndex(
+      (comment) => comment.id === commentId
+    );
+
+    to.places[placeIndex].comments[commentIndex].likes.unshift({
+      commentId,
+      userId,
+    });
+
+    this.changedUserInfo(to);
+
+    const commentLikeDto: CommentLikeDto = { commentId, date, userId };
+
+    this.addCommetnNotificationToUser(
+      from,
+      commentActionTo,
+      to.places[placeIndex].placeId,
+      commentId,
+      CommentAction.LikeComment
+    );
+    return Promise.resolve({ commentLikeDto });
   }
 
   unlikeComment(
@@ -599,7 +651,26 @@ class LocalBackendService implements BackendService {
     commentId: string,
     token: string
   ): Promise<{ commentLikes: { userId: string; commentId: string }[] }> {
-    throw new Error("Method not implemented.");
+    const to = this.findUserByUserId(userId);
+    const from = this.findUserByToken(token);
+
+    const placeIndex = to.places.findIndex((place) =>
+      place.comments.find((comment) => comment.id === commentId)
+    );
+
+    const commentIndex = to.places[placeIndex].comments.findIndex(
+      (comment) => comment.id === commentId
+    );
+
+    const newCommentlikes = to.places[placeIndex].comments[
+      commentIndex
+    ].likes.filter((like) => like.userId !== from.userId);
+
+    to.places[placeIndex].comments[commentIndex].likes = newCommentlikes;
+
+    this.changedUserInfo(to);
+
+    return Promise.resolve({ commentLikes: newCommentlikes });
   }
 
   replyComment(
@@ -633,7 +704,11 @@ class LocalBackendService implements BackendService {
 
     const newPlaces = to.places.map((place) => {
       if (place.placeId === postId) {
-        place.comments.unshift(newReplyComment);
+        // place.comments.unshift(newReplyComment);
+        const parentindex = place.comments.findIndex(
+          (comment) => comment.id === parentId
+        );
+        place.comments[parentindex].replies.unshift(newReplyComment);
       }
       return place;
     });

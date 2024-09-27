@@ -4,7 +4,7 @@ import useRequiredBackend from "../hooks/use-required-backend";
 import { NotificationDto } from "../helpers/dtos";
 import useRequiredAuthContext from "../hooks/use-required-authContext";
 import { createWebSocket } from "../services/webSocket";
-import useRequiredLocalBackendContext from "../hooks/use-required-local-backend-service-contex";
+import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 interface NotificationContextT {
   newNotifications: NotificationDto[];

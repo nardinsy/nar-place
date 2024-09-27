@@ -9,7 +9,7 @@ import { HasChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
 import { NotificationDto } from "../helpers/dtos";
-import useRequiredLocalBackendContext from "../hooks/use-required-local-backend-service-contex";
+import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 interface LoggedOutAuthContextT {
   isLoggedin: false;

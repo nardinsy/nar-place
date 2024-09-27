@@ -9,7 +9,7 @@ import {
   CommentReplyDto,
   NewComment,
 } from "../helpers/dtos";
-import useRequiredLocalBackendContext from "../hooks/use-required-local-backend-service-contex";
+import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 export interface CommentT {
   comments: CommentDto[];

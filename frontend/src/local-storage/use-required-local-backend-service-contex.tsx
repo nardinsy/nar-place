@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import LocalBackendContex from "../contexts/local-backend-service-context";
+import LocalBackendContex from "../local-storage/local-backend-service-context";
 
 const useRequiredLocalBackendContext = () => {
   const localBackendCtx = useContext(LocalBackendContex);

@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import PlacesList from "../../places/components/PlacesList";
 import { UserDto, PlaceDto } from "../../helpers/dtos";
 import useRequiredBackend from "../../hooks/use-required-backend";
-import useRequiredLocalBackendContext from "../../hooks/use-required-local-backend-service-contex";
+import useRequiredLocalBackendContext from "../../local-storage/use-required-local-backend-service-contex";
 
 interface LocationState {
   userDto: UserDto;
