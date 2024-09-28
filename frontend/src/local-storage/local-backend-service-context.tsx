@@ -25,17 +25,6 @@ import {
   RetrieveValue,
   IPlace,
 } from "../local-storage/local-storage-types";
-import { comment } from "postcss";
-
-const saveToLocalStorageList = (title: string, value: string) => {
-  if (!localStorage.getItem(title)) return;
-
-  const titleFromStorage: any[] = JSON.parse(localStorage.getItem(title)!);
-  titleFromStorage.push(value);
-  localStorage.removeItem(title);
-
-  localStorage.setItem(title, JSON.stringify(titleFromStorage));
-};
 
 // REMEMBER TO SET INITIAL LOCAL STORAGE **********************
 // REMEMBER TO manage user picture type **********************
@@ -49,23 +38,23 @@ class LocalBackendService implements BackendService {
     if (!localStorage.getItem(LocalStorageKeys.LoggedUsers)) {
       localStorage.setItem(LocalStorageKeys.LoggedUsers, JSON.stringify([]));
     }
-    if (!localStorage.getItem(LocalStorageKeys.Comments)) {
-      localStorage.setItem(LocalStorageKeys.Comments, JSON.stringify([]));
-    }
+    // if (!localStorage.getItem(LocalStorageKeys.Comments)) {
+    //   localStorage.setItem(LocalStorageKeys.Comments, JSON.stringify([]));
+    // }
     if (!localStorage.getItem(LocalStorageKeys.Notifications)) {
       localStorage.setItem(LocalStorageKeys.Notifications, JSON.stringify([]));
     }
-    if (!localStorage.getItem(LocalStorageKeys.Places)) {
-      localStorage.setItem(LocalStorageKeys.Places, JSON.stringify([]));
-    }
+    // if (!localStorage.getItem(LocalStorageKeys.Places)) {
+    //   localStorage.setItem(LocalStorageKeys.Places, JSON.stringify([]));
+    // }
   };
 
-  storeValue: StoreValue = (key, value) => {
+  setValueToLocalStorage: StoreValue = (key, value) => {
     localStorage.removeItem(key);
     localStorage.setItem(key, JSON.stringify(value));
   };
 
-  retrieveValue: RetrieveValue = (key) => {
+  getValueFromLocalStorage: RetrieveValue = (key) => {
     try {
       const data = localStorage.getItem(key);
       if (data) {
@@ -80,8 +69,10 @@ class LocalBackendService implements BackendService {
   };
 
   findUserByToken = (token: string) => {
-    const loggedUsers = this.retrieveValue(LocalStorageKeys.LoggedUsers);
-    const users = this.retrieveValue(LocalStorageKeys.Users);
+    const loggedUsers = this.getValueFromLocalStorage(
+      LocalStorageKeys.LoggedUsers
+    );
+    const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
     const loginInfo = loggedUsers.find((info) => info.token === token);
     if (!loginInfo) throw new Error("Token is invalid");
@@ -93,7 +84,7 @@ class LocalBackendService implements BackendService {
   };
 
   findUserByUserId = (userId: string) => {
-    const users = this.retrieveValue(LocalStorageKeys.Users);
+    const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
     const user = users.find((u) => u.userId === userId);
     if (!user) throw new Error("Can not find user");
@@ -102,18 +93,18 @@ class LocalBackendService implements BackendService {
   };
 
   changedUserInfo = (user: IUser) => {
-    const users = this.retrieveValue(LocalStorageKeys.Users);
+    const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
     const userIndex = users.findIndex((u) => u.userId === user.userId);
     if (!user) throw new Error("Can not find user");
 
     users[userIndex] = user;
-    this.storeValue(LocalStorageKeys.Users, users);
+    this.setValueToLocalStorage(LocalStorageKeys.Users, users);
   };
 
   getAllUsers(): Promise<UserDto[] | []> {
     return new Promise((resolve, reject) => {
-      const users = this.retrieveValue(LocalStorageKeys.Users);
+      const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
       const userDtos = users.map((user) => {
         const userDto: UserDto = {
@@ -187,13 +178,15 @@ class LocalBackendService implements BackendService {
     const { email, password, username } = userInfo;
 
     return new Promise((resolve, reject) => {
-      const loggedUsers = this.retrieveValue(LocalStorageKeys.LoggedUsers);
-      const users = this.retrieveValue(LocalStorageKeys.Users);
+      const loggedUsers = this.getValueFromLocalStorage(
+        LocalStorageKeys.LoggedUsers
+      );
+      const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
       const userId = uuid();
       const token = uuid();
       loggedUsers.push({ email, token, userId });
-      this.storeValue(LocalStorageKeys.LoggedUsers, loggedUsers);
+      this.setValueToLocalStorage(LocalStorageKeys.LoggedUsers, loggedUsers);
 
       const newUser: IUser = {
         userId,
@@ -206,7 +199,7 @@ class LocalBackendService implements BackendService {
         newNotifications: [],
       };
       users.push(newUser);
-      this.storeValue(LocalStorageKeys.Users, users);
+      this.setValueToLocalStorage(LocalStorageKeys.Users, users);
 
       const userDto: UserDto = {
         userId,
@@ -228,8 +221,10 @@ class LocalBackendService implements BackendService {
     const { email, password } = userInfo;
 
     return new Promise((resolve, reject) => {
-      const loggedUsers = this.retrieveValue(LocalStorageKeys.LoggedUsers);
-      const users = this.retrieveValue(LocalStorageKeys.Users);
+      const loggedUsers = this.getValueFromLocalStorage(
+        LocalStorageKeys.LoggedUsers
+      );
+      const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
       const user = users.find((user) => user.email === email);
       if (!user) return reject("Can not find user");
@@ -240,7 +235,7 @@ class LocalBackendService implements BackendService {
 
       const token = uuid();
       loggedUsers.push({ email, token, userId: user.userId });
-      this.storeValue(LocalStorageKeys.LoggedUsers, loggedUsers);
+      this.setValueToLocalStorage(LocalStorageKeys.LoggedUsers, loggedUsers);
 
       const userDto: UserDto = {
         userId: user.userId,
@@ -259,15 +254,20 @@ class LocalBackendService implements BackendService {
   }
 
   logout(token: string): Promise<void> {
-    const loggedUsers = this.retrieveValue(LocalStorageKeys.LoggedUsers);
+    const loggedUsers = this.getValueFromLocalStorage(
+      LocalStorageKeys.LoggedUsers
+    );
     const filteredLoggedUsers = loggedUsers.filter(
       (info) => info.token !== token
     );
-    this.storeValue(LocalStorageKeys.LoggedUsers, filteredLoggedUsers);
+    this.setValueToLocalStorage(
+      LocalStorageKeys.LoggedUsers,
+      filteredLoggedUsers
+    );
 
-    localStorage.removeItem(LocalStorageKeys.Comments);
+    // localStorage.removeItem(LocalStorageKeys.Comments);
     localStorage.removeItem(LocalStorageKeys.Notifications);
-    localStorage.removeItem(LocalStorageKeys.Places);
+    // localStorage.removeItem(LocalStorageKeys.Places);
 
     return Promise.resolve();
   }
@@ -390,7 +390,7 @@ class LocalBackendService implements BackendService {
   }
 
   getAnyUserPlacesByUserId(userId: string): Promise<{ places: PlaceDto[] }> {
-    const users = this.retrieveValue(LocalStorageKeys.Users);
+    const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
     const user = users.find((user) => user.userId === userId);
     if (!user) throw new Error("Can not find user");
@@ -401,7 +401,7 @@ class LocalBackendService implements BackendService {
   getPlaceById(
     placeId: string
   ): Promise<{ placeDto: PlaceDto; userDto: UserDto }> {
-    const users = this.retrieveValue(LocalStorageKeys.Users);
+    const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
     let allusersPlaces: IPlace[] = [];
 
@@ -489,7 +489,7 @@ class LocalBackendService implements BackendService {
   }
 
   getComments(placeId: string): Promise<CommentDto[]> {
-    const users = this.retrieveValue(LocalStorageKeys.Users);
+    const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
     let commentDto: CommentDto[] = [];
     users.forEach((user) => {
@@ -846,6 +846,7 @@ class LocalBackendService implements BackendService {
     const user = this.findUserByToken(token);
 
     const newNotifications: NotificationDto[] = user.newNotifications;
+    console.log(newNotifications);
     return Promise.resolve(newNotifications);
   }
 

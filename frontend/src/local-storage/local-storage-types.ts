@@ -3,9 +3,7 @@ import { CommentDto, NotificationDto, PlaceDto } from "../helpers/dtos";
 export enum LocalStorageKeys {
   LoggedUsers = "loggedUsers",
   Users = "users",
-  Comments = "comments",
   Notifications = "notifications",
-  Places = "places",
 }
 
 export type IUser = {
@@ -41,8 +39,8 @@ type StoreLogedUsers = StoreValueFunc<
   loggedUsers[]
 >;
 type StoreUser = StoreValueFunc<LocalStorageKeys.Users, IUser[]>;
-type StorePlace = StoreValueFunc<LocalStorageKeys.Places, PlaceDto>;
-type StoreComment = StoreValueFunc<LocalStorageKeys.Comments, CommentDto>;
+// type StorePlace = StoreValueFunc<LocalStorageKeys.Places, PlaceDto>;
+// type StoreComment = StoreValueFunc<LocalStorageKeys.Comments, CommentDto>;
 type StoreNotification = StoreValueFunc<
   LocalStorageKeys.Notifications,
   NotificationDto
@@ -50,8 +48,8 @@ type StoreNotification = StoreValueFunc<
 
 export type StoreValue = StoreUser &
   StoreLogedUsers &
-  StorePlace &
-  StoreComment &
+  // StorePlace &
+  // StoreComment &
   StoreNotification;
 
 // export const storeValue: StoreValue = (key, value) => {
@@ -68,11 +66,11 @@ type RetrieveLoggedUsers = RetrieveValueFunc<
   loggedUsers[]
 >;
 type RetrieveUsers = RetrieveValueFunc<LocalStorageKeys.Users, IUser[]>;
-type RetrievePlaces = RetrieveValueFunc<LocalStorageKeys.Places, PlaceDto[]>;
-type RetrieveComments = RetrieveValueFunc<
-  LocalStorageKeys.Comments,
-  CommentDto[]
->;
+// type RetrievePlaces = RetrieveValueFunc<LocalStorageKeys.Places, PlaceDto[]>;
+// type RetrieveComments = RetrieveValueFunc<
+//   LocalStorageKeys.Comments,
+//   CommentDto[]
+// >;
 type RetrieveNotifications = RetrieveValueFunc<
   LocalStorageKeys.Notifications,
   NotificationDto[]
@@ -80,8 +78,8 @@ type RetrieveNotifications = RetrieveValueFunc<
 
 export type RetrieveValue = RetrieveUsers &
   RetrieveLoggedUsers &
-  RetrievePlaces &
-  RetrieveComments &
+  // RetrievePlaces &
+  // RetrieveComments &
   RetrieveNotifications;
 
 // export const retrieveValue: RetrieveValue = (key) => {
