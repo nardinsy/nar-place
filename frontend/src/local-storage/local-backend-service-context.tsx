@@ -507,10 +507,11 @@ class LocalBackendService implements BackendService {
     parentId: string,
     commentId: string
   ) => {
-    return comment.id === parentId &&
-      comment.replies.find((reply) => reply.id === commentId)
-      ? true
-      : false;
+    return comment.id === parentId;
+    // return comment.id === parentId &&
+    //   comment.replies.find((reply) => reply.id === commentId)
+    //   ? true
+    //   : false;
   };
 
   findAndReplaceReplies = (
@@ -632,14 +633,18 @@ class LocalBackendService implements BackendService {
     };
 
     if (parentId) {
-      owner.places.forEach((place) => {
-        this.findAndReplaceReplies(
-          place.comments,
-          parentId,
-          commentId,
-          deleteTargetCommentFromReplies
-        );
-      });
+      for (const place of owner.places) {
+        if (
+          this.findAndReplaceReplies(
+            place.comments,
+            parentId,
+            commentId,
+            deleteTargetCommentFromReplies
+          )
+        ) {
+          break;
+        }
+      }
     } else {
       owner.places.forEach((place) => {
         place.comments.forEach((comment) => {
@@ -727,21 +732,6 @@ class LocalBackendService implements BackendService {
 
     const commentLikeDto: CommentLikeDto = { commentId, date, userId };
     return Promise.resolve({ commentLikeDto });
-
-    // const placeIndex = to.places.findIndex((place) =>
-    //   place.comments.find((comment) => comment.id === commentId)
-    // );
-
-    // const commentIndex = to.places[placeIndex].comments.findIndex(
-    //   (comment) => comment.id === commentId
-    // );
-
-    // to.places[placeIndex].comments[commentIndex].likes.unshift({
-    //   commentId,
-    //   userId,
-    // });
-
-    // this.changedUserInfo(to);
   }
 
   unlikeComment(
@@ -779,19 +769,6 @@ class LocalBackendService implements BackendService {
     this.changedUserInfo(to);
 
     return Promise.resolve({ commentLikes: newCommentlikes });
-    // const placeIndex = to.places.findIndex((place) =>
-    //   place.comments.find((comment) => comment.id === commentId)
-    // );
-
-    // const commentIndex = to.places[placeIndex].comments.findIndex(
-    //   (comment) => comment.id === commentId
-    // );
-
-    // const newCommentlikes = to.places[placeIndex].comments[
-    //   commentIndex
-    // ].likes.filter((like) => like.userId !== from.userId);
-
-    // to.places[placeIndex].comments[commentIndex].likes = newCommentlikes;
   }
 
   replyComment(
@@ -801,8 +778,8 @@ class LocalBackendService implements BackendService {
   ): Promise<{ replyComment: CommentDto }> {
     const { date, parentId, postId, text, userId } = commentReply;
 
+    const from = this.findUserByToken(token);
     const to = this.findUserByUserId(commentActionTo);
-    const from = this.findUserByUserId(userId);
 
     const writer: CommentWriter = {
       userId,
@@ -823,18 +800,24 @@ class LocalBackendService implements BackendService {
       writer,
     };
 
-    const newPlaces = to.places.map((place) => {
-      if (place.placeId === postId) {
-        // place.comments.unshift(newReplyComment);
-        const parentindex = place.comments.findIndex(
-          (comment) => comment.id === parentId
-        );
-        place.comments[parentindex].replies.unshift(newReplyComment);
-      }
-      return place;
-    });
+    const addReplyToReplies = (commentId: string, replies: CommentDto[]) => {
+      replies.unshift(newReplyComment);
+      return replies;
+    };
 
-    to.places = newPlaces;
+    for (const place of to.places) {
+      if (
+        this.findAndReplaceReplies(
+          place.comments,
+          parentId,
+          newCommentId,
+          addReplyToReplies
+        )
+      ) {
+        break;
+      }
+    }
+
     this.changedUserInfo(to);
 
     this.addCommetnNotificationToUser(
