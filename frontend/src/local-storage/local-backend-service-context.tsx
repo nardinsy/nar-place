@@ -518,55 +518,99 @@ class LocalBackendService implements BackendService {
     parentId: string,
     commentId: string,
     callback: (commentId: string, replies: CommentDto[]) => CommentDto[]
-  ) => {
-    primaryList.forEach((item) => {
+  ): boolean => {
+    for (const item of primaryList) {
       if (this.checkIfCommentIsParent(item, parentId, commentId)) {
         item.replies = callback(commentId, item.replies);
-        return;
+        return true;
       } else if (item.replies.length > 0) {
-        this.findAndReplaceReplies(item.replies, parentId, commentId, callback);
-        return;
+        if (
+          this.findAndReplaceReplies(
+            item.replies,
+            parentId,
+            commentId,
+            callback
+          )
+        ) {
+          return true;
+        }
       }
-      return;
-    });
-
-    return;
+    }
+    return false;
   };
 
   editComment(editComment: CommentDto, token: string): Promise<void> {
-    const { id, parentId, postID, date, text, writer, likes, replies } =
-      editComment;
+    const { id, parentId, date, text, writer } = editComment;
 
-    const editer = this.findUserByToken(token);
-    if (editer.userId !== writer.userId) {
+    const owner = this.findUserByToken(token);
+    if (owner.userId !== writer.userId) {
       throw new Error("You can not edit this comment");
     }
 
-    const allUsers = this.retrieveValue(LocalStorageKeys.Users);
-    const userIndex = allUsers.findIndex((user) =>
-      user.places.find((place) => place.placeId === postID)
-    );
+    const editTargetCommentFromReplies = (
+      commentId: string,
+      replies: CommentDto[]
+    ) => {
+      const editedReplies = replies.map((reply) => {
+        if (reply.id !== commentId) {
+          return reply;
+        }
+        reply.text = text;
+        reply.date = date;
+        return reply;
+      });
 
-    const places = allUsers[userIndex].places.map((place) => {
-      if (place.placeId === postID) {
-        const comments = place.comments.map((comment) => {
-          if (comment.id === id) {
-            comment.date = date;
-            comment.text = text;
-            return comment;
+      return editedReplies;
+    };
+
+    if (parentId) {
+      owner.places.forEach((place) => {
+        this.findAndReplaceReplies(
+          place.comments,
+          parentId,
+          id,
+          editTargetCommentFromReplies
+        );
+      });
+    } else {
+      for (const place of owner.places) {
+        for (const comment of place.comments) {
+          if (comment.id !== id) {
+            continue;
           }
-          return comment;
-        });
-        place.comments = comments;
+          comment.text = text;
+          comment.date = date;
+          break;
+        }
       }
-      return place;
-    });
+    }
 
-    const user = allUsers[userIndex];
-    user.places = places;
-    this.changedUserInfo(user);
+    this.changedUserInfo(owner);
 
     return Promise.resolve();
+    // const allUsers = this.retrieveValue(LocalStorageKeys.Users);
+    // const userIndex = allUsers.findIndex((user) =>
+    //   user.places.find((place) => place.placeId === postID)
+    // );
+
+    // const places = allUsers[userIndex].places.map((place) => {
+    //   if (place.placeId === postID) {
+    //     const comments = place.comments.map((comment) => {
+    //       if (comment.id === id) {
+    //         comment.date = date;
+    //         comment.text = text;
+    //         return comment;
+    //       }
+    //       return comment;
+    //     });
+    //     place.comments = comments;
+    //   }
+    //   return place;
+    // });
+
+    // const user = allUsers[userIndex];
+    // user.places = places;
+    // this.changedUserInfo(user);
   }
 
   deleteComment(
@@ -616,6 +660,27 @@ class LocalBackendService implements BackendService {
     return Promise.resolve();
   }
 
+  findNestedCommentAndEditLikesList = (
+    listOfComments: CommentDto[],
+    commentId: string,
+    callback: (comment: CommentDto) => void
+  ) => {
+    for (const comment of listOfComments) {
+      if (comment.id !== commentId && comment.replies.length > 0) {
+        this.findNestedCommentAndEditLikesList(
+          comment.replies,
+          commentId,
+          callback
+        );
+      }
+      if (comment.id === commentId) {
+        callback(comment);
+        return true;
+      }
+    }
+    return false;
+  };
+
   likeComment(
     NewCommentLike: CommentLikeDto,
     commentActionTo: string,
@@ -623,25 +688,34 @@ class LocalBackendService implements BackendService {
   ): Promise<{ commentLikeDto: CommentLikeDto }> {
     const { commentId, date, userId } = NewCommentLike;
 
-    const to = this.findUserByUserId(commentActionTo);
     const from = this.findUserByToken(token);
+    const to = this.findUserByUserId(commentActionTo);
 
-    const placeIndex = to.places.findIndex((place) =>
-      place.comments.find((comment) => comment.id === commentId)
-    );
+    const addLikeToLikes = (comment: CommentDto) => {
+      comment.likes.unshift({
+        commentId,
+        userId,
+      });
+    };
 
-    const commentIndex = to.places[placeIndex].comments.findIndex(
-      (comment) => comment.id === commentId
-    );
-
-    to.places[placeIndex].comments[commentIndex].likes.unshift({
-      commentId,
-      userId,
-    });
+    let currentIndex = 0;
+    let placeIndex = 0;
+    for (const place of to.places) {
+      if (
+        this.findNestedCommentAndEditLikesList(
+          place.comments,
+          commentId,
+          addLikeToLikes
+        )
+      ) {
+        placeIndex = currentIndex;
+        break;
+      } else {
+        currentIndex++;
+      }
+    }
 
     this.changedUserInfo(to);
-
-    const commentLikeDto: CommentLikeDto = { commentId, date, userId };
 
     this.addCommetnNotificationToUser(
       from,
@@ -650,7 +724,24 @@ class LocalBackendService implements BackendService {
       commentId,
       CommentAction.LikeComment
     );
+
+    const commentLikeDto: CommentLikeDto = { commentId, date, userId };
     return Promise.resolve({ commentLikeDto });
+
+    // const placeIndex = to.places.findIndex((place) =>
+    //   place.comments.find((comment) => comment.id === commentId)
+    // );
+
+    // const commentIndex = to.places[placeIndex].comments.findIndex(
+    //   (comment) => comment.id === commentId
+    // );
+
+    // to.places[placeIndex].comments[commentIndex].likes.unshift({
+    //   commentId,
+    //   userId,
+    // });
+
+    // this.changedUserInfo(to);
   }
 
   unlikeComment(
@@ -661,23 +752,46 @@ class LocalBackendService implements BackendService {
     const to = this.findUserByUserId(userId);
     const from = this.findUserByToken(token);
 
-    const placeIndex = to.places.findIndex((place) =>
-      place.comments.find((comment) => comment.id === commentId)
-    );
+    let newCommentlikes: {
+      userId: string;
+      commentId: string;
+    }[] = [];
 
-    const commentIndex = to.places[placeIndex].comments.findIndex(
-      (comment) => comment.id === commentId
-    );
+    const removeLikefromLikes = (comment: CommentDto) => {
+      newCommentlikes = comment.likes.filter(
+        (like) => like.userId !== from.userId
+      );
+      comment.likes = newCommentlikes;
+    };
 
-    const newCommentlikes = to.places[placeIndex].comments[
-      commentIndex
-    ].likes.filter((like) => like.userId !== from.userId);
-
-    to.places[placeIndex].comments[commentIndex].likes = newCommentlikes;
+    for (const place of to.places) {
+      if (
+        this.findNestedCommentAndEditLikesList(
+          place.comments,
+          commentId,
+          removeLikefromLikes
+        )
+      ) {
+        break;
+      }
+    }
 
     this.changedUserInfo(to);
 
     return Promise.resolve({ commentLikes: newCommentlikes });
+    // const placeIndex = to.places.findIndex((place) =>
+    //   place.comments.find((comment) => comment.id === commentId)
+    // );
+
+    // const commentIndex = to.places[placeIndex].comments.findIndex(
+    //   (comment) => comment.id === commentId
+    // );
+
+    // const newCommentlikes = to.places[placeIndex].comments[
+    //   commentIndex
+    // ].likes.filter((like) => like.userId !== from.userId);
+
+    // to.places[placeIndex].comments[commentIndex].likes = newCommentlikes;
   }
 
   replyComment(
