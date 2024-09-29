@@ -5,7 +5,7 @@ import useRequiredBackend from "../../hooks/use-required-backend";
 import Spinner from "../../shared-UI/Spinner";
 import PlacePageContent from "./PlacePageContent";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
-import useRequiredLocalBackendContext from "../../local-storage/use-required-local-backend-service-contex";
+// import useRequiredLocalBackendContext from "../../local-storage/use-required-local-backend-service-contex";
 
 interface RouteParams {
   placeId: string;
