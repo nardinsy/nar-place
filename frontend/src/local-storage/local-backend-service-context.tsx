@@ -846,7 +846,6 @@ class LocalBackendService implements BackendService {
     const user = this.findUserByToken(token);
 
     const newNotifications: NotificationDto[] = user.newNotifications;
-    console.log(newNotifications);
     return Promise.resolve(newNotifications);
   }
 

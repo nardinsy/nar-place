@@ -12,7 +12,7 @@ const UserItem: FC<UserItemProps> = ({ userDto }) => {
 
   return (
     <li
-      className="m-4 min-w-32 border rounded-md border-user-item-border"
+      className="m-4 w-[15rem] border rounded-md border-user-item-border"
       key={userId}
       data-testid={userId}
     >
@@ -22,7 +22,7 @@ const UserItem: FC<UserItemProps> = ({ userDto }) => {
             pathname: `/places/${userId}`,
             state: { userDto },
           }}
-          className="flex items-center w-full h-full p-2 hover:bg-gray-light"
+          className="flex items-center w-full h-full px-4 py-2 hover:bg-gray-light"
         >
           <div className="w-12 h-12 mr-4">
             <Avatar pictureUrl={pictureUrl} alt={username} width={"3rem"} />

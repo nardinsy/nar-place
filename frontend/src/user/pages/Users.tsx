@@ -7,8 +7,8 @@ import useRequiredLocalBackendContext from "../../local-storage/use-required-loc
 const Users = () => {
   const [users, setUsers] = useState<UserDto[] | []>([]);
   const [loading, setLoading] = useState(true);
-  // const backend = useRequiredBackend();
-  const backend = useRequiredLocalBackendContext();
+  const backend = useRequiredBackend();
+  // const backend = useRequiredLocalBackendContext();
 
   useEffect(() => {
     const getUsers = async () => {

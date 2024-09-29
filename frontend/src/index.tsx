@@ -17,15 +17,15 @@ root.render(
   <BrowserRouter>
     <ToastServiceContexProvider>
       {/* <ErrorContextProvider> */}
-      {/* <BackendContextProvider> */}
-      <LocalBackendContextProvider>
+      <BackendContextProvider>
+        {/* <LocalBackendContextProvider> */}
         <AuthContextProvider>
           {/* <React.StrictMode> */}
           <App />
           {/* </React.StrictMode> */}
         </AuthContextProvider>
-      </LocalBackendContextProvider>
-      {/* </BackendContextProvider> */}
+        {/* </LocalBackendContextProvider> */}
+      </BackendContextProvider>
       {/* </ErrorContextProvider> */}
     </ToastServiceContexProvider>
   </BrowserRouter>

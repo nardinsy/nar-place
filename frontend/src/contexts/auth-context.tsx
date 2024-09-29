@@ -75,8 +75,8 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
 
   const history = useHistory();
-  // const backend = useRequiredBackend();
-  const backend = useRequiredLocalBackendContext();
+  const backend = useRequiredBackend();
+  // const backend = useRequiredLocalBackendContext();
   const showSuccessToast = useRequiredToastContext().showSuccess;
 
   useEffect(() => {

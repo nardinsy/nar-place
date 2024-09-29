@@ -13,8 +13,8 @@ const AnyUserPlaces = () => {
   const [loadedPlaces, setLoadedPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // const backend = useRequiredBackend();
-  const backend = useRequiredLocalBackendContext();
+  const backend = useRequiredBackend();
+  // const backend = useRequiredLocalBackendContext();
 
   const { userId } = useParams() as { userId: string };
   const { state } = useLocation<LocationState>();

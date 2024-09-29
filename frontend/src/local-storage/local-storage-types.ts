@@ -81,17 +81,3 @@ export type RetrieveValue = RetrieveUsers &
   // RetrievePlaces &
   // RetrieveComments &
   RetrieveNotifications;
-
-// export const retrieveValue: RetrieveValue = (key) => {
-//   try {
-//     const data = localStorage.getItem(key);
-//     if (data) {
-//       return JSON.parse(data);
-//     } else {
-//       throw new Error("Can not find this key in local storage");
-//     }
-//     // return JSON.parse(localStorage.getItem(key) || "null");
-//   } catch {
-//     return null;
-//   }
-// };

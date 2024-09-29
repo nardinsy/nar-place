@@ -12,8 +12,8 @@ interface RouteParams {
 }
 
 const PlacePage: FC = () => {
-  // const backend = useRequiredBackend();
-  const backend = useRequiredLocalBackendContext();
+  const backend = useRequiredBackend();
+  // const backend = useRequiredLocalBackendContext();
 
   const {
     state,

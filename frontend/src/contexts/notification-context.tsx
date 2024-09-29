@@ -21,8 +21,8 @@ const socket = createWebSocket();
 export const NotificationContextProvider: FC<WithChildren<{}>> = ({
   children,
 }) => {
-  // const backend = useRequiredBackend();
-  const backend = useRequiredLocalBackendContext();
+  const backend = useRequiredBackend();
+  // const backend = useRequiredLocalBackendContext();
 
   const authCtx = useRequiredAuthContext();
 
