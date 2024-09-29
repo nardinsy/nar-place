@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import PlacesList from "../../places/components/PlacesList";
 import { UserDto, PlaceDto } from "../../helpers/dtos";
 import useRequiredBackend from "../../hooks/use-required-backend";
-// import useRequiredLocalBackendContext from "../../local-storage/use-required-local-backend-service-contex";
+import useRequiredLocalBackendContext from "../../local-storage/use-required-local-backend-service-contex";
 
 interface LocationState {
   userDto: UserDto;
@@ -13,8 +13,8 @@ const AnyUserPlaces = () => {
   const [loadedPlaces, setLoadedPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const backend = useRequiredBackend();
-  // const backend = useRequiredLocalBackendContext();
+  // const backend = useRequiredBackend();
+  const backend = useRequiredLocalBackendContext();
 
   const { userId } = useParams() as { userId: string };
   const { state } = useLocation<LocationState>();

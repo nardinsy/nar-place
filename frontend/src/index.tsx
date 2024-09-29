@@ -4,9 +4,8 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./contexts/auth-context";
-import { BackendContextProvider } from "./contexts/backend-service-context";
 import { ToastServiceContexProvider } from "./contexts/toast-service-context";
-import ErrorContextProvider from "./contexts/error-context";
+import { LocalBackendContextProvider } from "./local-storage/local-backend-service-context";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,17 +14,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <ToastServiceContexProvider>
-      {/* <ErrorContextProvider> */}
-      <BackendContextProvider>
-        {/* <LocalBackendContextProvider> */}
+      <LocalBackendContextProvider>
         <AuthContextProvider>
-          {/* <React.StrictMode> */}
-          <App />
-          {/* </React.StrictMode> */}
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
         </AuthContextProvider>
-        {/* </LocalBackendContextProvider> */}
-      </BackendContextProvider>
-      {/* </ErrorContextProvider> */}
+      </LocalBackendContextProvider>
     </ToastServiceContexProvider>
   </BrowserRouter>
 );

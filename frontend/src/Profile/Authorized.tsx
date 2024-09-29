@@ -16,7 +16,7 @@ import {
 import useRequiredAuthContext from "../hooks/use-required-authContext";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
-// import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
+import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 const Authorized = () => {
   // console.log("Authorized Component Render");
@@ -31,8 +31,8 @@ const Authorized = () => {
     throw new Error("User most be logged in, Please Login again");
   }
 
-  const backend = useRequiredBackend();
-  // const backend = useRequiredLocalBackendContext();
+  // const backend = useRequiredBackend();
+  const backend = useRequiredLocalBackendContext();
 
   const history = useHistory();
 

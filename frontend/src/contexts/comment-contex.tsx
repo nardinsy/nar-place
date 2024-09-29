@@ -9,7 +9,7 @@ import {
   CommentReplyDto,
   NewComment,
 } from "../helpers/dtos";
-// import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
+import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 export interface CommentT {
   comments: CommentDto[];
@@ -41,8 +41,8 @@ const CommentContext = createContext<CommentT | undefined>(undefined);
 export const CommentContextProvider: FC<
   WithChildren<{ commentActionTo: string }>
 > = ({ children, commentActionTo }) => {
-  const backend = useRequiredBackend();
-  // const backend = useRequiredLocalBackendContext();
+  // const backend = useRequiredBackend();
+  const backend = useRequiredLocalBackendContext();
   const showSuccessToast = useRequiredToastContext().showSuccess;
 
   const [comments, setCommetns] = useState<CommentDto[]>([]);

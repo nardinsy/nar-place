@@ -20,9 +20,9 @@ const PlacePageContent: FC<PlacePageContentT> = ({ placeDto, userDto }) => {
       <PlaceImage src={pictureUrl} alt={title} />
 
       <div className="relative flex flex-col items-center w-full md:w-2/5 md:h-full">
-        <div className="flex flex-row items-center justify-around w-full py-4 px-2">
+        <div className="flex flex-row w-full py-4 px-8">
           <PlaceCreatorAccountInfo userDto={userDto} alt={title} />
-          <FollowButton />
+          {/* <FollowButton /> */}
         </div>
 
         <div className="w-4/5 p-1 border-t border-gray-fav" />

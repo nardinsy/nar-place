@@ -9,7 +9,7 @@ import { HasChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
 import { NotificationDto } from "../helpers/dtos";
-// import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
+import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 interface LoggedOutAuthContextT {
   isLoggedin: false;
@@ -75,8 +75,8 @@ export const AuthContextProvider: FC<HasChildren> = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ isLoggedin: false });
 
   const history = useHistory();
-  const backend = useRequiredBackend();
-  // const backend = useRequiredLocalBackendContext();
+  // const backend = useRequiredBackend();
+  const backend = useRequiredLocalBackendContext();
   const showSuccessToast = useRequiredToastContext().showSuccess;
 
   useEffect(() => {
