@@ -27,7 +27,7 @@ In the full version of this application, data is managed with a Node.js server a
 - Toast Messages
 - Comment System
   - Nested Replies: Every comment can be replied to, potentially creating a hierarchical structure for conversations
-  - Editable and Deletable: Comments can be edited or deleted by their owner, giving users control over their content
+  - Editable and Deletable Comments
   - Likes: Users can leave likes on comments
 - Efficient Data Handling:
   - The PlacePage component intelligently manages data fetching by checking if the data has been passed through the router. If the data isn't available, it fetches it from the server; otherwise, it uses the data provided by the router
