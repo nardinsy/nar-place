@@ -2,7 +2,7 @@
 
 ## Overview
 
-NarPlace is a React application that allows users to share pictures of different places. Users can create an account, post pictures, leave comments on others' posts, reply to comments, and like posts and comments. It also features a real-time notification system to keep users updated on interactions.
+NarPlace is a fullstack application that allows users to share pictures of different places. Users can create an account, post pictures, leave comments on others' posts, reply to comments, and like posts and comments. It also features a real-time notification system to keep users updated on interactions.
 
 ## Demo
 
@@ -16,19 +16,33 @@ In the full version of this application, data is managed with a Node.js server a
 
 ## Features
 
-Front-End:
+### Front-End:
 
-- Responsive design
-- Real-time notification system using socket-io library
-- Toast notifications
-- Easy to understand project structure
-- Written in modern React, only functional components with hooks
-- Simple local React state management, without redux or similar
-- Component testing with Jest to ensure code reliability and quality
+- Fully Responsive Design
+  - Built with Tailwind CSS and CSS Modules
+- Notification System
+  - Post Interaction Alerts: Receive notifications when someone comments on your posts
+  - Comment Engagement: Get notified when your comment is liked or when someone replies to it
+  - Real-Time Updates: Notifications are delivered in real time using WebSockets, so users stay updated without needing to refresh the page
+- Toast Messages
+- Comment System
+  - Nested Replies: Every comment can be replied to, potentially creating a hierarchical structure for conversations
+  - Editable and Deletable: Comments can be edited or deleted by their owner, giving users control over their content
+  - Likes: Users can leave likes on comments
+- Efficient Data Handling:
+  - The PlacePage component intelligently manages data fetching by checking if the data has been passed through the router. If the data isn't available, it fetches it from the server; otherwise, it uses the data provided by the router
+- Code Quality and Design Principles:
+  - Dependency Injection: Utilized to create loosely coupled components
+  - Single Responsibility Principle: Components are designed to focus on a single task or function
+  - Flexible Server Switching:
+    - Because of this implementation, the server can easily be switched from Node.js to local storage, providing adaptability based on the environment or demo requirements
+- TypeScript types implemented for all data coming from the server and component props, enhancing type safety and reducing bugs
+- Component testing with Jest
 
-Back-End:
+### Back-End:
 
--User authentication using JSON Web Tokens (JWT) for secure login and account management
+- User authentication using JSON Web Tokens (JWT) for secure login and account management:
+  - Created custom middlewares to seamlesslly handle authentication in endpoints
 
 ## Technologies Used
 

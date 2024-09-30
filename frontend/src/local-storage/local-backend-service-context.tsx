@@ -40,19 +40,12 @@ class LocalBackendService implements BackendService {
     if (!localStorage.getItem(LocalStorageKeys.LoggedUsers)) {
       localStorage.setItem(LocalStorageKeys.LoggedUsers, JSON.stringify([]));
     }
-    // if (!localStorage.getItem(LocalStorageKeys.Comments)) {
-    //   localStorage.setItem(LocalStorageKeys.Comments, JSON.stringify([]));
-    // }
-    if (!localStorage.getItem(LocalStorageKeys.Notifications)) {
-      localStorage.setItem(LocalStorageKeys.Notifications, JSON.stringify([]));
-    }
-    // if (!localStorage.getItem(LocalStorageKeys.Places)) {
-    //   localStorage.setItem(LocalStorageKeys.Places, JSON.stringify([]));
-    // }
   };
 
   setValueToLocalStorage: StoreValue = (key, value) => {
-    localStorage.removeItem(key);
+    if (localStorage.getItem(key)) {
+      localStorage.removeItem(key);
+    }
     localStorage.setItem(key, JSON.stringify(value));
   };
 
@@ -259,6 +252,7 @@ class LocalBackendService implements BackendService {
     const loggedUsers = this.getValueFromLocalStorage(
       LocalStorageKeys.LoggedUsers
     );
+
     const filteredLoggedUsers = loggedUsers.filter(
       (info) => info.token !== token
     );
@@ -268,7 +262,7 @@ class LocalBackendService implements BackendService {
     );
 
     // localStorage.removeItem(LocalStorageKeys.Comments);
-    localStorage.removeItem(LocalStorageKeys.Notifications);
+    // localStorage.removeItem(LocalStorageKeys.Notifications);
     // localStorage.removeItem(LocalStorageKeys.Places);
 
     return Promise.resolve();
