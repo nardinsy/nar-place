@@ -65,5 +65,5 @@
     "ts-jest": "^29.1.4",
     "typescript-plugin-css-modules": "^5.1.0"
   },
-  "homepage": "http://nardinsy.github.io/narplace"
+  "homepage": "http://nardinsy.github.io/narplace/local-storage/frontend"
 }
