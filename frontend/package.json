@@ -30,7 +30,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --detectOpenHandles --forceExit",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -56,10 +58,12 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
+    "gh-pages": "^6.1.1",
     "jest": "^29.7.0",
     "react-shallow-renderer": "^16.15.0",
     "tailwindcss": "^3.4.9",
     "ts-jest": "^29.1.4",
     "typescript-plugin-css-modules": "^5.1.0"
-  }
+  },
+  "homepage": "http://nardinsy.github.io/narplace"
 }
