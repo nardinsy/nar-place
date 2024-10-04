@@ -5,7 +5,7 @@ const user1ProfilePicture =
 const user2ProfilePicture =
   "https://images.pexels.com/photos/1898555/pexels-photo-1898555.jpeg?auto=compress&cs=tinysrgb&w=600";
 const user1PlacePicture =
-  "https://images.pexels.com/photos/5620964/pexels-photo-5620964.jpeg?auto=compress&cs=tinysrgb&w=600";
+  "https://images.pexels.com/photos/773471/pexels-photo-773471.jpeg?auto=compress&cs=tinysrgb&w=800";
 const user2PlacePicture =
   "https://images.pexels.com/photos/1174138/pexels-photo-1174138.jpeg?auto=compress&cs=tinysrgb&w=600";
 

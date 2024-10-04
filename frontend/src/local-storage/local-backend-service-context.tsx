@@ -37,7 +37,7 @@ class LocalBackendService implements BackendService {
     if (!localStorage.getItem(LocalStorageKeys.Users)) {
       localStorage.setItem(
         LocalStorageKeys.Users,
-        JSON.stringify([initialUsers])
+        JSON.stringify(initialUsers)
       );
     }
     if (!localStorage.getItem(LocalStorageKeys.LoggedUsers)) {
