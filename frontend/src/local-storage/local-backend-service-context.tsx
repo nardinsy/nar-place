@@ -25,6 +25,7 @@ import {
   RetrieveValue,
   IPlace,
 } from "../local-storage/local-storage-types";
+import { initialUsers } from "./DUMMY-DATA";
 
 // REMEMBER TO SET INITIAL LOCAL STORAGE **********************
 // REMEMBER TO manage user picture type **********************
@@ -32,10 +33,12 @@ import {
 // TODO: REMEMBER TO cahnge createAbsoluteApiAddress in api-url
 
 class LocalBackendService implements BackendService {
-  // global
   setLocalStorageKeys = () => {
     if (!localStorage.getItem(LocalStorageKeys.Users)) {
-      localStorage.setItem(LocalStorageKeys.Users, JSON.stringify([]));
+      localStorage.setItem(
+        LocalStorageKeys.Users,
+        JSON.stringify([initialUsers])
+      );
     }
     if (!localStorage.getItem(LocalStorageKeys.LoggedUsers)) {
       localStorage.setItem(LocalStorageKeys.LoggedUsers, JSON.stringify([]));
@@ -864,6 +867,11 @@ const LocalBackendContex = createContext<BackendService | undefined>(undefined);
 export const LocalBackendContextProvider: FC<HasChildren> = ({ children }) => {
   const service = new LocalBackendService();
   service.setLocalStorageKeys();
+
+  window.addEventListener("unload", () => {
+    localStorage.clear();
+  });
+
   return (
     <LocalBackendContex.Provider value={service}>
       {children}

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import { AuthContextProvider } from "./contexts/auth-context";
 import { ToastServiceContexProvider } from "./contexts/toast-service-context";
 import { LocalBackendContextProvider } from "./local-storage/local-backend-service-context";
@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <BrowserRouter>
+  <HashRouter>
     <ToastServiceContexProvider>
       <LocalBackendContextProvider>
         <AuthContextProvider>
@@ -22,7 +22,7 @@ root.render(
         </AuthContextProvider>
       </LocalBackendContextProvider>
     </ToastServiceContexProvider>
-  </BrowserRouter>
+  </HashRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
