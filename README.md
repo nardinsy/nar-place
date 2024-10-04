@@ -6,6 +6,8 @@ NarPlace is a fullstack application that allows users to share pictures of diffe
 
 ## Demo
 
+https://nardinsy.github.io/narplace-demo/
+
 ![Screenshot of the application](<frontend/src/assets/Screenshot%20(98).png>)
 
 ## Note
@@ -34,6 +36,7 @@ In the full version of this application, data is managed with a Node.js server a
 - Code Quality and Design Principles:
   - Dependency Injection: Utilized to create loosely coupled components
   - Single Responsibility Principle: Components are designed to focus on a single task or function
+  - Component Composition
   - Flexible Server Switching:
     - Because of this implementation, the server can easily be switched from Node.js to local storage, providing adaptability based on the environment or demo requirements
 - TypeScript types implemented for all data coming from the server and component props, enhancing type safety and reducing bugs
