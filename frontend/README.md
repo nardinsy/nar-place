@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+# NarPlace
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+NarPlace is a fullstack application that allows users to share pictures of different places. Users can create an account, post pictures, leave comments on others' posts, reply to comments, and like posts and comments. It also features a real-time notification system to keep users updated on interactions.
 
-In the project directory, you can run:
+## Demo
 
-### `npm start`
+https://nardinsy.github.io/narplace-demo/
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![Screenshot of the application](<./src/assets/Screenshot (98).png>)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Note
 
-### `npm test`
+In this GitHub Pages demo, data is stored using local storage to allow users to experience the app's functionality directly in their browser without needing a backend server.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In the full version of this application, data is managed with a Node.js server and MongoDB for persistence, ensuring secure and scalable data handling.
 
-### `npm run build`
+## Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Front-End:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Fully Responsive Design
+  - Built with Tailwind CSS and CSS Modules
+- Notification System
+  - Post Interaction Alerts: Receive notifications when someone comments on your posts
+  - Comment Engagement: Get notified when your comment is liked or when someone replies to it
+  - Real-Time Updates: Notifications are delivered in real time using WebSockets, so users stay updated without needing to refresh the page
+- Toast Messages
+- Comment System
+  - Nested Replies: Every comment can be replied to, potentially creating a hierarchical structure for conversations
+  - Editable and Deletable Comments
+  - Likes: Users can leave likes on comments
+- Efficient Data Handling:
+  - The PlacePage component intelligently manages data fetching by checking if the data has been passed through the router. If the data isn't available, it fetches it from the server; otherwise, it uses the data provided by the router
+- Code Quality and Design Principles:
+  - Dependency Injection: Utilized to create loosely coupled components
+  - Single Responsibility Principle: Components are designed to focus on a single task or function
+  - Component Composition
+  - Flexible Server Switching:
+    - Because of this implementation, the server can easily be switched from Node.js to local storage, providing adaptability based on the environment or demo requirements
+- TypeScript types implemented for all data coming from the server and component props, enhancing type safety and reducing bugs
+- Component testing with Jest
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Back-End:
 
-### `npm run eject`
+- User authentication using JSON Web Tokens (JWT) for secure login and account management:
+  - Created custom middlewares to seamlesslly handle authentication in endpoints
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Technologies Used
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- React (with TypeScript)
+- Node.js (with TypeScript)
+- Express
+- MongoDB with Mongoose for data storage and management
+- JSON Web Tokens (JWT) for authentication
+- Socket.IO for real-time notifications
+- Tailwind CSS for styling
