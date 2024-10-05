@@ -1,17 +1,16 @@
 import { useRef, FC, ChangeEvent, MouseEvent } from "react";
-import { HasChildren } from "../helpers/props";
 
-type ImageUploadT = HasChildren & {
+type PictureUploadFromFileT = {
   id: string;
   className: string;
   onChangeImage: (file: File) => void;
 };
 
-const ImageUpload: FC<ImageUploadT> = ({
+const PictureUploadFromFile: FC<PictureUploadFromFileT> = ({
   id,
   className,
   onChangeImage,
-  children,
+  // children,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,7 +33,9 @@ const ImageUpload: FC<ImageUploadT> = ({
   };
 
   return (
-    <div>
+    <div className="p-4 flex flex-col">
+      <label className="text-2xl pb-2">Select from file:</label>
+
       <input
         data-testid="photo-uploader"
         id={id}
@@ -49,10 +50,11 @@ const ImageUpload: FC<ImageUploadT> = ({
         onClick={triggerFileChangeHandler}
         className={className}
       >
-        {children}
+        Uplaod
+        {/* {children} */}
       </button>
     </div>
   );
 };
 
-export default ImageUpload;
+export default PictureUploadFromFile;

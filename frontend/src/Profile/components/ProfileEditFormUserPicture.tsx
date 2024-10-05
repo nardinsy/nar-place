@@ -1,9 +1,7 @@
 import { FC, useState, MouseEvent } from "react";
 import Avatar from "../../shared-UI/Avatar";
 import PictureModal from "../../shared/PictureModal";
-import ImageUpload from "../../shared/ImageUpload";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import PictureUploadButton from "../../uploadPicture/PictureUploadButton";
 
 export interface ProfileEditFormUserPictureT {
   userPictureUrl: string | undefined;
@@ -35,7 +33,7 @@ const ProfileEditFormUserPicture: FC<ProfileEditFormUserPictureT> = ({
     setShowPictureModal(true);
   };
 
-  const changeImage = (fileFormatFile: File) => {
+  const changeNewPictureFile = (fileFormatFile: File) => {
     onChangeImage(fileFormatFile);
     setAvatarURL(URL.createObjectURL(fileFormatFile));
 
@@ -72,20 +70,27 @@ const ProfileEditFormUserPicture: FC<ProfileEditFormUserPictureT> = ({
     },
   ];
 
+  const changeNewPictureUrl = () => {};
   return (
     <>
-      <div className="relative w-36 h-36 cursor-pointer">
-        <div onClick={onImageClickHandler} data-testid="picture-container">
-          <Avatar width={"9rem"} pictureUrl={avatarURL} alt={username} />
+      <div className="flex flex-col">
+        <div className="w-36 h-36 my-2 cursor-pointer">
+          <div onClick={onImageClickHandler} data-testid="picture-container">
+            <Avatar width={"9rem"} pictureUrl={avatarURL} alt={username} />
+          </div>
         </div>
+        <PictureUploadButton
+          changeNewPictureFile={changeNewPictureFile}
+          changeNewPictureUrl={changeNewPictureUrl}
+        />
 
-        <ImageUpload
+        {/* <PictureUploadFile
           id={token}
           onChangeImage={changeImage}
           className="absolute top-3 right-1 bg-gray-light z-10 py-1 px-2 text-gray border border-primary rounded-full hover:outline-none hover:bg-white  hover:text-primary"
         >
           <FontAwesomeIcon icon={faPen} />
-        </ImageUpload>
+        </PictureUploadFile> */}
       </div>
 
       {showPictureModal && (

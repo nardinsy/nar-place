@@ -1,10 +1,9 @@
 import { useState, FC, useEffect } from "react";
-import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
 import picturePlaceholder from "../../assets/Image-placeholder.png";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import { placeInfoCard, PlaceInfoCardWithPictire } from "../../helpers/dtos";
-import classes from "./NewPlacePage.module.css";
+import PictureUploadButton from "../../uploadPicture/PictureUploadButton";
 
 interface NewPlacePageProps {
   addPlace: (place: PlaceInfoCardWithPictire) => Promise<void>;
@@ -22,9 +21,13 @@ const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  const changeNewPicture = (file: File) => {
+  const changeNewPictureFile = (file: File) => {
     setFile(file);
     setUploadedPicture(URL.createObjectURL(file));
+  };
+
+  const changeNewPictureUrl = (url: string) => {
+    setUploadedPicture(url);
   };
 
   const addNewPlace = (place: placeInfoCard) => {
@@ -52,13 +55,17 @@ const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
           />
         </div>
         <div className="flex justify-center items-center my-3">
-          <ImageUpload
+          {/* <ImageUpload
             id={authContext.token}
             onChangeImage={changeNewPicture}
             className="bg-primary text-white text-xl p-2 rounded-4xl border border-primary transition-colors hover:bg-white hover:text-primary hover:transition-all"
           >
             Upload new picture
-          </ImageUpload>
+          </ImageUpload> */}
+          <PictureUploadButton
+            changeNewPictureFile={changeNewPictureFile}
+            changeNewPictureUrl={changeNewPictureUrl}
+          />
         </div>
       </div>
 

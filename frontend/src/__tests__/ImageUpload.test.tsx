@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import ImageUpload from "../shared/ImageUpload";
+import PictureUploadFromFile from "../uploadPicture/PictureUploadFromFile";
 
 const value = {
   id: "12345",
@@ -10,7 +10,7 @@ const value = {
 
 test("image upload button upload image successfully", () => {
   render(
-    <ImageUpload
+    <PictureUploadFromFile
       id={value.id}
       children={value.chidren}
       className={value.className}
