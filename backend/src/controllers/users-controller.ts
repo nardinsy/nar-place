@@ -12,7 +12,7 @@ import ProfilePicture, { IProfilePicture } from "../models/profile-picture";
 import { LoginResult } from "../shared/results";
 
 export const getProfilePictureUrl = (id: string): string => {
-  return `users/profile-picture/${id}`;
+  return `~users/profile-picture/${id}`;
 };
 
 export const getAllUsers: RequestHandler = async (req, res, next) => {

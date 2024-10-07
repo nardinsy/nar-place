@@ -56,11 +56,12 @@ export interface UserSignupInformation {
   password: string;
 }
 
+export type UrlPath = string;
 export interface NewPlace {
   title: string;
   description: string;
   address: string;
-  picture: Base64<"jpeg">;
+  picture: Base64<"jpeg"> | UrlPath;
 }
 
 export type Base64<imageType extends string> =

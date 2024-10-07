@@ -3,7 +3,8 @@ import routerAuth from "../lib/router-auth";
 import {
   getPlaces,
   getLoggedUserPlaces,
-  addPlace,
+  addPlaceWithPictureTypeFile,
+  addPlaceWithPictureTypeUrl,
   editPlaceById,
   deletePlaceById,
   getAnyUserPlacesByUserId,
@@ -49,13 +50,23 @@ const placeRouter = routerAuth();
 placeRouter.getAuth("/userPlaces", getLoggedUserPlaces);
 
 placeRouter.postAuth(
-  "/add-place",
+  "/add-place-picture-file",
   [
     check("title").not().isEmpty(),
     check("description").isLength({ min: 5 }),
     check("address").not().isEmpty(),
   ],
-  addPlace
+  addPlaceWithPictureTypeFile
+);
+
+placeRouter.postAuth(
+  "/add-place-picture-url",
+  [
+    check("title").not().isEmpty(),
+    check("description").isLength({ min: 5 }),
+    check("address").not().isEmpty(),
+  ],
+  addPlaceWithPictureTypeUrl
 );
 
 placeRouter.patchAuth(
