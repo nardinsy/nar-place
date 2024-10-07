@@ -9,6 +9,8 @@ interface NewPlacePageProps {
   addPlace: (place: PlaceInfoCardWithPictire) => Promise<void>;
 }
 
+type UploadedPicture = File | string;
+
 const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
   const authContext = useRequiredAuthContext();
   if (!authContext.isLoggedin)
@@ -17,28 +19,32 @@ const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
   const [uploadedPicture, setUploadedPicture] = useState<string>();
   const [file, setFile] = useState<File | undefined>(undefined);
 
+  const [pic, setPic] = useState<UploadedPicture>();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const changeNewPictureFile = (file: File) => {
-    setFile(file);
+    // setFile(file);
+    setPic(file);
     setUploadedPicture(URL.createObjectURL(file));
   };
 
   const changeNewPictureUrl = (url: string) => {
+    setPic(url);
     setUploadedPicture(url);
   };
 
   const addNewPlace = (place: placeInfoCard) => {
-    if (!file)
+    if (!pic || !uploadedPicture)
       throw new Error("Can not add place without file, try to add file");
 
     const placeInfoCardWithPictire: PlaceInfoCardWithPictire = {
       title: place.title,
       description: place.description,
       address: place.address,
-      picture: file,
+      picture: pic,
     };
 
     addPlace(placeInfoCardWithPictire);

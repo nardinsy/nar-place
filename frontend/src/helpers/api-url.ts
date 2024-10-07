@@ -33,7 +33,8 @@ export enum ENDPOINTS {
   changeUsername = "users/change/username",
 
   getLoggedUserPlaces = "places/userPlaces",
-  addPlace = "places/add-place",
+  addPlacePictureFile = "places/add-place-picture-file",
+  addPlacePictureUrl = "places/add-place-picture-url",
   editPlace = "places/edit-place",
   deletePlaceById = `places/delete-place/`,
   getAnyUserPlacesByUserId = "places/any-user-places-by-userId/",
@@ -60,8 +61,13 @@ const getApiAddress = (endPoint: string, param?: string) => {
   return `${BASE_URL}${endPoint}`;
 };
 
-const createAbsoluteApiAddress = (relativePath: string) => {
-  return `${BASE_URL}${relativePath}`;
+const createAbsoluteApiAddress = (path: string) => {
+  if (path.startsWith("~")) {
+    const reletivePath = path.slice(1);
+    return `${BASE_URL}${reletivePath}`;
+  } else {
+    return path;
+  }
   // return relativePath;
 };
 

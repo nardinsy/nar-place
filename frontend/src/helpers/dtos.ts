@@ -55,11 +55,12 @@ export interface UserSignupInformation {
   password: string;
 }
 
+export type UrlPath = string;
 export interface NewPlace {
   title: string;
   description: string;
   address: string;
-  picture: Base64<"jpeg">;
+  picture: Base64<"jpeg"> | UrlPath;
 }
 
 export interface placeInfoCard {
@@ -69,7 +70,7 @@ export interface placeInfoCard {
 }
 
 export interface PlaceInfoCardWithPictire extends placeInfoCard {
-  picture: File;
+  picture: File | string;
 }
 
 export type Base64<imageType extends string> =

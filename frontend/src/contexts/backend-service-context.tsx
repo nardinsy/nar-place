@@ -109,14 +109,30 @@ class BackedServiceImpl implements BackendService {
     return await sendHttpRequest(ENDPOINTS.getLoggedUserPlaces, requestOptions);
   }
 
-  async addPlace(place: NewPlace, token: string): Promise<{ place: PlaceDto }> {
+  async addPlacePictureFile(
+    place: NewPlace,
+    token: string
+  ): Promise<{ place: PlaceDto }> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json", token },
       body: JSON.stringify(place),
     };
 
-    return await sendHttpRequest(ENDPOINTS.addPlace, requestOptions);
+    return await sendHttpRequest(ENDPOINTS.addPlacePictureFile, requestOptions);
+  }
+
+  async addPlacePictureUrl(
+    place: NewPlace,
+    token: string
+  ): Promise<{ place: PlaceDto }> {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify(place),
+    };
+
+    return await sendHttpRequest(ENDPOINTS.addPlacePictureUrl, requestOptions);
   }
 
   async editPlace(

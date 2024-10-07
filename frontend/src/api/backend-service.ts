@@ -37,7 +37,14 @@ export interface BackendService {
     places: PlaceDto[];
   }>;
 
-  addPlace(
+  addPlacePictureFile(
+    place: NewPlace,
+    token: string
+  ): Promise<{
+    place: PlaceDto;
+  }>;
+
+  addPlacePictureUrl(
     place: NewPlace,
     token: string
   ): Promise<{
