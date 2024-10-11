@@ -8,6 +8,7 @@ import PlacePage from "./places/pages/PlacePage";
 import Users from "./user/pages/Users";
 import useRequiredAuthContext from "./hooks/use-required-authContext";
 import ToastList from "./toast/ToastList";
+import * as Config from "./config.json";
 
 const App: React.FC = (porps) => {
   const authContext = useRequiredAuthContext();
@@ -18,6 +19,10 @@ const App: React.FC = (porps) => {
   // const ws = connectWebSocket();
   // ws.connect();
   // ws.welcome();
+
+  // if(Config.useLocal) {
+
+  // }
 
   return (
     <>

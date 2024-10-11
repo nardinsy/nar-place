@@ -39,7 +39,7 @@ class WebSocketImpl implements WebSocketService {
 
   connect(token: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      // this._socket.connect();
+      this._socket.connect();
 
       this._socket.on("userId-inquiry", () => {
         this._socket.emit("announce", { token });

@@ -58,9 +58,9 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
     // };
 
     // fetchNewNotifications();
-
     const connectSocket = async () => {
       const isConnected = await socket.connect(authCtx.token);
+      console.log("connected here");
       if (!isConnected) {
         console.log("Offline");
         return;
