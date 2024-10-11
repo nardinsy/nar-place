@@ -448,11 +448,8 @@ export const getAnyUserPlacesByUserId: RequestHandler = async (
       if (!placePicture) {
         console.log("Can not find place picture");
       } else if (placePicture.image.kind === "File") {
-        console.log("file");
         placePictureUrl = getPlacePictureUrl(place.picture.toHexString());
       } else if (placePicture.image.kind === "Url") {
-        console.log("url");
-        console.log(placePictureUrl);
         placePictureUrl = placePicture.image.path;
       }
 
@@ -483,7 +480,6 @@ export const getPlacePictureByUrl: RequestHandler = async (req, res, next) => {
     placePicture = await PlacePicture.findOne({
       _id: placePictureId,
     });
-    // console.log(placePicture._id);
   } catch (error) {
     console.log(error);
     return next(
@@ -507,8 +503,6 @@ export const getPlacePictureByUrl: RequestHandler = async (req, res, next) => {
     res.set("Content-Type", placePicture.image.contentType);
     res.send(placePicture.image.data);
   }
-  // res.set("Content-Type", placePicture!.image.contentType);
-  // res.send(placePicture!.image.data);
 };
 
 const checkPlaceBelongsToUser = (place: IPlace, user: IUser) => {
