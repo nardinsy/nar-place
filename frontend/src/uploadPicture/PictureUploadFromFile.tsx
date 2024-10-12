@@ -35,6 +35,10 @@ const PictureUploadFromFile: FC<PictureUploadFromFileT> = ({
   return (
     <div className="p-4 flex flex-col">
       <label className="text-2xl pb-2">Select from file:</label>
+      <p className="text-red-heart">
+        Please upload your picture with url, local-storage can not manage memory
+        to large data
+      </p>
 
       <input
         data-testid="photo-uploader"
@@ -46,9 +50,10 @@ const PictureUploadFromFile: FC<PictureUploadFromFileT> = ({
         onChange={pickImageHandler}
       />
       <button
+        disabled
         data-testid="upload-button"
         onClick={triggerFileChangeHandler}
-        className={className}
+        className={`${className} cursor-not-allowed`}
       >
         Uplaod
         {/* {children} */}

@@ -342,6 +342,7 @@ class LocalBackendService implements BackendService {
       comments: [],
       picture,
     };
+    console.log(IPlace);
 
     user.places.unshift(IPlace);
     this.changedUserInfo(user);
