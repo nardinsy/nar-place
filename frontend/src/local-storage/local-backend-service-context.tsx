@@ -16,7 +16,6 @@ import {
   CommentWriter,
   CommentAction,
 } from "../helpers/dtos";
-import { BackendService } from "../api/backend-service";
 import uuid from "react-uuid";
 import {
   LocalStorageKeys,
@@ -26,6 +25,7 @@ import {
   IPlace,
 } from "../local-storage/local-storage-types";
 import { initialUsers } from "./DUMMY-DATA";
+import { BackendService } from "../api/backend-service";
 
 // REMEMBER TO SET INITIAL LOCAL STORAGE **********************
 // REMEMBER TO manage user picture type **********************
@@ -316,7 +316,10 @@ class LocalBackendService implements BackendService {
     return Promise.resolve({ places });
   }
 
-  addPlace(place: NewPlace, token: string): Promise<{ place: PlaceDto }> {
+  addPlacePictureFile(
+    place: NewPlace,
+    token: string
+  ): Promise<{ place: PlaceDto }> {
     const user = this.findUserByToken(token);
     const { title, description, address, picture } = place;
 
@@ -345,6 +348,69 @@ class LocalBackendService implements BackendService {
 
     return Promise.resolve({ place: placeDto });
   }
+
+  addPlacePictureUrl(
+    place: NewPlace,
+    token: string
+  ): Promise<{ place: PlaceDto }> {
+    const user = this.findUserByToken(token);
+    const { title, description, address, picture } = place;
+
+    const placeDto: PlaceDto = {
+      address,
+      title,
+      description,
+      placeId: uuid(),
+      creator: user.userId,
+      pictureId: "",
+      pictureUrl: picture,
+    };
+
+    const IPlace: IPlace = {
+      address,
+      title,
+      description,
+      placeId: uuid(),
+      creator: user.userId,
+      comments: [],
+      picture,
+    };
+
+    user.places.unshift(IPlace);
+    this.changedUserInfo(user);
+
+    return Promise.resolve({ place: placeDto });
+  }
+
+  // addPlace(place: NewPlace, token: string): Promise<{ place: PlaceDto }> {
+  //   const user = this.findUserByToken(token);
+  //   const { title, description, address, picture } = place;
+
+  //   const placeDto: PlaceDto = {
+  //     address,
+  //     title,
+  //     description,
+  //     placeId: uuid(),
+  //     creator: user.userId,
+  //     pictureId: "",
+  //     pictureUrl: picture,
+  //   };
+
+  //   const IPlace: IPlace = {
+  //     address,
+  //     title,
+  //     description,
+  //     placeId: uuid(),
+  //     creator: user.userId,
+  //     comments: [],
+  //     picture,
+  //   };
+
+  //   user.places.unshift(IPlace);
+  //   this.changedUserInfo(user);
+
+  //   return Promise.resolve({ place: placeDto });
+  // }
 
   editPlace(
     placeInfo: placeInfoCard & { id: string },
@@ -868,9 +934,9 @@ export const LocalBackendContextProvider: FC<HasChildren> = ({ children }) => {
   const service = new LocalBackendService();
   service.setLocalStorageKeys();
 
-  window.addEventListener("unload", () => {
-    localStorage.clear();
-  });
+  // window.addEventListener("unload", () => {
+  //   localStorage.clear();
+  // });
 
   return (
     <LocalBackendContex.Provider value={service}>

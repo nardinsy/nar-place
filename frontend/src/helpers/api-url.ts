@@ -1,25 +1,4 @@
-import { io, Socket } from "socket.io-client";
-
-// const BASE_URL = "http://localhost:5000/api/";
 const BASE_URL = "http://192.168.1.13:5000/api/";
-// const BASE_URL = "http://172.20.10.4:5000/api/";
-// const END_POINTS = {
-//   getAllUsers: "users",
-//   getuserPlaces: "places/placesByUserId/",
-//   addPlace: "places/addPlace",
-//   getPlaces: "places/userPlaces",
-//   deletePlace: `places/`,
-//   editPlace: "places/edit",
-//   signup: "users/signup",
-//   login: "users/login",
-//   logout: "users/logout",
-//   changeProfilePicture: "users/changeProfilePicture",
-//   changePassword: "users/changePassword",
-//   changeUsername: "users/changeUsername",
-//   autoLogin: "users/autoLogin",
-//   profilePicture: "users/profile-picture/",
-//   placePicture: "places/place-picture/",
-// };
 
 export enum ENDPOINTS {
   getAllUsers = "users",
@@ -33,7 +12,8 @@ export enum ENDPOINTS {
   changeUsername = "users/change/username",
 
   getLoggedUserPlaces = "places/userPlaces",
-  addPlace = "places/add-place",
+  addPlacePictureFile = "places/add-place-picture-file",
+  addPlacePictureUrl = "places/add-place-picture-url",
   editPlace = "places/edit-place",
   deletePlaceById = `places/delete-place/`,
   getAnyUserPlacesByUserId = "places/any-user-places-by-userId/",

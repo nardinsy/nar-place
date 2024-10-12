@@ -14,13 +14,10 @@ import {
   placeInfoCard,
 } from "../helpers/dtos";
 import useRequiredAuthContext from "../hooks/use-required-authContext";
-import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
 import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 const Authorized = () => {
-  // console.log("Authorized Component Render");
-
   const [places, setPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
   const authContext = useRequiredAuthContext();
@@ -52,22 +49,51 @@ const Authorized = () => {
   const addPlace: (place: PlaceInfoCardWithPictire) => Promise<void> = async (
     place
   ) => {
-    const newPLaceBlob = place.picture;
+    if (place.picture instanceof File) {
+      const newPLaceBlob = place.picture;
+      const reader = new FileReader();
 
-    const reader = new FileReader();
+      reader.onloadend = async () => {
+        const newImageDataURLFormat = reader.result as Base64<"jpeg">;
+        //reader.result: data:image/jpeg;base64
 
-    reader.onloadend = async () => {
-      const newImageDataURLFormat = reader.result as Base64<"jpeg">;
-      //reader.result: data:image/jpeg;base64
+        const newplace: NewPlace = {
+          title: place.title,
+          description: place.description,
+          address: place.address,
+          picture: newImageDataURLFormat,
+        };
 
+        const data = await backend.addPlacePictureFile(
+          newplace,
+          authContext.token
+        );
+
+        const placeData = new PlaceDto(
+          data.place.title,
+          data.place.description,
+          data.place.address,
+          data.place.pictureId,
+          data.place.placeId,
+          data.place.creator,
+          data.place.pictureUrl
+        );
+
+        setPlaces((pre) => (pre ? [...pre, placeData] : [placeData]));
+        reader.readAsDataURL(newPLaceBlob);
+      };
+    } else if (typeof place.picture === "string") {
       const newplace: NewPlace = {
         title: place.title,
         description: place.description,
         address: place.address,
-        picture: newImageDataURLFormat,
+        picture: place.picture,
       };
 
-      const data = await backend.addPlace(newplace, authContext.token);
+      const data = await backend.addPlacePictureUrl(
+        newplace,
+        authContext.token
+      );
 
       const placeData = new PlaceDto(
         data.place.title,
@@ -80,12 +106,10 @@ const Authorized = () => {
       );
 
       setPlaces((pre) => (pre ? [...pre, placeData] : [placeData]));
+    }
 
-      showSuccessToast("Add place successfully");
-      history.push("/myplace");
-    };
-
-    reader.readAsDataURL(newPLaceBlob);
+    showSuccessToast("Add place successfully");
+    history.push("/myplace");
   };
 
   const editPlace = async (placeInfo: placeInfoCard & { id: string }) => {

@@ -1,14 +1,15 @@
 import { useState, FC, useEffect } from "react";
-import ImageUpload from "../../shared/ImageUpload";
 import PlaceInfoCard from "../UI/PlaceInfoCard";
 import picturePlaceholder from "../../assets/Image-placeholder.png";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import { placeInfoCard, PlaceInfoCardWithPictire } from "../../helpers/dtos";
-import classes from "./NewPlacePage.module.css";
+import PictureUploadButton from "../../uploadPicture/PictureUploadButton";
 
 interface NewPlacePageProps {
   addPlace: (place: PlaceInfoCardWithPictire) => Promise<void>;
 }
+
+type UploadedPicture = File | string;
 
 const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
   const authContext = useRequiredAuthContext();
@@ -17,6 +18,8 @@ const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
 
   const [uploadedPicture, setUploadedPicture] = useState<string>();
   const [file, setFile] = useState<File | undefined>(undefined);
+
+  const [pic, setPic] = useState<UploadedPicture>();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -27,15 +30,26 @@ const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
     setUploadedPicture(URL.createObjectURL(file));
   };
 
+  const changeNewPictureFile = (file: File) => {
+    // setFile(file);
+    setPic(file);
+    setUploadedPicture(URL.createObjectURL(file));
+  };
+
+  const changeNewPictureUrl = (url: string) => {
+    setPic(url);
+    setUploadedPicture(url);
+  };
+
   const addNewPlace = (place: placeInfoCard) => {
-    if (!file)
+    if (!pic || !uploadedPicture)
       throw new Error("Can not add place without file, try to add file");
 
     const placeInfoCardWithPictire: PlaceInfoCardWithPictire = {
       title: place.title,
       description: place.description,
       address: place.address,
-      picture: file,
+      picture: pic,
     };
 
     addPlace(placeInfoCardWithPictire);
@@ -52,13 +66,17 @@ const NewPlacePage: FC<NewPlacePageProps> = ({ addPlace }) => {
           />
         </div>
         <div className="flex justify-center items-center my-3">
-          <ImageUpload
+          {/* <ImageUpload
             id={authContext.token}
             onChangeImage={changeNewPicture}
             className="bg-primary text-white text-xl p-2 rounded-4xl border border-primary transition-colors hover:bg-white hover:text-primary hover:transition-all"
           >
             Upload new picture
-          </ImageUpload>
+          </ImageUpload> */}
+          <PictureUploadButton
+            changeNewPictureFile={changeNewPictureFile}
+            changeNewPictureUrl={changeNewPictureUrl}
+          />
         </div>
       </div>
 
