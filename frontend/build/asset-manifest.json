@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/narplace/static/css/main.993917ae.css",
-    "main.js": "/narplace/static/js/main.8c3df16a.js",
+    "main.css": "/narplace/static/css/main.08c2e631.css",
+    "main.js": "/narplace/static/js/main.00e23006.js",
     "index.html": "/narplace/index.html",
-    "main.993917ae.css.map": "/narplace/static/css/main.993917ae.css.map",
-    "main.8c3df16a.js.map": "/narplace/static/js/main.8c3df16a.js.map"
+    "main.08c2e631.css.map": "/narplace/static/css/main.08c2e631.css.map",
+    "main.00e23006.js.map": "/narplace/static/js/main.00e23006.js.map"
   },
   "entrypoints": [
-    "static/css/main.993917ae.css",
-    "static/js/main.8c3df16a.js"
+    "static/css/main.08c2e631.css",
+    "static/js/main.00e23006.js"
   ]
 }
