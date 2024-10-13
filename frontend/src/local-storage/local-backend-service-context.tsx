@@ -81,7 +81,7 @@ class LocalBackendService implements BackendService {
     return user;
   };
 
-  findUserByUserId = (userId: string) => {
+  private findUserByUserId = (userId: string) => {
     const users = this.getValueFromLocalStorage(LocalStorageKeys.Users);
 
     const user = users.find((u) => u.userId === userId);
@@ -168,6 +168,19 @@ class LocalBackendService implements BackendService {
     this.changedUserInfo(toUser);
 
     return commentNotification;
+  };
+
+  getAnyUserByUserId = (id: string) => {
+    const user = this.findUserByUserId(id);
+
+    const userDto: UserDto = {
+      userId: user.userId,
+      username: user.username,
+      pictureUrl: user.picture,
+      placeCount: user.places.length,
+    };
+
+    return userDto;
   };
 
   // auth

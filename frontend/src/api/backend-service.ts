@@ -16,6 +16,8 @@ import {
 export interface BackendService {
   getAllUsers(): Promise<UserDto[]>;
 
+  getAnyUserByUserId(id: string): UserDto;
+
   signup(userInfo: UserSignupInformation): Promise<LoginResult>;
 
   login(userInfo: UserLoginInformation): Promise<LoginResult>;

@@ -33,6 +33,16 @@ class BackedServiceImpl implements BackendService {
     return data.usersInfo;
   }
 
+  getAnyUserByUserId(id: string): UserDto {
+    const userDto: UserDto = {
+      pictureUrl: "",
+      userId: "",
+      username: "",
+      placeCount: 0,
+    };
+    return userDto;
+  }
+
   async signup(userInfo: UserSignupInformation): Promise<LoginResult> {
     const requestOptions: MyRequestOptions = {
       method: "POST",

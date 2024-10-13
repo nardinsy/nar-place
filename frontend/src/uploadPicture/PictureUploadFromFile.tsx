@@ -36,8 +36,8 @@ const PictureUploadFromFile: FC<PictureUploadFromFileT> = ({
     <div className="p-4 flex flex-col">
       <label className="text-2xl pb-2">Select from file:</label>
       <p className="text-red-heart">
-        Please upload your picture with url, local-storage can not manage memory
-        to large data
+        Please upload your picture via a URL, as local storage cannot handle
+        large data efficiently.
       </p>
 
       <input
