@@ -6,9 +6,9 @@ NarPlace is a fullstack application that allows users to share pictures of diffe
 
 ## Demo
 
-https://nardinsy.github.io/narplace-demo/
+https://nardinsy.github.io/narplace/
 
-![Screenshot of the application]()
+![Screenshot of the application](./src/assets/Screenshot.png)
 
 ## Note
 

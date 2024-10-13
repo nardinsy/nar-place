@@ -76,17 +76,17 @@ class WebSocketImpl implements WebSocketService {
     // socket.connect();
 
     this._socket.on("place-received-comment", (notification) => {
-      console.log(notification);
+      // console.log(notification);
       onRecieveNewNotificationCallback(notification);
     });
 
     this._socket.on("comment-replied", (notification) => {
-      console.log(notification);
+      // console.log(notification);
       onRecieveNewNotificationCallback(notification);
     });
 
     this._socket.on("comment-liked", (notification) => {
-      console.log(notification);
+      // console.log(notification);
       onRecieveNewNotificationCallback(notification);
     });
   }

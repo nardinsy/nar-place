@@ -53,8 +53,7 @@ const Authorized = () => {
     place
   ) => {
     if (place.picture instanceof File) {
-      const newPLaceBlob = place.picture;
-
+      const newPLaceBlob = place.picture as File;
       const reader = new FileReader();
 
       reader.onloadend = async () => {
@@ -72,7 +71,6 @@ const Authorized = () => {
           newplace,
           authContext.token
         );
-        console.log(data);
         const placeData = new PlaceDto(
           data.place.title,
           data.place.description,
@@ -82,10 +80,13 @@ const Authorized = () => {
           data.place.creator,
           data.place.pictureUrl
         );
-
         setPlaces((pre) => (pre ? [...pre, placeData] : [placeData]));
-        reader.readAsDataURL(newPLaceBlob);
       };
+
+      reader.readAsDataURL(newPLaceBlob);
+
+      showSuccessToast("Add place successfully");
+      history.push("/myplace");
     } else if (typeof place.picture === "string") {
       const newplace: NewPlace = {
         title: place.title,
@@ -99,8 +100,6 @@ const Authorized = () => {
         authContext.token
       );
 
-      console.log(data);
-
       const placeData = new PlaceDto(
         data.place.title,
         data.place.description,
@@ -112,10 +111,9 @@ const Authorized = () => {
       );
 
       setPlaces((pre) => (pre ? [...pre, placeData] : [placeData]));
+      showSuccessToast("Add place successfully");
+      history.push("/myplace");
     }
-
-    showSuccessToast("Add place successfully");
-    history.push("/myplace");
   };
 
   const editPlace = async (placeInfo: placeInfoCard & { id: string }) => {
