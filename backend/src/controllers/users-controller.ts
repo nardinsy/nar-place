@@ -11,24 +11,50 @@ import contentTypeBufferSplit from "../helpers/data-url";
 import ProfilePicture, { IProfilePicture } from "../models/profile-picture";
 import { LoginResult } from "../shared/results";
 
-export const getProfilePictureUrl = (id: string): string => {
+const getProfilePicturePath = (id: string): string => {
   return `~users/profile-picture/${id}`;
+};
+
+export const getProfilePictureUrl = async (id: string): Promise<string> => {
+  const profilePictureId: string = id;
+
+  let profilePictureUrl = "";
+  let profilePicture: IProfilePicture | null;
+  try {
+    profilePicture = await ProfilePicture.findOne({
+      _id: profilePictureId,
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("Can not find profile picture with givern id");
+  }
+
+  if (!profilePicture) {
+    console.log("Can not find place picture");
+  } else if (profilePicture.image.kind === "File") {
+    profilePictureUrl = getProfilePicturePath(id);
+  } else if (profilePicture.image.kind === "Url") {
+    profilePictureUrl = profilePicture.image.path;
+  }
+
+  return profilePictureUrl;
 };
 
 export const getAllUsers: RequestHandler = async (req, res, next) => {
   const result = await User.find().exec();
 
-  const usersInfo = result.map((user) => {
-    return new UserDto(
-      user.id,
-      user.username,
-      user.picture
-        ? getProfilePictureUrl(user.picture.toHexString())
-        : undefined,
-      user.places.length
-      // pictureUrl: (if has picture) ? url to the picture : undefined
-    );
-  });
+  const usersInfo = await Promise.all(
+    result.map(async (user) => {
+      return new UserDto(
+        user.id,
+        user.username,
+        user.picture
+          ? await getProfilePictureUrl(user.picture.toHexString())
+          : undefined,
+        user.places.length
+      );
+    })
+  );
 
   res.json({ usersInfo });
 };
@@ -138,7 +164,7 @@ export const login: RequestHandler = async (req, res, next) => {
     existingUser.id,
     existingUser.username,
     existingUser.picture
-      ? getProfilePictureUrl(existingUser.picture.toHexString())
+      ? await getProfilePictureUrl(existingUser.picture.toHexString())
       : undefined,
     existingUser.places.length
   );
@@ -206,6 +232,7 @@ export const changeProfilePicture: AuthRequestHandler = async (
 
   const userPicture: IProfilePicture = new ProfilePicture({
     image: {
+      kind: "File",
       data: buffer,
       contentType,
     },
@@ -229,8 +256,59 @@ export const changeProfilePicture: AuthRequestHandler = async (
   const userInfo = new UserDto(
     user.id,
     user.username,
-    getProfilePictureUrl(userPicture.id)
+    getProfilePicturePath(userPicture.id)
   );
+
+  res.status(201).json({
+    userInfo,
+  });
+};
+
+export const changeProfilePictureWithUrl: AuthRequestHandler = async (
+  user,
+  req,
+  res,
+  next
+) => {
+  const image: string = req.body.image;
+  const deleteOk = await deleteUserPictureFromDB(user.id);
+
+  if (!image && deleteOk) {
+    user.picture = null;
+    try {
+      user.save();
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(201).json({
+      message: "Delete user image successfully.",
+    });
+    return;
+  }
+
+  const userPicture: IProfilePicture = new ProfilePicture({
+    image: {
+      kind: "Url",
+      path: image,
+    },
+    userId: user.id,
+  });
+
+  try {
+    await userPicture.save();
+  } catch (error) {
+    console.log(error);
+  }
+
+  user.picture = userPicture._id;
+
+  try {
+    user.save();
+  } catch (error) {
+    console.log(error);
+  }
+
+  const userInfo = new UserDto(user.id, user.username, image);
 
   res.status(201).json({
     userInfo,
@@ -251,7 +329,7 @@ export const getUserProfilePicture: RequestHandler = async (req, res, next) => {
 
   if (!userPicture) {
     res.status(404).end();
-  } else {
+  } else if (userPicture.image.kind === "File") {
     res.set("Content-Type", userPicture.image.contentType);
     res.send(userPicture.image.data);
   }

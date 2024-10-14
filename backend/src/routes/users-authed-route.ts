@@ -9,6 +9,7 @@ import {
   getUserProfilePicture,
   changePassword,
   changeUsername,
+  changeProfilePictureWithUrl,
 } from "../controllers/users-controller";
 
 import {
@@ -36,6 +37,11 @@ usersRouter.post("/login", login);
 usersRouter.getAuth("/logout", logout);
 
 usersRouter.postAuth("/change/profile-picture", changeProfilePicture);
+
+usersRouter.postAuth(
+  "/change/profile-picture-url",
+  changeProfilePictureWithUrl
+);
 
 usersRouter.postAuth("/change/password", changePassword);
 

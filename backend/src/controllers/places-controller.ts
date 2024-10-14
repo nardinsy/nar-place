@@ -560,7 +560,9 @@ export const getPlaceById: RequestHandler = async (req, res, next) => {
   const userDto = new UserDto(
     user.id,
     user.username,
-    user.picture ? getProfilePictureUrl(user.picture.toHexString()) : undefined,
+    user.picture
+      ? await getProfilePictureUrl(user.picture.toHexString())
+      : undefined,
     user.places.length
   );
 

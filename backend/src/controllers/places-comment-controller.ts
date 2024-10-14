@@ -325,7 +325,7 @@ const getCommentWriter = async (comment: IPostComment) => {
       userId: userThatWroteComment.id,
       username: userThatWroteComment.username,
       pictureUrl: userThatWroteComment.picture
-        ? getProfilePictureUrl(userThatWroteComment.picture.toHexString())
+        ? await getProfilePictureUrl(userThatWroteComment.picture.toHexString())
         : undefined,
       placeCount: userThatWroteComment.places.length,
     };
@@ -665,7 +665,7 @@ const addCommetnNotificationToUser = async (
     userId: from.id,
     username: from.username,
     pictureUrl: from.picture
-      ? getProfilePictureUrl(from.picture.toHexString())
+      ? await getProfilePictureUrl(from.picture.toHexString())
       : undefined,
     placeCount: from.places.length,
   };
