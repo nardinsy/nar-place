@@ -18,14 +18,14 @@ const ProfileEditForm: FC<ProfileSettingsPageT> = ({
     //redirect to login form
   }
 
-  const [profilePicture, setProfilePicture] = useState<File | "noChange">(
-    "noChange"
-  );
+  const [profilePicture, setProfilePicture] = useState<
+    File | String | "noChange"
+  >("noChange");
   const [username, setUsername] = useState(authContext.username);
   const [isDirty, setIsDirty] = useState(false);
 
-  const onChangeImage = (fileFormatFile: File) => {
-    setProfilePicture(fileFormatFile);
+  const onChangeImage = (image: File | String) => {
+    setProfilePicture(image);
     setIsDirty(true);
   };
 

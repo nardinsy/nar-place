@@ -2,7 +2,9 @@ import ProfileEditForm from "../components/ProfileEditForm";
 import { FC } from "react";
 
 export interface ProfileSettingsPageT {
-  changeProfilePicture: (userNewImage: File | undefined) => Promise<void>;
+  changeProfilePicture: (
+    userNewImage: File | String | undefined
+  ) => Promise<void>;
   changePassword: (newPassword: string) => Promise<void>;
   changeUsername: (newUsername: string) => Promise<void>;
 }

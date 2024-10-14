@@ -7,7 +7,7 @@ export interface ProfileEditFormUserPictureT {
   userPictureUrl: string | undefined;
   username: string;
   token: string;
-  onChangeImage: (fileFormatFile: File) => void;
+  onChangeImage: (image: File | String) => void;
   changeProfilePicture: (userNewImage: File | undefined) => Promise<void>;
 }
 
@@ -45,6 +45,7 @@ const ProfileEditFormUserPicture: FC<ProfileEditFormUserPictureT> = ({
   };
 
   const changeNewPictureUrl = (path: string) => {
+    onChangeImage(path);
     setAvatarURL(path);
   };
 
