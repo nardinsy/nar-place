@@ -29,6 +29,13 @@ export interface BackendService {
     userInfo: UserDto;
   }>;
 
+  changeProfilePictureWithUrl(
+    pictureFile: string,
+    token: string
+  ): Promise<{
+    userInfo: UserDto;
+  }>;
+
   changePassword(newPassword: string, token: string): Promise<void>;
 
   changeUsername(newUsername: string, token: string): Promise<void>;

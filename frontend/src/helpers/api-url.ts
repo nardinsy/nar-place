@@ -29,6 +29,7 @@ export enum ENDPOINTS {
   logout = "users/logout",
 
   changeProfilePicture = "users/change/profile-picture",
+  changeProfilePictureWithUrl = "users/change/profile-picture-url",
   changePassword = "users/change/password",
   changeUsername = "users/change/username",
 

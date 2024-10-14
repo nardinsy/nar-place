@@ -143,7 +143,9 @@ const Authorized = () => {
     showSuccessToast("Delete place successfully");
   };
 
-  const changeProfilePicture = async (userNewImage: File | undefined) => {
+  const changeProfilePicture = async (
+    userNewImage: String | File | undefined
+  ) => {
     // imuserNewImage: File {name: '2021-10-22 7.18.jpg', lastModified: 1704866449845, lastModifiedDate: Wed Jan 10 2024 09:30:49 GMT+0330 (Iran Standard Time), webkitRelativePath: '', size: 1156073, …}
 
     if (!userNewImage) {
@@ -152,30 +154,43 @@ const Authorized = () => {
       authContext.setPictureUrl(undefined);
       return;
     }
-
     let data: { userInfo: UserDto };
-    const reader = new FileReader();
 
-    reader.onloadend = async () => {
-      const newImageDataURLFormat = reader.result; //reader.result: data:image/jpeg;base64
-      if (!newImageDataURLFormat) throw new Error("Can not read file");
+    if (userNewImage instanceof File) {
+      const reader = new FileReader();
 
-      data = await sendHttpRequestForChangeProfilePicture(
-        newImageDataURLFormat
+      reader.onloadend = async () => {
+        const newImageDataURLFormat = reader.result; //reader.result: data:image/jpeg;base64
+        if (!newImageDataURLFormat) throw new Error("Can not read file");
+
+        data = await sendHttpRequestForChangeProfilePicture(
+          newImageDataURLFormat
+        );
+
+        if (!data) throw new Error("error");
+        const url = data.userInfo.pictureUrl as string;
+        const absPictureUrl = createAbsoluteApiAddress(url);
+
+        localStorage.removeItem("userPictureUrl");
+        localStorage.setItem("userPictureUrl", absPictureUrl);
+      };
+
+      reader.readAsDataURL(userNewImage);
+      authContext.setPictureUrl(URL.createObjectURL(userNewImage));
+
+      showSuccessToast("Change profile picture successfully");
+    } else if (typeof userNewImage === "string") {
+      await backend.changeProfilePictureWithUrl(
+        userNewImage,
+        authContext.token
       );
 
-      if (!data) throw new Error("error");
-      const url = data.userInfo.pictureUrl as string;
-      const absPictureUrl = createAbsoluteApiAddress(url);
-
       localStorage.removeItem("userPictureUrl");
-      localStorage.setItem("userPictureUrl", absPictureUrl);
-    };
+      localStorage.setItem("userPictureUrl", userNewImage);
+      authContext.setPictureUrl(userNewImage);
 
-    reader.readAsDataURL(userNewImage);
-    authContext.setPictureUrl(URL.createObjectURL(userNewImage));
-
-    showSuccessToast("Change profile picture successfully");
+      showSuccessToast("Change profile picture successfully");
+    }
   };
 
   const sendHttpRequestForChangeProfilePicture = async (

@@ -80,6 +80,24 @@ class BackedServiceImpl implements BackendService {
     );
   }
 
+  async changeProfilePictureWithUrl(
+    pictureFile: string,
+    token: string
+  ): Promise<{ userInfo: UserDto }> {
+    const userNewImage = { image: pictureFile };
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify(userNewImage),
+    };
+
+    return await sendHttpRequest(
+      ENDPOINTS.changeProfilePictureWithUrl,
+      requestOptions
+    );
+  }
+
   async changePassword(newPassword: string, token: string): Promise<void> {
     const requestOptions = {
       method: "POST",
