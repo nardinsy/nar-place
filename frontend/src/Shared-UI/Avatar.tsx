@@ -27,7 +27,7 @@ const Avatar = ({
     <FontAwesomeIcon
       data-testid="no-image"
       icon={faCircleUser}
-      className={`block rounded-full w-full h-full object-cover ${cssClassName}`}
+      className={`block rounded-full w-full h-full object-cover  ${cssClassName}`}
       style={{ width, height: width }}
     />
   );
