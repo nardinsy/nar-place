@@ -16,13 +16,13 @@ const UserItem: FC<UserItemProps> = ({ userDto }) => {
       key={userId}
       data-testid={userId}
     >
-      <Card className="p-0">
+      <Card className="p-0 h-full hover:bg-gray-light">
         <Link
           to={{
             pathname: `/places/${userId}`,
             state: { userDto },
           }}
-          className="flex items-center w-full h-full px-4 py-2 hover:bg-gray-light"
+          className="flex items-center px-4 py-2"
         >
           <div className="w-12 h-12 mr-4">
             <Avatar pictureUrl={pictureUrl} alt={username} width={"3rem"} />
