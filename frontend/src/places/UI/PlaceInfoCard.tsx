@@ -95,7 +95,6 @@ const PlaceInfoCard: FC<PlaceInfoCardProps> = ({
       futureState.address = false;
     }
 
-    console.log(futureState);
     setFormInputsIsvalid(futureState);
 
     return false;

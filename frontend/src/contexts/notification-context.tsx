@@ -40,7 +40,7 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
   );
 
   const fetchAndSetCurrentNotifications = useCallback(async () => {
-    console.log("This should call only one time");
+    // console.log("This should call only one time");
     const { currentNotifications } = await backend.getCurrentNotifications(
       authCtx.token
     );
@@ -62,7 +62,7 @@ export const NotificationContextProvider: FC<WithChildren<{}>> = ({
     const connectSocket = async () => {
       const isConnected = await socket.connect(authCtx.token);
       if (!isConnected) {
-        console.log("Offline");
+        // console.log("Offline");
         return;
       }
 
