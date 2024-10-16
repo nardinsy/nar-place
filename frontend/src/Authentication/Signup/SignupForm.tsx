@@ -1,7 +1,5 @@
-import { useRef, MouseEvent, useState, ChangeEvent } from "react";
+import { MouseEvent, useState, ChangeEvent } from "react";
 import Button from "../../shared-UI/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
 import classes from "./SignupForm.module.css";
 import { UserSignupInformation } from "../../../../backend/src/shared/dtos";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
@@ -144,10 +142,9 @@ const SignupForm = () => {
           value={password}
           onChange={passwordChangeHandler}
         />
-        <FontAwesomeIcon
-          icon={faEye}
+        <i
           data-testid="icon"
-          className={classes["eye-icon"]}
+          className={`${classes["eye-icon"]} bx bx-show`}
           onClick={(e) => setShowPassword((prev) => !prev)}
         />
       </div>

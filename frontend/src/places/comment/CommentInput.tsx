@@ -1,6 +1,4 @@
 import { ChangeEvent, KeyboardEvent, FC, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { NewComment } from "../../helpers/dtos";
 import useRequiredCommentContext from "../../hooks/use-required-commentContext";
 
@@ -78,21 +76,15 @@ const CommentInput: FC<CommentInputT> = ({ placeId }) => {
       </div>
 
       <div>
-        {/* <FontAwesomeIcon
-          icon={faFaceSmile}
-          className={classes["emoji-button"]}
-        /> */}
-
         <div
           onClick={submitCommentHandler}
-          className="flex justify-center items-center pr-4"
+          className="flex justify-center items-center p-4"
         >
-          <FontAwesomeIcon
-            icon={faPaperPlane}
+          <i
             className={
               submitButtonIsActive
-                ? "text-primary w-6 h-6 ml-1 cursor-pointer hover:text-primary-hover"
-                : "text-white w-6 h-6 ml-1"
+                ? "bx bx-navigation text-primary text-2xl cursor-pointer hover:text-primary-hover"
+                : ""
             }
           />
         </div>
@@ -102,14 +94,3 @@ const CommentInput: FC<CommentInputT> = ({ placeId }) => {
 };
 
 export default CommentInput;
-
-{
-  /* <input
-        type="text"
-        placeholder="Add a comment"
-        className={classes["comment-input"]}
-        value={commentInput}
-        onKeyDown={keyDownHandler}
-        onChange={commentInputChangeHandler}
-      /> */
-}

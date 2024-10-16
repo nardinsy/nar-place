@@ -21,7 +21,7 @@ const Dropdown = ({
 
   const finalClassName = propClassName
     ? propClassName
-    : "absolute top-14 right-1 bg-white shadow-default z-50 rounded-xl w-60";
+    : "absolute top-14 right-1 bg-white text-black shadow-default z-50 rounded-xl w-60";
 
   return (
     <div className={finalClassName} data-testid="drop">

@@ -1,5 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "../../shared-UI/Avatar";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 
@@ -15,10 +13,9 @@ const MenuButtonIcon = () => {
           width={"3rem"}
         />
       ) : (
-        <FontAwesomeIcon
+        <i
           data-testid="icon"
-          icon={faCircleUser}
-          className="text-5xl text-gray-light"
+          className="text-5xl text-gray-light bx bx-user-circle"
         />
       )}
     </>

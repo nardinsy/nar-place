@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import UsersList from "../components/UsersList";
 import { UserDto } from "../../helpers/dtos";
 import useRequiredBackend from "../../hooks/use-required-backend";

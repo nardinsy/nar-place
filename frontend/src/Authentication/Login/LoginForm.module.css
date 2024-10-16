@@ -35,9 +35,10 @@
 
 .eye-icon {
   position: absolute;
-  top: 11.6rem;
+  top: 13.6rem;
   right: 1.5rem;
   color: rgb(143, 135, 135);
+  cursor: pointer;
 }
 
 .eye-icon:hover {
