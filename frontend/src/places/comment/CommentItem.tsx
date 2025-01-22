@@ -4,8 +4,6 @@ import { CommentDto, UserDto } from "../../helpers/dtos";
 import { createAbsoluteApiAddress } from "../../helpers/api-url";
 import { Link } from "react-router-dom";
 import Dropdown, { DropDownItem } from "../../shared/DropdownCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import CommentLike from "./like/CommentLike";
 import useRequiredAuthContext from "../../hooks/use-required-authContext";
 import Reply from "./reply/Reply";
@@ -128,7 +126,7 @@ const CommentItem: FC<CommentItemT> = ({ commentDto, children, items }) => {
               className="relative px-2 border-none text-gray-fav hover:text-black-light"
               onClick={moreButtonClickHandler}
             >
-              <FontAwesomeIcon icon={faEllipsis} />
+              <i className="bx bx-dots-horizontal" />
               {showDropDown && (
                 <Dropdown
                   items={dropdownItems}

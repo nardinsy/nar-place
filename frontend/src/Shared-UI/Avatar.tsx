@@ -1,6 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
-
 const Avatar = ({
   cssClassName,
   pictureUrl,
@@ -24,10 +21,9 @@ const Avatar = ({
       loading="lazy"
     />
   ) : (
-    <FontAwesomeIcon
+    <i
       data-testid="no-image"
-      icon={faCircleUser}
-      className={`block rounded-full w-full h-full object-cover ${cssClassName}`}
+      className={`bx bx-user-circle block rounded-full w-full h-full object-cover ${cssClassName}`}
       style={{ width, height: width }}
     />
   );

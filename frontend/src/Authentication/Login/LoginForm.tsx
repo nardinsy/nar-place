@@ -1,6 +1,4 @@
 import { ChangeEvent, MouseEvent, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared-UI/Button";
 import classes from "./LoginForm.module.css";
 import { UserLoginInformation } from "../../../../backend/src/shared/dtos";
@@ -109,10 +107,9 @@ const LoginForm: React.FC = () => {
           onChange={passwordChangeHandler}
           className={formInputsIsvalid.password ? `` : `${classes.invalid}`}
         />
-        <FontAwesomeIcon
-          icon={faEye}
+        <i
           data-testid="icon"
-          className={classes["eye-icon"]}
+          className={`${classes["eye-icon"]} bx bx-show`}
           onClick={() => setShowPassword((prev) => !prev)}
         />
       </div>

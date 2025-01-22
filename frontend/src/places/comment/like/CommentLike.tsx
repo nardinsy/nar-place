@@ -1,6 +1,4 @@
 import { MouseEvent, FC, useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import useRequiredCommentContext from "../../../hooks/use-required-commentContext";
 import { CommentDto, CommentLikeDto } from "../../../helpers/dtos";
 
@@ -29,7 +27,7 @@ const CommentLike: FC<CommentLikeT> = ({ commentDto, loggedUserUserId }) => {
     setInitialHeartIconColor();
   }, []);
 
-  const likeCommentClickHandler = async (event: MouseEvent<SVGSVGElement>) => {
+  const likeCommentClickHandler = async (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
     if (checkIfUserLikedComment()) {
@@ -75,10 +73,9 @@ const CommentLike: FC<CommentLikeT> = ({ commentDto, loggedUserUserId }) => {
 
   return (
     <button className="border-none bg-white">
-      <FontAwesomeIcon
+      <i
+        className={`bx bxs-heart cursor-pointer text-sm text-gray-fav hover:text-red-heart ${heartIconClassName}`}
         onClick={likeCommentClickHandler}
-        icon={faHeart}
-        className={`cursor-pointer text-sm text-gray-fav hover:text-red-heart ${heartIconClassName}`}
       />
       <span className="text-xxs ml-1 text-gray-dark">
         {commentLikeNumber ? commentLikeNumber : ""}

@@ -2,13 +2,13 @@ import { useState, useRef, FC, ReactNode, MouseEvent } from "react";
 import Avatar from "../shared-UI/Avatar";
 import Dropdown from "./DropdownCard";
 import Modal from "../shared-UI/Modal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsis,
-  faXmark,
-  faChevronRight,
-  faChevronLeft,
-} from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import {
+//   faEllipsis,
+//   faXmark,
+//   faChevronRight,
+//   faChevronLeft,
+// } from "@fortawesome/free-solid-svg-icons";
 import classes from "./PictureModal.module.css";
 
 type PictureModalT = {
@@ -62,31 +62,23 @@ const PictureModal: FC<PictureModalT> = ({
   return (
     <Modal onBackdropClick={xMarkHandler} cssClassName={classes.modal}>
       <div onClick={closePictureModalHandler}>
-        <FontAwesomeIcon
-          icon={faXmark}
-          className={`${classes["picture-close"]} ${classes.icon}`}
-        />
+        <i className="bx bx-x" />
       </div>
 
       <div onClick={ellipsisClickHandler} ref={ellipsisRef}>
-        <FontAwesomeIcon
-          icon={faEllipsis}
-          className={`${classes["picture-ellipsis"]} ${classes.icon}`}
-        />
+        <i className="bx bx-dots-horizontal" />
         {showEllipsisDropdown && <Dropdown items={ellipsisDropdownItems} />}
       </div>
 
       <div style={{ display: showChevrons ? "block" : "none" }}>
-        <FontAwesomeIcon
-          icon={faChevronRight}
-          className={`${classes["picture-next"]} ${classes.icon}`}
+        <i
+          className={`${classes["picture-next"]} ${classes.icon} bx bx-chevron-right`}
         />
       </div>
 
       <div style={{ display: showChevrons ? "block" : "none" }}>
-        <FontAwesomeIcon
-          icon={faChevronLeft}
-          className={`${classes["picture-back"]} ${classes.icon}`}
+        <i
+          className={`${classes["picture-back"]} ${classes.icon} bx bx-chevron-left`}
         />
       </div>
 

@@ -3,8 +3,8 @@ import PlaceCard from "../UI/PlaceCard";
 import MessageModal from "../../shared-UI/MessageModal";
 import EditPlaceModal from "./EditPlaceModal";
 import Button from "../../shared-UI/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { PlaceDto, UserDto, placeInfoCard } from "../../helpers/dtos";
 
 interface EditablePlaceItemProps {
@@ -61,7 +61,7 @@ const EditablePlaceItem: FC<EditablePlaceItemProps> = ({
           className="absolute top-2 right-2 rounded-full text-black bg-edit-button-bg text-sm p-2 cursor-pointer hover:text-primary"
           onClick={showEditModalHandler}
         >
-          <FontAwesomeIcon icon={faPen} />
+          <i className={`bx bx-pencil`} />
         </div>
       </PlaceCard>
 
