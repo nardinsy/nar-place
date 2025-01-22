@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/nar-place/static/css/main.a7335e2e.css",
+    "main.js": "/nar-place/static/js/main.8c790dde.js",
+    "index.html": "/nar-place/index.html",
+    "main.a7335e2e.css.map": "/nar-place/static/css/main.a7335e2e.css.map",
+    "main.8c790dde.js.map": "/nar-place/static/js/main.8c790dde.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a7335e2e.css",
+    "static/js/main.8c790dde.js"
+  ]
+}
