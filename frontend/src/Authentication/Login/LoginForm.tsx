@@ -109,7 +109,7 @@ const LoginForm: React.FC = () => {
         />
         <i
           data-testid="icon"
-          className={`${classes["eye-icon"]} bx bx-show`}
+          className={`${classes["eye-icon"]} bx bx-show top-[13.6rem]`}
           onClick={() => setShowPassword((prev) => !prev)}
         />
       </div>

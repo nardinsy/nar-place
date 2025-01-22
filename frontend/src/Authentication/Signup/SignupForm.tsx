@@ -144,7 +144,7 @@ const SignupForm = () => {
         />
         <i
           data-testid="icon"
-          className={`${classes["eye-icon"]} bx bx-show`}
+          className={`${classes["eye-icon"]} bx bx-show top-[19rem]`}
           onClick={(e) => setShowPassword((prev) => !prev)}
         />
       </div>
