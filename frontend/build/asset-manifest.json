@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/narplace/static/css/main.a7335e2e.css",
+    "main.js": "/narplace/static/js/main.8c790dde.js",
+    "index.html": "/narplace/index.html",
+    "main.a7335e2e.css.map": "/narplace/static/css/main.a7335e2e.css.map",
+    "main.8c790dde.js.map": "/narplace/static/js/main.8c790dde.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a7335e2e.css",
+    "static/js/main.8c790dde.js"
+  ]
+}
