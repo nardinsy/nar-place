@@ -1,5 +1,4 @@
 import { Types } from "mongoose";
-import { IUserNotification } from "../models/notification";
 
 export class UserDto {
   constructor(

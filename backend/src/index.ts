@@ -1,3 +1,4 @@
+// const mongoDB = "mongodb://127.0.0.1:27017/mern";
 const mongoDB = "mongodb://127.0.0.1:27017/mern";
 import mongoose from "mongoose";
 import expressAuth from "./lib/express-auth";
