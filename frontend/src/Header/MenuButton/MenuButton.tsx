@@ -19,6 +19,12 @@ const MenuButton = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const closeDropdown = useCallback((event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setDropdown({ show: false, component: undefined });
+  }, []);
+
   useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
       if (!ref.current) return;
@@ -34,13 +40,7 @@ const MenuButton = () => {
     return () => {
       window.removeEventListener("mousedown", checkIfClickedOutside);
     };
-  }, [isMenuOpen]);
-
-  const closeDropdown = useCallback((event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setDropdown({ show: false, component: undefined });
-  }, []);
+  }, [isMenuOpen, closeDropdown]);
 
   const showDropDownHandler = useCallback(
     (event: any) => {
@@ -57,7 +57,7 @@ const MenuButton = () => {
       closeDropdown(event);
       setIsMenuOpen(false);
     },
-    [dropdown.show, authContext.isLoggedin]
+    [dropdown.show, authContext.isLoggedin, closeDropdown]
   );
 
   return (

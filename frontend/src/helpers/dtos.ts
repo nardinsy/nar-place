@@ -1,5 +1,3 @@
-import { Types } from "mongoose";
-
 export class UserDto {
   constructor(
     public userId: string,

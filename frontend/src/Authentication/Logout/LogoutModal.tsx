@@ -29,10 +29,9 @@ const LogoutModal = () => {
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
-    // window.addEventListener("click", () => {});
 
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
+  });
 
   const logoutClickHandler = async (event: MouseEvent) => {
     event.preventDefault();

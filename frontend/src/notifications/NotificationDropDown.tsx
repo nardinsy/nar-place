@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 interface NotificationDropdownT {}
 
-const NotificationDropdown: FC<NotificationDropdownT> = ({}) => {
+const NotificationDropdown: FC<NotificationDropdownT> = () => {
   const notifCtx = useRequiredNotificationContext();
   const authCtx = useRequiredAuthContext();
 

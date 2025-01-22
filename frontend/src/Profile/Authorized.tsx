@@ -16,24 +16,19 @@ import {
 import useRequiredAuthContext from "../hooks/use-required-authContext";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
-// import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 const Authorized = () => {
-  // console.log("Authorized Component Render");
-
   const [places, setPlaces] = useState<PlaceDto[]>([]);
   const [loading, setLoading] = useState(true);
   const authContext = useRequiredAuthContext();
   const showSuccessToast = useRequiredToastContext().showSuccess;
-  const showErrorToast = useRequiredToastContext().showError;
+  // const showErrorToast = useRequiredToastContext().showError;
 
   if (!authContext.isLoggedin) {
     throw new Error("User most be logged in, Please Login again");
   }
 
   const backend = useRequiredBackend();
-  // const backend = useRequiredLocalBackendContext();
-
   const history = useHistory();
 
   const getLoggedUserPlaces = async () => {
@@ -117,7 +112,7 @@ const Authorized = () => {
   };
 
   const editPlace = async (placeInfo: placeInfoCard & { id: string }) => {
-    const data = await backend.editPlace(placeInfo, authContext.token);
+    await backend.editPlace(placeInfo, authContext.token);
 
     const editedPlace = places.find((place) => place.placeId === placeInfo.id);
 
@@ -133,8 +128,6 @@ const Authorized = () => {
 
   const deletePlaceById = async (placeId: string) => {
     await backend.deletePlaceById(placeId, authContext.token);
-
-    console.log("delete place front");
 
     setPlaces((pre) => {
       return places.filter((place) => place.placeId !== placeId);

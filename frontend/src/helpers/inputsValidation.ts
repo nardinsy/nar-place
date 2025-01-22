@@ -1,4 +1,4 @@
-const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+// const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 const isValidUsername = /^[a-zA-Z0-9]+$/;
 const isValidPassword = /.*/;
 // const isValidPassword =

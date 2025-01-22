@@ -1,6 +1,6 @@
 import { createContext, useState, FC } from "react";
 import { createRelativePath } from "../helpers/api-url";
-import { HasChildren, WithChildren } from "../helpers/props";
+import { WithChildren } from "../helpers/props";
 import useRequiredBackend from "../hooks/use-required-backend";
 import useRequiredToastContext from "../hooks/use-required-toastContext";
 import {
@@ -9,7 +9,6 @@ import {
   CommentReplyDto,
   NewComment,
 } from "../helpers/dtos";
-// import useRequiredLocalBackendContext from "../local-storage/use-required-local-backend-service-contex";
 
 export interface CommentT {
   comments: CommentDto[];
@@ -42,7 +41,6 @@ export const CommentContextProvider: FC<
   WithChildren<{ commentActionTo: string }>
 > = ({ children, commentActionTo }) => {
   const backend = useRequiredBackend();
-  // const backend = useRequiredLocalBackendContext();
   const showSuccessToast = useRequiredToastContext().showSuccess;
 
   const [comments, setCommetns] = useState<CommentDto[]>([]);

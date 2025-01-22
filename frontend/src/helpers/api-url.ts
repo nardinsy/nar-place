@@ -1,25 +1,6 @@
-import { io, Socket } from "socket.io-client";
-
 // const BASE_URL = "http://localhost:5000/api/";
 const BASE_URL = "http://192.168.1.13:5000/api/";
 // const BASE_URL = "http://172.20.10.4:5000/api/";
-// const END_POINTS = {
-//   getAllUsers: "users",
-//   getuserPlaces: "places/placesByUserId/",
-//   addPlace: "places/addPlace",
-//   getPlaces: "places/userPlaces",
-//   deletePlace: `places/`,
-//   editPlace: "places/edit",
-//   signup: "users/signup",
-//   login: "users/login",
-//   logout: "users/logout",
-//   changeProfilePicture: "users/changeProfilePicture",
-//   changePassword: "users/changePassword",
-//   changeUsername: "users/changeUsername",
-//   autoLogin: "users/autoLogin",
-//   profilePicture: "users/profile-picture/",
-//   placePicture: "places/place-picture/",
-// };
 
 export enum ENDPOINTS {
   getAllUsers = "users",
@@ -69,17 +50,12 @@ const createAbsoluteApiAddress = (path: string) => {
   } else {
     return path;
   }
-  // return relativePath;
 };
 
 const createRelativePath = (absolutePath: string) => {
-  // const semiPictureUrl = absolute.match(BASE_URL);
-  if (absolutePath.startsWith(BASE_URL)) {
-    return absolutePath.replace(BASE_URL, "~");
-  } else {
-    return absolutePath;
-  }
-  // return absolutePath.replace(BASE_URL, "");
+  return absolutePath.startsWith(BASE_URL)
+    ? absolutePath.replace(BASE_URL, "~")
+    : absolutePath;
 };
 
 export { getApiAddress, createAbsoluteApiAddress, createRelativePath };

@@ -1,6 +1,6 @@
 export default function wordWrap(str: string, maxWidth: number) {
-  let newLineStr = "\n";
-  let done = false;
+  const newLineStr = "\n";
+  // let done = false;
   let res = "";
   while (str.length > maxWidth) {
     let found = false;
@@ -24,6 +24,6 @@ export default function wordWrap(str: string, maxWidth: number) {
 }
 
 function testWhite(x: string) {
-  let white = new RegExp(/^\s$/);
+  const white = new RegExp(/^\s$/);
   return white.test(x.charAt(0));
 }

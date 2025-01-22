@@ -8,6 +8,11 @@ const NotificationButton = () => {
 
   const ref = useRef<HTMLDivElement | null>(null);
 
+  const closeDropDown = async () => {
+    setShowDropdown(false);
+    await notifCtx.mergeAndResetNotifications();
+  };
+
   useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
       if (!ref.current) return;
@@ -22,18 +27,13 @@ const NotificationButton = () => {
     return () => {
       window.removeEventListener("mousedown", checkIfClickedOutside);
     };
-  }, [showDropdown]);
+  }, [showDropdown, closeDropDown]);
 
   const notificationButtonHandler = async (
     e: React.MouseEvent<HTMLElement>
   ) => {
     e.preventDefault();
     showDropdown ? await closeDropDown() : openDropDown();
-  };
-
-  const closeDropDown = async () => {
-    setShowDropdown(false);
-    await notifCtx.mergeAndResetNotifications();
   };
 
   const openDropDown = () => {
